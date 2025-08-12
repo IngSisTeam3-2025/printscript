@@ -10,7 +10,7 @@ class InterpreterTest {
         val tokenizer = Tokenizer(src)
         val parser = Parser(tokenizer)
         val ast = parser.parseProgram()
-        return Interpreter().eval(ast)
+        return Interpreter(parser).eval(ast)
     }
 
     @Test

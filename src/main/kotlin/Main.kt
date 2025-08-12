@@ -12,7 +12,7 @@ fun main() {
             val tokenizer = Tokenizer(source)
             val parser = Parser(tokenizer)
             val ast = parser.parseProgram()
-            val interpreter = Interpreter()
+            val interpreter = Interpreter(parser)
             val res = interpreter.eval(ast)
             println(res)
         } catch (e: Exception) {
