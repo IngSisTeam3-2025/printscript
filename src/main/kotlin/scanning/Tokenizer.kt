@@ -6,11 +6,11 @@ class Tokenizer(private val source: String) {
     private var column: Int = 0
     private var currentChar : Char? = source[0]
 
-    fun column() : Int {
+    internal fun column() : Int {
         return column
     }
 
-    fun getNextToken() : Token {
+    internal fun getNextToken() : Token {
         while (currentChar != null) {
             if (currentChar!!.isWhitespace()) {
                 advance()
@@ -43,12 +43,12 @@ class Tokenizer(private val source: String) {
 
             if (currentChar!! == '(') {
                 advance()
-                return Token(TokenType.MUL, "(")
+                return Token(TokenType.LPAREN, "(")
             }
 
             if (currentChar!! == ')') {
                 advance()
-                return Token(TokenType.MUL, ")")
+                return Token(TokenType.RPAREN, ")")
             }
 
             error()

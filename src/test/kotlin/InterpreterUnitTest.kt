@@ -117,4 +117,81 @@ class InterpreterUnitTest {
         assertEquals(148, result)
     }
 
+    @Test
+    fun `should handle parentheses around single number`() {
+        val tokenizerParens = Tokenizer("(10)")
+        val interpreterParens = Interpreter(tokenizerParens)
+        val result = interpreterParens.expr()
+        assertEquals(10, result)
+    }
+
+    @Test
+    fun `should honor precedence with parentheses`() {
+        val tokenizerP = Tokenizer("2 * (3 + 4)")
+        val interpreterP = Interpreter(tokenizerP)
+        val result = interpreterP.expr()
+        assertEquals(14, result)
+    }
+
+    @Test
+    fun `should handle nested parentheses correctly`() {
+        val tokenizerNested = Tokenizer("7 + 3 * (10 / (12 / (3 + 1) - 1))")
+        val interpreterNested = Interpreter(tokenizerNested)
+        val result = interpreterNested.expr()
+        assertEquals(22, result)
+    }
+
+    @Test
+    fun `should handle spaces with parentheses`() {
+        val tokenizerSpaces = Tokenizer(" (  2+3 ) * ( 4 - 1 ) ")
+        val interpreterSpaces = Interpreter(tokenizerSpaces)
+        val result = interpreterSpaces.expr()
+        assertEquals(15, result)
+    }
+
+    @Test
+    fun `should throw error on unmatched opening parenthesis`() {
+        val t = Tokenizer("(1 + 2")
+        val i = Interpreter(t)
+        assertThrows(Error::class.java) { i.expr() }
+    }
+
+    @Test
+    fun `should throw error on unmatched closing parenthesis`() {
+        val t = Tokenizer("1 + 2)")
+        val i = Interpreter(t)
+        assertThrows(Error::class.java) { i.expr() }
+    }
+
+    @Test
+    fun `should throw error on empty parentheses`() {
+        val t = Tokenizer("()")
+        val i = Interpreter(t)
+        assertThrows(Error::class.java) { i.expr() }
+    }
+
+    @Test
+    fun `should throw error on missing operator between parentheses`() {
+        val t = Tokenizer("(1 + 2)(3 + 4)")
+        val i = Interpreter(t)
+        assertThrows(Error::class.java) { i.expr() }
+    }
+
+    @Test
+    fun `should handle redundant nested parentheses`() {
+        val t = Tokenizer("((15))")
+        val i = Interpreter(t)
+        val r = i.expr()
+        assertEquals(15, r)
+    }
+
+    @Test
+    fun `should handle operations with parentheses`() {
+        val t = Tokenizer("3 * (2 + 5) - (4 / 2)")
+        val i = Interpreter(t)
+        val r = i.expr()
+        assertEquals(19, r)
+    }
+
+
 }

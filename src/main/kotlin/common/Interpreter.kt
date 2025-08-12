@@ -6,10 +6,7 @@ import scanning.Tokenizer
 
 class Interpreter (private val tokenizer: Tokenizer) {
     private var currentToken : Token = tokenizer.getNextToken()
-    private var opTable = arrayOf(
-        TokenType.ADD,
-        TokenType.SUB,
-    )
+    private var depth = 0
 
     private fun error() {
         val column = tokenizer.column() - 1
@@ -17,20 +14,35 @@ class Interpreter (private val tokenizer: Tokenizer) {
     }
 
     private fun parse(tokenType: TokenType) {
-
-        if (tokenType == currentToken.type) {
-            currentToken = tokenizer.getNextToken()
+        if (tokenType == this.currentToken.type) {
+            this.currentToken = tokenizer.getNextToken()
         }
-        else error()
+        else {
+            error()
+        }
     }
 
-    private fun factor() : Int {
+    private fun factor(): Int {
+        if (currentToken.type == TokenType.INT) {
+            val value = currentToken.lexeme.toInt()
+            parse(TokenType.INT)
+            return value
+        }
 
-        val token = this.currentToken
-        this.parse(TokenType.INT)
-        return token.lexeme.toInt()
+        if (currentToken.type == TokenType.LPAREN) {
+            parse(TokenType.LPAREN)
+            depth++
+            val value = expr()
+            parse(TokenType.RPAREN)
+            depth--
+            return value
+        }
 
+        error()
+        return 0
     }
+
+
 
     private fun term(): Int {
 
@@ -51,18 +63,28 @@ class Interpreter (private val tokenizer: Tokenizer) {
 
     }
 
-    fun expr(): Int {
+    internal fun expr(): Int {
         var res = term()
-        while (opTable.contains(currentToken.type)) {
+        while (currentToken.type == TokenType.ADD || currentToken.type == TokenType.SUB) {
             if (currentToken.type == TokenType.ADD) {
-                parse(TokenType.ADD); res += term()
+                parse(TokenType.ADD);
+                res += term();
+                continue
             }
             if (currentToken.type == TokenType.SUB) {
-                parse(TokenType.SUB); res -= term()
+                parse(TokenType.SUB);
+                res -= term();
+                continue
             }
         }
-        if (currentToken.type != TokenType.EOF) error()
+        if (depth == 0 && currentToken.type != TokenType.EOF) error()
         return res
+    }
+
+    fun eval(): Int {
+        val v = expr()
+        if (currentToken.type != TokenType.EOF) error()
+        return v
     }
 
 }

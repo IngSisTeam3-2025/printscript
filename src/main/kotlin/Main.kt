@@ -9,7 +9,7 @@ fun main() {
         try {
             val tokenizer = Tokenizer(source)
             val interpreter = Interpreter(tokenizer)
-            val res = interpreter.expr()
+            val res = interpreter.eval()
             println(res)
         }
         catch (e: Exception) {
