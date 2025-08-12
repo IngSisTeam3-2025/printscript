@@ -1,4 +1,5 @@
 import common.Interpreter
+import scanning.Tokenizer
 
 fun main() {
 
@@ -6,7 +7,8 @@ fun main() {
         println("ps> ")
         val source : String = readln()
         try {
-            val interpreter = Interpreter(source)
+            val tokenizer = Tokenizer(source)
+            val interpreter = Interpreter(tokenizer)
             val res = interpreter.expr()
             println(res)
         }

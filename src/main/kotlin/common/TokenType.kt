@@ -1,4 +1,4 @@
 
 enum class TokenType {
-    INTEGER, ADDITION, SUBTRACTION, SOF, EOF
+    INT, ADD, SUB, EOF
 }
