@@ -5,14 +5,16 @@ import common.AbstractSyntaxTree
 import common.BinOp
 import common.Num
 import common.UnaryOp
+import parser.Parser
 
-class Interpreter {
+class Interpreter(private val parser: Parser) {
 
     fun eval(node: AbstractSyntaxTree): Int {
 
         if (node is Num) {
             return node.value
-        } else if (node is BinOp) {
+        }
+        else if (node is BinOp) {
             val left = eval(node.left)
             val right = eval(node.right)
             if (node.op.type == TokenType.ADD) {
@@ -29,9 +31,7 @@ class Interpreter {
             }
             error("Unsupported operator: ${node.op.type}")
         }
-
-
-        if (node is UnaryOp) {
+        else if (node is UnaryOp) {
             if (node.op.type == TokenType.ADD) {
                 return +eval(node.expr)
             }
