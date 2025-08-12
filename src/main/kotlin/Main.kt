@@ -1,25 +1,22 @@
-import common.Interpreter
+import interpreter.Interpreter
+import parser.Parser
 import scanning.Tokenizer
 
 fun main() {
-
     while (true) {
-        println("ps> ")
-        val source : String = readln()
-
-        if (source == "") {
-            continue
-        }
+        print("ps> ")
+        val source: String = readln()
+        if (source.isBlank()) continue
 
         try {
             val tokenizer = Tokenizer(source)
-            val interpreter = Interpreter(tokenizer)
-            val res = interpreter.eval()
+            val parser = Parser(tokenizer)
+            val ast = parser.parseProgram()
+            val interpreter = Interpreter()
+            val res = interpreter.eval(ast)
             println(res)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             println(e.message)
         }
     }
-
 }
