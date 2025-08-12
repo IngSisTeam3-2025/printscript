@@ -61,4 +61,60 @@ class InterpreterUnitTest {
         }
     }
 
+    @Test
+    fun `should handle multiple mult operand correctly`() {
+        val tokenizerMultiple = Tokenizer("3 + 5 * 3")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(18, result)
+    }
+
+    @Test
+    fun `should handle simple mult operand correctly`() {
+        val tokenizerMultiple = Tokenizer("5 * 3")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(15, result)
+    }
+
+    @Test
+    fun `should handle multiple div operand correctly`() {
+        val tokenizerMultiple = Tokenizer("20 / 5 / 2")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(2, result)
+    }
+
+    @Test
+    fun `should handle simple div operand correctly`() {
+        val tokenizerMultiple = Tokenizer("10 / 2")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(5, result)
+    }
+
+    @Test
+    fun `should handle multiple operations correctly`() {
+        val tokenizerMultiple = Tokenizer("15 * 10 + 10 / 5 - 2 + 5 / 5")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(151, result)
+    }
+
+    @Test
+    fun `should handle multiple spaces correctly`() {
+        val tokenizerMultiple = Tokenizer("15       *     10      + 5    /  5   - 3  ")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(148, result)
+    }
+
+    @Test
+    fun `should handle no spaces correctly`() {
+        val tokenizerMultiple = Tokenizer("15*10+5/5-3")
+        val interpreterSingle = Interpreter(tokenizerMultiple)
+        val result = interpreterSingle.expr()
+        assertEquals(148, result)
+    }
+
 }

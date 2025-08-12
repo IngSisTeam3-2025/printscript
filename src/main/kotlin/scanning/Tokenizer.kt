@@ -31,6 +31,26 @@ class Tokenizer(private val source: String) {
                 return Token(TokenType.SUB, "-")
             }
 
+            if (currentChar!! == '/') {
+                advance()
+                return Token(TokenType.DIV, "/")
+            }
+
+            if (currentChar!! == '*') {
+                advance()
+                return Token(TokenType.MUL, "*")
+            }
+
+            if (currentChar!! == '(') {
+                advance()
+                return Token(TokenType.MUL, "(")
+            }
+
+            if (currentChar!! == ')') {
+                advance()
+                return Token(TokenType.MUL, ")")
+            }
+
             error()
         }
         return Token(TokenType.EOF, "")

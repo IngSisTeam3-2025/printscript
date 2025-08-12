@@ -1,4 +1,11 @@
 
 enum class TokenType {
-    INT, ADD, SUB, EOF
+    INT,
+    ADD,
+    DIV,
+    MUL,
+    SUB,
+    LPAREN,
+    RPAREN,
+    EOF
 }
