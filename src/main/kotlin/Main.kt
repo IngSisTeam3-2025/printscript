@@ -6,6 +6,11 @@ fun main() {
     while (true) {
         println("ps> ")
         val source : String = readln()
+
+        if (source == "") {
+            continue
+        }
+
         try {
             val tokenizer = Tokenizer(source)
             val interpreter = Interpreter(tokenizer)
