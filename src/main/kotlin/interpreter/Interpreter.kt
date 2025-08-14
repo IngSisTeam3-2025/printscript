@@ -5,43 +5,43 @@ import common.AbstractSyntaxTree
 import common.BinOp
 import common.Num
 import common.UnaryOp
-import parser.Parser
 
-class Interpreter(private val parser: Parser) {
+class Interpreter : NodeVisitor {
 
-    fun eval(node: AbstractSyntaxTree): Int {
 
-        if (node is Num) {
-            return node.value
+    override fun visitNum(node: Num): Int {
+        return node.value
+    }
+
+    override fun visitBinOp(node: BinOp): Int {
+        val left = visit(node.left)
+        val right = visit(node.right)
+        if (node.op.type == TokenType.ADD) {
+            return left + right
         }
-        else if (node is BinOp) {
-            val left = eval(node.left)
-            val right = eval(node.right)
-            if (node.op.type == TokenType.ADD) {
-                return left + right
-            }
-            if (node.op.type == TokenType.SUB) {
-                return left - right
-            }
-            if (node.op.type == TokenType.MUL) {
-                return left * right
-            }
-            if (node.op.type == TokenType.DIV) {
-                return left / right
-            }
-            error("Unsupported operator: ${node.op.type}")
+        if (node.op.type == TokenType.SUB) {
+            return left - right
         }
-        else if (node is UnaryOp) {
-            if (node.op.type == TokenType.ADD) {
-                return +eval(node.expr)
-            }
-            if (node.op.type == TokenType.SUB) {
-                return -eval(node.expr)
-            }
-            error("Unsupported unary op: ${node.op.type}")
+        if (node.op.type == TokenType.MUL) {
+            return left * right
         }
+        if (node.op.type == TokenType.DIV) {
+            return left / right
+        }
+        error("Unsupported operator: ${node.op.type}")
+    }
 
-        return 0
+    override fun visitUnaryOp(node: UnaryOp): Int {
+        if (node.op.type == TokenType.ADD) {
+            return +visit(node.expr)
+        }
+        if (node.op.type == TokenType.SUB) {
+            return -visit(node.expr)
+        }
+        error("Unsupported unary op: ${node.op.type}")
+    }
 
+    fun interpret(ast: AbstractSyntaxTree): Int {
+        return visit(ast)
     }
 }

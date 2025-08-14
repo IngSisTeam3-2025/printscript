@@ -5,6 +5,7 @@ import TokenType
 import common.AbstractSyntaxTree
 import common.BinOp
 import common.Num
+import common.UnaryOp
 import scanning.Tokenizer
 
 class Parser(private val tokenizer: Tokenizer) {
@@ -24,20 +25,28 @@ class Parser(private val tokenizer: Tokenizer) {
     }
 
     private fun factor(): AbstractSyntaxTree {
-        return when (currentToken.type) {
-            TokenType.INT -> {
-                val tok = currentToken
-                parse(TokenType.INT)
-                Num(tok, tok.lexeme.toInt())
-            }
-            TokenType.LPAREN -> {
-                parse(TokenType.LPAREN)
-                val node = expr()
-                parse(TokenType.RPAREN)
-                node
-            }
-            else -> error()
+        if (currentToken.type == TokenType.ADD) {
+            val token = currentToken
+            parse(TokenType.ADD)
+            return UnaryOp(token, factor())
         }
+        if (currentToken.type == TokenType.SUB) {
+            val token = currentToken
+            parse(TokenType.SUB)
+            return UnaryOp(token, factor())
+        }
+        if (currentToken.type == TokenType.INT) {
+            val token = currentToken
+            parse(TokenType.INT)
+            return Num(token, token.lexeme.toInt())
+        }
+        if (currentToken.type == TokenType.LPAREN) {
+            parse(TokenType.LPAREN)
+            val node = expr()
+            parse(TokenType.RPAREN)
+            return node
+        }
+        error()
     }
 
     private fun term(): AbstractSyntaxTree {
@@ -50,7 +59,7 @@ class Parser(private val tokenizer: Tokenizer) {
         return node
     }
 
-    internal fun expr(): AbstractSyntaxTree {
+    private fun expr(): AbstractSyntaxTree {
         var node = term()
         while (currentToken.type == TokenType.ADD || currentToken.type == TokenType.SUB) {
             val op = currentToken

@@ -10,13 +10,20 @@ class InterpreterTest {
         val tokenizer = Tokenizer(src)
         val parser = Parser(tokenizer)
         val ast = parser.parseProgram()
-        return Interpreter(parser).eval(ast)
+        return Interpreter().interpret(ast)
     }
 
     @Test
     fun `should parse and evaluate addition and subtraction correctly`() {
         assertEquals(6, evaluate("3 + 5 - 2"))
     }
+
+    @Test
+    fun `should handle unary operators`() {
+        assertEquals(-5, evaluate("-5"))
+        assertEquals(8, evaluate("-3 * -2 + 2"))
+    }
+
 
     @Test
     fun `should handle single operand correctly`() {
