@@ -1,10 +1,10 @@
 import interpreter.Interpreter
-import parser.Parser
+import lexer.Tokenizer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import scanning.Tokenizer
+import parser.Parser
 
-class InterpreterTest {
+class AppTest {
 
     private fun evaluate(src: String): Int {
         val tokenizer = Tokenizer(src)

@@ -2,11 +2,11 @@ package parser
 
 import Token
 import TokenType
-import common.AbstractSyntaxTree
-import common.BinOp
-import common.Num
-import common.UnaryOp
-import scanning.Tokenizer
+import ast.AbstractSyntaxTree
+import ast.BinOp
+import ast.Num
+import ast.UnaryOp
+import lexer.Tokenizer
 
 class Parser(private val tokenizer: Tokenizer) {
     private var currentToken: Token = tokenizer.getNextToken()

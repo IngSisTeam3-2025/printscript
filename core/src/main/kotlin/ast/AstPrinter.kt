@@ -1,9 +1,7 @@
-package printer
-
-import common.AbstractSyntaxTree
-import common.BinOp
-import common.Num
-import common.UnaryOp
+import ast.AbstractSyntaxTree
+import ast.BinOp
+import ast.Num
+import ast.UnaryOp
 
 class AstPrinter {
     fun print(node: AbstractSyntaxTree, indent: String = ""): String {

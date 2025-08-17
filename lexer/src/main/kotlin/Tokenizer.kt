@@ -1,4 +1,4 @@
-package scanning
+package lexer
 
 import Token
 
@@ -6,11 +6,11 @@ class Tokenizer(private val source: String) {
     private var column: Int = 0
     private var currentChar : Char? = source[0]
 
-    internal fun column() : Int {
+    fun column() : Int {
         return column
     }
 
-    internal fun getNextToken() : Token {
+    fun getNextToken() : Token {
         while (currentChar != null) {
             if (currentChar!!.isWhitespace()) {
                 advance()

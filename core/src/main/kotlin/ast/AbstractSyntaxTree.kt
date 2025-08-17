@@ -1,9 +1,8 @@
-package common
+package ast
 
 import Token
 
-
-sealed interface AbstractSyntaxTree
+interface AbstractSyntaxTree
 
 data class Num(val token: Token, val value: Int) : AbstractSyntaxTree
 data class BinOp(val left: AbstractSyntaxTree, val op: Token, val right: AbstractSyntaxTree) : AbstractSyntaxTree

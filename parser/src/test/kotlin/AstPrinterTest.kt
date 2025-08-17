@@ -1,8 +1,7 @@
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.Parser
-import scanning.Tokenizer
-import printer.AstPrinter
+import lexer.Tokenizer
 
 class AstPrinterTest {
 

@@ -1,6 +1,6 @@
 import interpreter.Interpreter
 import parser.Parser
-import scanning.Tokenizer
+import lexer.Tokenizer
 
 fun main() {
     while (true) {
@@ -11,9 +11,8 @@ fun main() {
         try {
             val tokenizer = Tokenizer(source)
             val parser = Parser(tokenizer)
-            val ast = parser.parseProgram()
             val interpreter = Interpreter()
-            val res = interpreter.interpret(ast)
+            val res = interpreter.interpret(parser.parseProgram())
             println(res)
         } catch (e: Exception) {
             println(e.message)

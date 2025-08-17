@@ -1,10 +1,9 @@
 package interpreter
 
-import TokenType
-import common.AbstractSyntaxTree
-import common.BinOp
-import common.Num
-import common.UnaryOp
+import ast.AbstractSyntaxTree
+import ast.BinOp
+import ast.Num
+import ast.UnaryOp
 
 class Interpreter : NodeVisitor {
 
