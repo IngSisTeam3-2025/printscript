@@ -78,7 +78,7 @@ class Tokenizer(private val source: String) {
 
             if (currentChar!!.isWhitespace()) {
                 advance()
-                continue
+                return Token(TokenType.WHITESPACE, " ")
             }
 
             if (currentChar!!.isDigit()) {

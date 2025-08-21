@@ -6,8 +6,15 @@ import parser.Parser
 
 class AppTest {
 
+    // Metodo para eliminar espacios en blanco del texto hasta que este configurado el parser
+    private fun removeSpaces(text: String): String {
+        return text.replace(" ", "")
+    }
+
+
     private fun evaluate(src: String): Int {
-        val tokenizer = Tokenizer(src)
+        val cleanSrc = removeSpaces(src)
+        val tokenizer = Tokenizer(cleanSrc)
         val parser = Parser(tokenizer)
         val ast = parser.parseProgram()
         return Interpreter().interpret(ast)

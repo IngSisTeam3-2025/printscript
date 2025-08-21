@@ -15,6 +15,6 @@ enum class TokenType {
     EOF,
 
     // Especiales
-    END, BEGIN
+    WHITESPACE
 }
 

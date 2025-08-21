@@ -10,8 +10,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let x = 5;")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "x"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "5"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -22,8 +25,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let name = \"Hello World\";")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "name"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.STRING, "Hello World"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -46,16 +52,27 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let result = 10 + 5 - 2 * 3 / 1;")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "result"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "10"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ADD, "+"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "5"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SUB, "-"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "2"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.MUL, "*"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "3"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.DIV, "/"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "1"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -66,8 +83,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let _variable1 = myFunction123;")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "_variable1"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "myFunction123"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -78,8 +98,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let msg = 'Hello';")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "msg"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.STRING, "Hello"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -90,8 +113,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let empty = \"\";")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "empty"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.STRING, ""), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -101,30 +127,57 @@ class TokenizerTest {
     fun testWhitespaceHandling() {
         val tokenizer = Tokenizer("   let   x   =   5   ;   ")
 
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "x"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "5"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
     }
 
     @Test
     fun testTypeDeclarations() {
-        val tokenizer = Tokenizer("age let: number = 25; let name: string = \"John\";")
+        val tokenizer = Tokenizer("let age: number = 25; let name: string = \"John\";")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "age"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.COLON, ":"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "number"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "25"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "name"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.COLON, ":"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.STRING, "string"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.STRING, "John"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
@@ -138,10 +191,14 @@ class TokenizerTest {
         assertEquals(Token(TokenType.LPAREN, "("), tokenizer.getNextToken())
         assertEquals(Token(TokenType.LPAREN, "("), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "10"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ADD, "+"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "5"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.RPAREN, ")"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.MUL, "*"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "2"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.RPAREN, ")"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
@@ -151,6 +208,9 @@ class TokenizerTest {
     @Test
     fun testOnlyWhitespace() {
         val tokenizer = Tokenizer("   \t  \n  ")
+        for (i in 1..9) {
+            assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
+        }
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
     }
 
@@ -160,8 +220,11 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let msg = \"Hello")
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "msg"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
 
         assertThrows<Error> {
             tokenizer.getNextToken() // Debería lanzar error por string sin cerrar
@@ -173,9 +236,13 @@ class TokenizerTest {
         val tokenizer = Tokenizer("let x = 5 & 3;") // '&' no es un carácter válido
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ID, "x"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.ASSIGN, "="), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.INT, "5"), tokenizer.getNextToken())
+        assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
 
         assertThrows<Error> {
             tokenizer.getNextToken() // Debería lanzar error por carácter inválido '&'
@@ -198,8 +265,11 @@ class TokenizerTest {
         tokenizer.getNextToken() // "let"
         assertEquals(3, tokenizer.column()) // Después de "let"
 
-        tokenizer.getNextToken() // " x" (incluye el espacio)
-        assertEquals(5, tokenizer.column()) // Después de " x"
+        tokenizer.getNextToken() // " " (whitespace)
+        assertEquals(4, tokenizer.column()) // Después del whitespace
+
+        tokenizer.getNextToken() // "x"
+        assertEquals(5, tokenizer.column()) // Después de "x"
     }
 
     // Test estilo Python REPL como en tu ejemplo
@@ -211,11 +281,20 @@ class TokenizerTest {
         var token = tokenizer.getNextToken()
         assertEquals("Token(LET, 'let')", "Token(${token.type}, '${token.lexeme}')")
 
+        token = tokenizer.getNextToken() // whitespace
+        assertEquals("Token(WHITESPACE, ' ')", "Token(${token.type}, '${token.lexeme}')")
+
         token = tokenizer.getNextToken()
         assertEquals("Token(ID, 'a')", "Token(${token.type}, '${token.lexeme}')")
 
+        token = tokenizer.getNextToken() // whitespace
+        assertEquals("Token(WHITESPACE, ' ')", "Token(${token.type}, '${token.lexeme}')")
+
         token = tokenizer.getNextToken()
         assertEquals("Token(ASSIGN, '=')", "Token(${token.type}, '${token.lexeme}')")
+
+        token = tokenizer.getNextToken() // whitespace
+        assertEquals("Token(WHITESPACE, ' ')", "Token(${token.type}, '${token.lexeme}')")
 
         token = tokenizer.getNextToken()
         assertEquals("Token(INT, '2')", "Token(${token.type}, '${token.lexeme}')")

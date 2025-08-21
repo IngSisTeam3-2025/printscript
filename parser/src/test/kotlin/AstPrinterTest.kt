@@ -5,8 +5,15 @@ import lexer.Tokenizer
 
 class AstPrinterTest {
 
+
+    // Metodo para eliminar espacios en blanco del texto hasta que este configurado el parser
+    private fun removeSpaces(text: String): String {
+        return text.replace(" ", "")
+    }
+
     private fun printAst(src: String): String {
-        val tokenizer = Tokenizer(src)
+        val cleanSrc = removeSpaces(src)
+        val tokenizer = Tokenizer(cleanSrc)
         val parser = Parser(tokenizer)
         val ast = parser.parseProgram()
         return AstPrinter().print(ast)
