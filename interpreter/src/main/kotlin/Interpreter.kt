@@ -29,16 +29,39 @@ class Interpreter : NodeVisitor {
         RuntimeValue.Str(node.value)
 
     override fun visitBinOp(node: BinOp): RuntimeValue {
-        val l = num(visit(node.left))
-        val r = num(visit(node.right))
-        val res = when (node.op.type) {
-            TokenType.ADD -> l + r
-            TokenType.SUB -> l - r
-            TokenType.MUL -> l * r
-            TokenType.DIV -> l / r
+        val left = visit(node.left)
+        val right = visit(node.right)
+        return when (node.op.type) {
+            TokenType.ADD -> {
+                when {
+                    left is RuntimeValue.Num && right is RuntimeValue.Num ->
+                        RuntimeValue.Num(left.v + right.v)
+                    left is RuntimeValue.Str && right is RuntimeValue.Str ->
+                        RuntimeValue.Str(left.v + right.v)
+                    left is RuntimeValue.Str && right is RuntimeValue.Num ->
+                        RuntimeValue.Str(left.v + right.v.toString())
+                    left is RuntimeValue.Num && right is RuntimeValue.Str ->
+                        RuntimeValue.Str(left.v.toString() + right.v)
+                    else -> error("Operador + no soportado para tipos: $left y $right")
+                }
+            }
+            TokenType.SUB -> {
+                val l = num(left)
+                val r = num(right)
+                RuntimeValue.Num(l - r)
+            }
+            TokenType.MUL -> {
+                val l = num(left)
+                val r = num(right)
+                RuntimeValue.Num(l * r)
+            }
+            TokenType.DIV -> {
+                val l = num(left)
+                val r = num(right)
+                RuntimeValue.Num(l / r)
+            }
             else -> error("Operador no soportado: ${node.op.type}")
         }
-        return RuntimeValue.Num(res)
     }
 
     override fun visitUnaryOp(node: UnaryOp): RuntimeValue {

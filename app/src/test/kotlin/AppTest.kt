@@ -235,10 +235,8 @@ class AppTest {
     }
 
     @Test
-    fun `should throw error when trying to add string and number`() {
-        assertThrows(Exception::class.java) {
-            evaluate("let x: string = \"hello\"; let y: number = 5; x + y;")
-        }
+    fun `should concatenate string and number`() {
+        assertEquals("hello5", evaluate("let x: string = \"hello\"; let y: number = 5; x + y;"))
     }
 
     @Test
