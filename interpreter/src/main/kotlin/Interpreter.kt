@@ -1,46 +1,124 @@
 package interpreter
 
-import ast.AbstractSyntaxTree
-import ast.BinOp
-import ast.Num
-import ast.UnaryOp
+import ast.*
+import interpreter.runtime.NodeVisitor
+import interpreter.runtime.RuntimeValue
+
+import token.TokenType
 
 class Interpreter : NodeVisitor {
 
+    private val env = mutableMapOf<String, RuntimeValue?>()
 
-    override fun visitNum(node: Num): Int {
-        return node.value
+    private fun num(value: RuntimeValue): Int {
+        if (value is RuntimeValue.Num) {
+            return value.v
+        } else {
+            error("Se esperaba número, llegó $value")
+        }
     }
 
-    override fun visitBinOp(node: BinOp): Int {
-        val left = visit(node.left)
-        val right = visit(node.right)
-        if (node.op.type == TokenType.ADD) {
-            return left + right
-        }
-        if (node.op.type == TokenType.SUB) {
-            return left - right
-        }
-        if (node.op.type == TokenType.MUL) {
-            return left * right
-        }
-        if (node.op.type == TokenType.DIV) {
-            return left / right
-        }
-        error("Unsupported operator: ${node.op.type}")
+    private fun ensureDeclared(name: String) {
+        if (name !in env) error("Variable '$name' no definida")
     }
 
-    override fun visitUnaryOp(node: UnaryOp): Int {
-        if (node.op.type == TokenType.ADD) {
-            return +visit(node.expr)
+    override fun visitNum(node: Num): RuntimeValue =
+        RuntimeValue.Num(node.value)
+
+    override fun visitStr(node: Str): RuntimeValue =
+        RuntimeValue.Str(node.value)
+
+    override fun visitBinOp(node: BinOp): RuntimeValue {
+        val l = num(visit(node.left))
+        val r = num(visit(node.right))
+        val res = when (node.op.type) {
+            TokenType.ADD -> l + r
+            TokenType.SUB -> l - r
+            TokenType.MUL -> l * r
+            TokenType.DIV -> l / r
+            else -> error("Operador no soportado: ${node.op.type}")
         }
-        if (node.op.type == TokenType.SUB) {
-            return -visit(node.expr)
-        }
-        error("Unsupported unary op: ${node.op.type}")
+        return RuntimeValue.Num(res)
     }
 
-    fun interpret(ast: AbstractSyntaxTree): Int {
-        return visit(ast)
+    override fun visitUnaryOp(node: UnaryOp): RuntimeValue {
+        val value = num(visit(node.expr))
+        val res = when (node.op.type) {
+            TokenType.ADD -> +value
+            TokenType.SUB -> -value
+            else -> error("Unario no soportado: ${node.op.type}")
+        }
+        return RuntimeValue.Num(res)
+    }
+
+    override fun visitVar(node: Var): RuntimeValue {
+        val name = node.name.lexeme
+        val binding = env[name] ?: error("Variable '$name' no definida")
+        return binding
+    }
+
+    override fun visitAssign(node: Assign): RuntimeValue {
+        val name = node.name.lexeme
+        ensureDeclared(name)
+        val value = visit(node.value)
+        env[name] = value
+        return value
+    }
+
+    override fun visitVarDecl(node: VarDecl): RuntimeValue {
+        val name = node.name.lexeme
+        if (env.containsKey(name)) error("Variable '$name' ya declarada")
+
+        val init = if (node.init != null) visit(node.init!!) else RuntimeValue.Void
+
+        if (node.annotatedType != null) {
+            val ty = node.annotatedType!!.lexeme
+            if (ty == "number") {
+                if (init !is RuntimeValue.Num && init !is RuntimeValue.Void) {
+                    error("Type error: expected number, got ${init::class.simpleName}")
+                }
+            } else if (ty == "string") {
+                if (init !is RuntimeValue.Str && init !is RuntimeValue.Void) {
+                    error("Type error: expected string, got ${init::class.simpleName}")
+                }
+            } else {
+                error("Unknown type '${ty}'")
+            }
+        }
+        env[name] = if (init is RuntimeValue.Void) null else init
+        return RuntimeValue.Void
+    }
+    override fun visitPrintln(node: PrintlnStmt): RuntimeValue {
+        val out: RuntimeValue?
+        if (node.arg != null) {
+            out = visit(node.arg!!)
+        } else {
+            out = null
+        }
+
+        val text = when (out) {
+            null -> ""
+            is RuntimeValue.Num -> out.v.toString()
+            is RuntimeValue.Str -> out.v
+            is RuntimeValue.Void -> ""
+        }
+
+        println(text)
+        return RuntimeValue.Void
+    }
+
+    override fun visitExprStmt(node: ExprStmt): RuntimeValue {
+        return visit(node.expr)
+    }
+
+    override fun visitProgram(node: Program): RuntimeValue {
+        var last: RuntimeValue = RuntimeValue.Void
+        for (s in node.statements) {
+            val r = visit(s)
+            if (r !is RuntimeValue.Void) {
+                last = r
+            }
+        }
+        return last
     }
 }

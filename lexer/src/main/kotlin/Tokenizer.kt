@@ -1,7 +1,7 @@
 package lexer
 
 import Token
-import TokenType
+import token.TokenType
 
 
 class Tokenizer(private val source: String) {
@@ -77,8 +77,9 @@ class Tokenizer(private val source: String) {
         while (currentChar != null) {
 
             if (currentChar!!.isWhitespace()) {
+                val ch = currentChar!!
                 advance()
-                return Token(TokenType.WHITESPACE, " ")
+                return Token(TokenType.WHITESPACE, ch.toString())
             }
 
             if (currentChar!!.isDigit()) {

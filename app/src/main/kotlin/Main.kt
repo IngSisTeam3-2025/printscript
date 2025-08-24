@@ -1,22 +1,29 @@
 import interpreter.Interpreter
-import parser.Parser
-import lexer.Tokenizer
+import interpreter.runtime.RuntimeValue
 
 fun main() {
+    val interpreter = Interpreter()
     while (true) {
         print("ps> ")
-        val source: String = readln()
-        if (source.isBlank()) continue
-
-        try {
-            val tokenizer = Tokenizer(source)
-            val parser = Parser(tokenizer)
-            val interpreter = Interpreter()
-            val res = interpreter.interpret(parser.parseProgram())
-            println(res)
-        } catch (e: Exception) {
-            println(e.message)
+        val line = readLine() ?: break
+        if (line.isBlank()) continue
+        try { evalAndPrint(line, interpreter) }
+        catch (e: Throwable) {
+            print(e.message ?: e.toString())
+            print("\n")
         }
     }
 }
 
+
+fun evalAndPrint(src: String, interpreter: Interpreter) {
+    val tokenizer = lexer.Tokenizer(src)
+    val ts = ParserTokenStream(tokenizer)
+    val parser = Parser(ts)
+    val program = parser.parseProgram()
+    when (val result = interpreter.visit(program)) {
+        is RuntimeValue.Num  -> println(result.v)
+        is RuntimeValue.Str  -> println(result.v)
+        is RuntimeValue.Void -> {}
+    }
+}

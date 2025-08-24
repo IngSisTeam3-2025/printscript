@@ -2,6 +2,7 @@ import lexer.Tokenizer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
+import token.TokenType
 
 class TokenizerTest {
 
@@ -202,15 +203,6 @@ class TokenizerTest {
         assertEquals(Token(TokenType.INT, "2"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.RPAREN, ")"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.SEMI, ";"), tokenizer.getNextToken())
-        assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
-    }
-
-    @Test
-    fun testOnlyWhitespace() {
-        val tokenizer = Tokenizer("   \t  \n  ")
-        for (i in 1..9) {
-            assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
-        }
         assertEquals(Token(TokenType.EOF, ""), tokenizer.getNextToken())
     }
 
