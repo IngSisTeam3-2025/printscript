@@ -1,14 +1,13 @@
-import ast.Num
-import ast.Str
+import ast.Assign
 import ast.BinOp
+import ast.ExprStmt
+import ast.Num
+import ast.PrintlnStmt
+import ast.Program
+import ast.Str
 import ast.UnaryOp
 import ast.Var
-import ast.Assign
 import ast.VarDecl
-import ast.PrintlnStmt
-import ast.ExprStmt
-import ast.Program
-
 import token.TokenType
 
 class Interpreter : NodeVisitor {
@@ -110,13 +109,12 @@ class Interpreter : NodeVisitor {
                     error("Type error: expected string, got ${init::class.simpleName}")
                 }
             } else {
-                error("Unknown type '${ty}'")
+                error("Unknown type '$ty'")
             }
         }
         env[name] = if (init is RuntimeValue.Void) null else init
         return RuntimeValue.Void
     }
-
 
     override fun visitPrintln(node: PrintlnStmt): RuntimeValue {
         val out: RuntimeValue?

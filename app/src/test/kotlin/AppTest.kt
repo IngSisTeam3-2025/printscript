@@ -12,13 +12,12 @@ class AppTest {
 
         val rv = Interpreter().visit(program)
         return when (rv) {
-            is RuntimeValue.Num  -> rv.v
+            is RuntimeValue.Num -> rv.v
             is RuntimeValue.Void -> error("La última sentencia no produce valor (Void)")
-            is RuntimeValue.Str  -> rv.v
+            is RuntimeValue.Str -> rv.v
             else -> {}
         }
     }
-
 
     @Test
     fun `should parse and evaluate addition and subtraction correctly`() {
@@ -30,7 +29,6 @@ class AppTest {
         assertEquals(-5, evaluate("-5;"))
         assertEquals(8, evaluate("-3 * -2 + 2;"))
     }
-
 
     @Test
     fun `should handle single operand correctly`() {
@@ -303,5 +301,4 @@ class AppTest {
     fun `should print string variable correctly`() {
         assertEquals("goodbye", evaluate("let farewell: string = \"goodbye\"; farewell;"))
     }
-
 }

@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import token.TokenType
 import java.io.File
 
@@ -8,13 +8,15 @@ class FileSourceTokenizerTests {
     @Test
     fun testFileSourceWithProgramPrints() {
         val tempFile = File.createTempFile("program", ".prints")
-        tempFile.writeText("""
+        tempFile.writeText(
+            """
             let x: number = 42;
             let message: string = "Hello World";
             let result: number = x + 8;
             println(message);
             println(result);
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         val tokenizer = Tokenizer(FileSource(tempFile.absolutePath))
 

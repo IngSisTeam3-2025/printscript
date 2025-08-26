@@ -10,7 +10,7 @@ class Tokenizer(source: Source) {
         "let" to TokenType.LET,
         "number" to TokenType.INT,
         "string" to TokenType.STRING,
-        "println" to TokenType.PRINTLN
+        "println" to TokenType.PRINTLN,
     )
 
     private fun isIdStart(c: Char) = c.isLetter() || c == '_'

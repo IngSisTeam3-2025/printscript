@@ -1,28 +1,28 @@
-import ast.Num
+import ast.AbstractSyntaxTree
+import ast.Assign
 import ast.BinOp
+import ast.ExprStmt
+import ast.Num
+import ast.PrintlnStmt
+import ast.Program
+import ast.Str
 import ast.UnaryOp
 import ast.Var
-import ast.Assign
-import ast.Str
 import ast.VarDecl
-import ast.PrintlnStmt
-import ast.ExprStmt
-import ast.Program
-import ast.AbstractSyntaxTree
 
 interface NodeVisitor {
 
     fun visit(node: AbstractSyntaxTree): RuntimeValue = when (node) {
-        is Num          -> visitNum(node)
-        is BinOp        -> visitBinOp(node)
-        is UnaryOp      -> visitUnaryOp(node)
-        is Var          -> visitVar(node)
-        is Assign       -> visitAssign(node)
-        is VarDecl      -> visitVarDecl(node)
-        is Str          -> visitStr(node)
-        is PrintlnStmt  -> visitPrintln(node)
-        is ExprStmt     -> visitExprStmt(node)
-        is Program      -> visitProgram(node)
+        is Num -> visitNum(node)
+        is BinOp -> visitBinOp(node)
+        is UnaryOp -> visitUnaryOp(node)
+        is Var -> visitVar(node)
+        is Assign -> visitAssign(node)
+        is VarDecl -> visitVarDecl(node)
+        is Str -> visitStr(node)
+        is PrintlnStmt -> visitPrintln(node)
+        is ExprStmt -> visitExprStmt(node)
+        is Program -> visitProgram(node)
         else -> error("No visit method for ${node::class.simpleName}")
     }
 

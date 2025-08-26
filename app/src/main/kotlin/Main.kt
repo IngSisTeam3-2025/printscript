@@ -8,9 +8,9 @@ fun main() {
     if (tryRunFromFile("program.prints", interpreter)) {
         return
     }
-    */
+     */
 
-    //Si no encuentra ese file pasa directamente al input del usuario
+    // Si no encuentra ese file pasa directamente al input del usuario
     runInteractiveMode(interpreter)
 }
 
@@ -33,9 +33,10 @@ fun tryRunFromFile(fileName: String, interpreter: Interpreter): Boolean {
 
         println("Programa ejecutado exitosamente.")
         when (result) {
-            is RuntimeValue.Num  -> println("Resultado: ${result.v}")
-            is RuntimeValue.Str  -> println("Resultado: ${result.v}")
+            is RuntimeValue.Num -> println("Resultado: ${result.v}")
+            is RuntimeValue.Str -> println("Resultado: ${result.v}")
             is RuntimeValue.Void -> {}
+            else -> {}
         }
 
         ts.close()
@@ -69,9 +70,10 @@ fun evalAndPrint(src: String, interpreter: Interpreter) {
     try {
         val program = parser.parseProgram()
         when (val result = interpreter.visit(program)) {
-            is RuntimeValue.Num  -> println(result.v)
-            is RuntimeValue.Str  -> println(result.v)
+            is RuntimeValue.Num -> println(result.v)
+            is RuntimeValue.Str -> println(result.v)
             is RuntimeValue.Void -> {}
+            else -> {}
         }
     } finally {
         ts.close()
