@@ -2,9 +2,13 @@ import ast.AbstractSyntaxTree
 import ast.BinOp
 import ast.Num
 import ast.UnaryOp
-
-import ast.*
-import token.TokenType
+import ast.Assign
+import ast.Str
+import ast.Var
+import ast.VarDecl
+import ast.PrintlnStmt
+import ast.ExprStmt
+import ast.Program
 
 class AstPrinter {
     fun print(node: AbstractSyntaxTree, indent: String = ""): String = when (node) {

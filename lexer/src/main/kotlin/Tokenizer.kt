@@ -1,6 +1,3 @@
-package lexer
-
-import Token
 import token.TokenType
 import java.io.Reader
 
@@ -9,7 +6,7 @@ class Tokenizer(source: Source) {
     private var column: Int = 0
     private var currentChar: Int = reader.read()
 
-    private val RESERVED_KEYWORDS = mapOf(
+    private val keywords = mapOf(
         "let" to TokenType.LET,
         "number" to TokenType.INT,
         "string" to TokenType.STRING,
@@ -33,14 +30,14 @@ class Tokenizer(source: Source) {
         return if (nextChar == -1) null else nextChar.toChar()
     }
 
-    private fun _id(): Token {
+    private fun id(): Token {
         var res = ""
         while (currentChar != -1 && isIdPart(currentChar.toChar())) {
             res += currentChar.toChar()
             advance()
         }
         val lexeme = res
-        val type = RESERVED_KEYWORDS[lexeme] ?: TokenType.ID
+        val type = keywords[lexeme] ?: TokenType.ID
         return Token(type, lexeme)
     }
 
@@ -136,7 +133,7 @@ class Tokenizer(source: Source) {
                 }
                 else -> {
                     if (isIdStart(ch)) {
-                        return _id()
+                        return id()
                     }
                     error()
                 }

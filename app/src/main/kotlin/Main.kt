@@ -1,14 +1,14 @@
-import lexer.*
-import interpreter.Interpreter
-import interpreter.runtime.RuntimeValue
 import java.io.File
+import java.io.IOException
 
 fun main() {
     val interpreter = Interpreter()
 
+    /*
     if (tryRunFromFile("program.prints", interpreter)) {
         return
     }
+    */
 
     //Si no encuentra ese file pasa directamente al input del usuario
     runInteractiveMode(interpreter)
@@ -40,7 +40,7 @@ fun tryRunFromFile(fileName: String, interpreter: Interpreter): Boolean {
 
         ts.close()
         true
-    } catch (e: Exception) {
+    } catch (e: IOException) {
         println("Error al ejecutar archivo '$fileName': ${e.message}")
         false
     }
@@ -54,7 +54,7 @@ fun runInteractiveMode(interpreter: Interpreter) {
 
         try {
             evalAndPrint(line, interpreter)
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             println(e.message ?: e.toString())
         }
     }

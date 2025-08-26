@@ -1,11 +1,9 @@
-import lexer.FileSource
-import lexer.Tokenizer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import token.TokenType
 import java.io.File
 
-class FileSourceTokenizerTest {
+class FileSourceTokenizerTests {
 
     @Test
     fun testFileSourceWithProgramPrints() {

@@ -1,5 +1,3 @@
-package lexer
-
 import java.io.Reader
 import java.io.StringReader
 
