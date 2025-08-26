@@ -2,7 +2,6 @@ import lexer.TokenSource
 import lexer.Tokenizer
 import token.TokenType
 
-
 class ParserTokenStream(private val tokenizer: Tokenizer) : TokenSource {
     private var lookahead: Token? = null
 
@@ -23,5 +22,8 @@ class ParserTokenStream(private val tokenizer: Tokenizer) : TokenSource {
     override fun peek(): Token {
         if (lookahead == null) lookahead = readNonWhiteSpaces()
         return lookahead!!
+    }
+    fun close() {
+        tokenizer.close()
     }
 }

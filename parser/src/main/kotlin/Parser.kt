@@ -41,10 +41,15 @@ class Parser(private val ts: TokenSource) {
                 advance()
             }
             TokenType.ID -> {
-                if (current.lexeme != "number" && current.lexeme != "string")
+                if (current.lexeme == "number") {
+                    typeTok = Token(TokenType.INT, "number")
+                    advance()
+                } else if (current.lexeme == "string") {
+                    typeTok = Token(TokenType.STRING, "string")
+                    advance()
+                } else {
                     error("Unknown type '${current.lexeme}'")
-                typeTok = current
-                advance()
+                }
             }
             else -> error("Expected type after ':'")
         }
@@ -113,7 +118,13 @@ class Parser(private val ts: TokenSource) {
 
     private fun parsePrimary(): AbstractSyntaxTree = when (current.type) {
         TokenType.INT -> {
-            val t = current; advance(); Num(t, t.lexeme.toInt())
+            val t = current; advance()
+            val value = if (t.lexeme.contains('.')) {
+                t.lexeme.toDouble().toInt()
+            } else {
+                t.lexeme.toInt()
+            }
+            Num(t, value)
         }
         TokenType.STRING -> {
             val t = current; advance(); Str(t, t.lexeme)
