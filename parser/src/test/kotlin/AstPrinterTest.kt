@@ -1,3 +1,4 @@
+import lexer.StringSource
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import lexer.Tokenizer
@@ -5,7 +6,7 @@ import lexer.Tokenizer
 class AstPrinterTest {
 
     private fun printAst(src: String): String {
-        val tokenizer = Tokenizer(src)
+        val tokenizer = Tokenizer(StringSource(src))
         val stream = ParserTokenStream(tokenizer)
         val parser = Parser(stream)
         val ast = parser.parseProgram()

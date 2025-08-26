@@ -3,11 +3,12 @@ import lexer.Tokenizer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import interpreter.runtime.RuntimeValue
+import lexer.StringSource
 
 class AppTest {
 
     private fun evaluate(src: String): Any {
-        val tokenizer = Tokenizer(src)
+        val tokenizer = Tokenizer(StringSource(src))
         val stream = ParserTokenStream(tokenizer)
         val parser = Parser(stream)
         val program = parser.parseProgram()
