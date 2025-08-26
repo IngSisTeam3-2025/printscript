@@ -1,8 +1,15 @@
 package interpreter
 
-import ast.*
-import interpreter.runtime.NodeVisitor
-import interpreter.runtime.RuntimeValue
+import ast.Num
+import ast.Str
+import ast.BinOp
+import ast.UnaryOp
+import ast.Var
+import ast.Assign
+import ast.VarDecl
+import ast.PrintlnStmt
+import ast.ExprStmt
+import ast.Program
 
 import token.TokenType
 
@@ -111,6 +118,8 @@ class Interpreter : NodeVisitor {
         env[name] = if (init is RuntimeValue.Void) null else init
         return RuntimeValue.Void
     }
+
+
     override fun visitPrintln(node: PrintlnStmt): RuntimeValue {
         val out: RuntimeValue?
         if (node.arg != null) {

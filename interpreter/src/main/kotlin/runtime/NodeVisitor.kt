@@ -1,6 +1,14 @@
-package interpreter.runtime
-
-import ast.*
+import ast.Num
+import ast.BinOp
+import ast.UnaryOp
+import ast.Var
+import ast.Assign
+import ast.Str
+import ast.VarDecl
+import ast.PrintlnStmt
+import ast.ExprStmt
+import ast.Program
+import ast.AbstractSyntaxTree
 
 interface NodeVisitor {
 

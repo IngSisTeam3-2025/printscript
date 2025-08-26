@@ -1,4 +1,3 @@
-package interpreter.runtime
 
 sealed class RuntimeValue {
     object Void : RuntimeValue()

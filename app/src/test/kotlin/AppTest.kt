@@ -1,8 +1,7 @@
-import interpreter.Interpreter
 import lexer.Tokenizer
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import interpreter.runtime.RuntimeValue
 import lexer.StringSource
 
 class AppTest {
@@ -13,11 +12,12 @@ class AppTest {
         val parser = Parser(stream)
         val program = parser.parseProgram()
 
-        val rv = Interpreter().visit(program) // o interpret(program)
+        val rv = Interpreter().visit(program)
         return when (rv) {
             is RuntimeValue.Num  -> rv.v
             is RuntimeValue.Void -> error("La última sentencia no produce valor (Void)")
             is RuntimeValue.Str  -> rv.v
+            else -> {}
         }
     }
 
