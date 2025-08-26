@@ -2,11 +2,13 @@ package lexer
 
 import Token
 import token.TokenType
+import java.io.Reader
 
-
-class Tokenizer(private val source: String) {
+class Tokenizer(source: Source) {
+    private val reader: Reader = source.getReader()
     private var column: Int = 0
-    private var currentChar : Char? = source[0]
+    private var currentChar: Int = reader.read()
+
     private val RESERVED_KEYWORDS = mapOf(
         "let" to TokenType.LET,
         "number" to TokenType.INT,
@@ -15,16 +17,26 @@ class Tokenizer(private val source: String) {
     )
 
     private fun isIdStart(c: Char) = c.isLetter() || c == '_'
-    private fun isIdPart(c: Char)  = c.isLetterOrDigit() || c == '_'
+    private fun isIdPart(c: Char) = c.isLetterOrDigit() || c == '_'
 
-    fun column() : Int {
-        return column
+    fun column(): Int = column
+
+    private fun advance() {
+        column++
+        currentChar = reader.read()
     }
 
-    fun _id(): Token {
+    fun peek(): Char? {
+        reader.mark(1)
+        val nextChar = reader.read()
+        reader.reset()
+        return if (nextChar == -1) null else nextChar.toChar()
+    }
+
+    private fun _id(): Token {
         var res = ""
-        while (currentChar != null && isIdPart(currentChar!!)) {
-            res += currentChar
+        while (currentChar != -1 && isIdPart(currentChar.toChar())) {
+            res += currentChar.toChar()
             advance()
         }
         val lexeme = res
@@ -32,23 +44,15 @@ class Tokenizer(private val source: String) {
         return Token(type, lexeme)
     }
 
-    fun peek(): Char? {
-        return if (column + 1 > source.length - 1) {
-            null
-        } else {
-            source[column + 1]
-        }
-    }
-
     private fun string(): Token {
-        val quote = currentChar
+        val quote = currentChar.toChar()
         advance()
         var res = ""
-        while (currentChar != null && currentChar != quote) {
-            res += currentChar
+        while (currentChar != -1 && currentChar.toChar() != quote) {
+            res += currentChar.toChar()
             advance()
         }
-        if (currentChar == quote) {
+        if (currentChar != -1 && currentChar.toChar() == quote) {
             advance()
         } else {
             throw Error("String sin cerrar en columna $column")
@@ -56,112 +60,96 @@ class Tokenizer(private val source: String) {
         return Token(TokenType.STRING, res)
     }
 
-    private fun number(): Int {
+    private fun number(): String {
         var res = ""
-        while (currentChar != null && currentChar!!.isDigit()) {
-            res += currentChar.toString()
+        while (currentChar != -1 && currentChar.toChar().isDigit()) {
+            res += currentChar.toChar()
             advance()
         }
-        if (currentChar == '.') {
-            res += currentChar
+        if (currentChar != -1 && currentChar.toChar() == '.') {
+            res += currentChar.toChar()
             advance()
-            while (currentChar != null && currentChar!!.isDigit()) {
-                res += currentChar
+            while (currentChar != -1 && currentChar.toChar().isDigit()) {
+                res += currentChar.toChar()
                 advance()
             }
         }
-        return res.toInt()
+        return res
     }
 
-    fun getNextToken() : Token {
-        while (currentChar != null) {
+    fun getNextToken(): Token {
+        while (currentChar != -1) {
+            val ch = currentChar.toChar()
 
-            if (currentChar!!.isWhitespace()) {
-                val ch = currentChar!!
+            if (ch.isWhitespace()) {
                 advance()
                 return Token(TokenType.WHITESPACE, ch.toString())
             }
 
-            if (currentChar!!.isDigit()) {
-                return Token(TokenType.INT, number().toString())
+            if (ch.isDigit()) {
+                return Token(TokenType.INT, number())
             }
 
-            if (currentChar!! == '=') {
-                advance()
-                return Token(TokenType.ASSIGN, "=")
+            when (ch) {
+                '=' -> {
+                    advance()
+                    return Token(TokenType.ASSIGN, "=")
+                }
+                ';' -> {
+                    advance()
+                    return Token(TokenType.SEMI, ";")
+                }
+                ':' -> {
+                    advance()
+                    return Token(TokenType.COLON, ":")
+                }
+                '.' -> {
+                    advance()
+                    return Token(TokenType.DOT, ".")
+                }
+                '+' -> {
+                    advance()
+                    return Token(TokenType.ADD, "+")
+                }
+                '-' -> {
+                    advance()
+                    return Token(TokenType.SUB, "-")
+                }
+                '/' -> {
+                    advance()
+                    return Token(TokenType.DIV, "/")
+                }
+                '*' -> {
+                    advance()
+                    return Token(TokenType.MUL, "*")
+                }
+                '(' -> {
+                    advance()
+                    return Token(TokenType.LPAREN, "(")
+                }
+                ')' -> {
+                    advance()
+                    return Token(TokenType.RPAREN, ")")
+                }
+                '"', '\'' -> {
+                    return string()
+                }
+                else -> {
+                    if (isIdStart(ch)) {
+                        return _id()
+                    }
+                    error()
+                }
             }
-
-            if (currentChar!! == ';') {
-                advance()
-                return Token(TokenType.SEMI, ";")
-            }
-
-            if (currentChar!! == ':') {
-                advance()
-                return Token(TokenType.COLON, ":")
-            }
-
-            if (currentChar!! == '.') {
-                advance()
-                return Token(TokenType.DOT, ".")
-            }
-
-            if (isIdStart(currentChar!!)) {
-                return _id()
-            }
-
-
-            if (currentChar == '"' || currentChar == '\'') {
-                return string()
-            }
-
-            if (currentChar!! == '+') {
-                advance()
-                return Token(TokenType.ADD, "+")
-            }
-
-            if (currentChar!! == '-') {
-                advance()
-                return Token(TokenType.SUB, "-")
-            }
-
-            if (currentChar!! == '/') {
-                advance()
-                return Token(TokenType.DIV, "/")
-            }
-
-            if (currentChar!! == '*') {
-                advance()
-                return Token(TokenType.MUL, "*")
-            }
-
-            if (currentChar!! == '(') {
-                advance()
-                return Token(TokenType.LPAREN, "(")
-            }
-
-            if (currentChar!! == ')') {
-                advance()
-                return Token(TokenType.RPAREN, ")")
-            }
-            error()
         }
         return Token(TokenType.EOF, "")
     }
 
-    private fun error() {
-        throw Error("Col: $column -> Lexical error:: Invalid character: '$currentChar'")
+    private fun error(): Nothing {
+        throw Error("Col: $column -> Lexical error:: Invalid character: '${currentChar.toChar()}'")
     }
 
-    private fun advance() {
-        column++
-
-        currentChar = if (column > source.length - 1) {
-            null
-        } else {
-            source[column]
-        }
-
+    fun close() {
+        reader.close()
     }
-
 }
