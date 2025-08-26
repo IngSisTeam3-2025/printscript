@@ -1,7 +1,5 @@
-import lexer.StringSource
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import lexer.Tokenizer
 
 class AstPrinterTest {
 
@@ -117,7 +115,7 @@ class AstPrinterTest {
             )
         """.trimIndent()
         val withSpaces = " (  (2 + 3) * 4 ) - ( 10 / 5 ) ;"
-        val noSpaces  = "((2+3)*4)-(10/5);"
+        val noSpaces = "((2+3)*4)-(10/5);"
         assertEquals(expected, printAst(withSpaces))
         assertEquals(expected, printAst(noSpaces))
     }
@@ -414,7 +412,11 @@ class AstPrinterTest {
               result
             )
         """.trimIndent()
-        assertEquals(expected, printAst("let a: number = 5; let b: number = 10; let result: number = (a + b) * 2; println(result);"))
+        assertEquals(
+            expected,
+            printAst("let a: number = 5; let b: number = 10; let result: " +
+                    "number = (a + b) * 2; println(result);")
+        )
     }
 
     @Test
@@ -439,7 +441,11 @@ class AstPrinterTest {
               age
             )
         """.trimIndent()
-        assertEquals(expected, printAst("let name: string = \"Alice\"; let age: number = 25; println(name); println(age);"))
+        assertEquals(
+            expected,
+            printAst("let name: string = \"Alice\"; let age: " +
+                    "number = 25; println(name); println(age);")
+        )
     }
 
     // Tests para casos especiales

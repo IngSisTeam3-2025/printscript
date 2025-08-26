@@ -1,5 +1,3 @@
-package interpreter
-
 import ast.Num
 import ast.Str
 import ast.BinOp
@@ -129,10 +127,9 @@ class Interpreter : NodeVisitor {
         }
 
         val text = when (out) {
-            null -> ""
             is RuntimeValue.Num -> out.v.toString()
             is RuntimeValue.Str -> out.v
-            is RuntimeValue.Void -> ""
+            else -> ""
         }
 
         println(text)

@@ -1,5 +1,3 @@
-import lexer.TokenSource
-import lexer.Tokenizer
 import token.TokenType
 
 class ParserTokenStream(private val tokenizer: Tokenizer) : TokenSource {

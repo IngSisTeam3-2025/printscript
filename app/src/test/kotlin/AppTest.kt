@@ -1,8 +1,6 @@
-import lexer.Tokenizer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import lexer.StringSource
 
 class AppTest {
 

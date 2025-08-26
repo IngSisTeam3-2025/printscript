@@ -1,6 +1,16 @@
 import token.TokenType
-import ast.*
-import lexer.TokenSource
+import ast.Num
+import ast.Str
+import ast.Var
+import ast.BinOp
+import ast.UnaryOp
+import ast.Assign
+import ast.VarDecl
+import ast.PrintlnStmt
+import ast.ExprStmt
+import ast.Program
+import ast.AbstractSyntaxTree
+import ast.Stmt
 
 class Parser(private val ts: TokenSource) {
     private var current: Token = ts.peek()
@@ -8,7 +18,10 @@ class Parser(private val ts: TokenSource) {
     private fun error(msg: String = "Parsing error"): Nothing = throw Error(msg)
     private fun advance() { current = ts.next() }
     private fun check(t: TokenType) = current.type == t
-    private fun expect(t: TokenType) { if (!check(t)) error("Expected $t, got ${current.type}"); advance() }
+    private fun expect(t: TokenType) {
+        if (current.type != t) error("Expected $t, got ${current.type}")
+        advance()
+    }
 
     fun parseProgram(): Program {
         advance()

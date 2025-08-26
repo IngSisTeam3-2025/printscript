@@ -31,12 +31,23 @@ detekt {
                 maxLineLength: 120
               LoopWithTooManyJumpStatements:
                 active: false
+              ReturnCount:
+                active: false
+              UseCheckOrError:
+                active: false
 
             complexity:
               TooManyFunctions:
                 active: false
               CyclomaticComplexMethod:
                 active: false
+              LongMethod:
+                active: false
+                
+            exceptions:
+              TooGenericExceptionThrown:
+                active: false
+                                
             """.trimIndent()
         )
     )
