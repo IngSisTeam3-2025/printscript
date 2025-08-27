@@ -1,7 +1,8 @@
+
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import token.TokenType
 import java.io.File
+import kotlin.test.Test
 
 class FileSourceTokenizerTests {
 

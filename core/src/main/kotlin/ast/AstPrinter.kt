@@ -19,9 +19,7 @@ class AstPrinter {
         is VarDecl -> buildString {
             append("$indent(VAR_DECL\n")
             append("$indent  NAME ${node.name.lexeme}\n")
-            node.annotatedType?.let { ty ->
-                append("$indent  TYPE ${ty.lexeme}\n")
-            }
+            append("$indent  TYPE ${node.annotatedType.lexeme}\n")
             node.init?.let { init ->
                 append("$indent  INIT\n")
                 append(print(init, "$indent    ")).append("\n")
