@@ -54,8 +54,23 @@ spotless {
     }
 }
 
-tasks.check { dependsOn("detekt","spotlessCheck") }
+tasks.check { dependsOn("detekt","spotlessCheck", "koverVerify") }
 
 tasks.named("build") {
     dependsOn("spotlessApply", "check")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "20"
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("build/**/*.kt")
+        trimTrailingWhitespace()
+    }
+}
+
+kover {
 }
