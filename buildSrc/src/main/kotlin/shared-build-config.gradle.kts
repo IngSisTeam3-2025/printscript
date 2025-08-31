@@ -60,3 +60,8 @@ tasks.check {
 kotlin {
     jvmToolchain(21)
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}

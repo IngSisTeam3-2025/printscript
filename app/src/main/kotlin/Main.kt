@@ -36,6 +36,9 @@ fun tryRunFromFile(fileName: String, interpreter: Interpreter): Boolean {
             is RuntimeValue.Num  -> println("Resultado: ${result.v}")
             is RuntimeValue.Str  -> println("Resultado: ${result.v}")
             is RuntimeValue.Void -> {}
+            else -> {
+
+            }
         }
 
         ts.close()
@@ -72,6 +75,9 @@ fun evalAndPrint(src: String, interpreter: Interpreter) {
             is RuntimeValue.Num  -> println(result.v)
             is RuntimeValue.Str  -> println(result.v)
             is RuntimeValue.Void -> {}
+            else -> {
+
+            }
         }
     } finally {
         ts.close()
