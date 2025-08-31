@@ -8,9 +8,9 @@ fun main() {
     if (tryRunFromFile("program.prints", interpreter)) {
         return
     }
-     */
+    */
 
-    // Si no encuentra ese file pasa directamente al input del usuario
+    //Si no encuentra ese file pasa directamente al input del usuario
     runInteractiveMode(interpreter)
 }
 
