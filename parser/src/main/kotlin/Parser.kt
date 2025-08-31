@@ -1,22 +1,24 @@
-import token.TokenType
-import ast.Num
-import ast.Str
-import ast.Var
-import ast.BinOp
-import ast.UnaryOp
-import ast.Assign
-import ast.VarDecl
-import ast.PrintlnStmt
-import ast.ExprStmt
-import ast.Program
 import ast.AbstractSyntaxTree
+import ast.Assign
+import ast.BinOp
+import ast.ExprStmt
+import ast.Num
+import ast.PrintlnStmt
+import ast.Program
 import ast.Stmt
+import ast.Str
+import ast.UnaryOp
+import ast.Var
+import ast.VarDecl
+import token.TokenType
 
 class Parser(private val ts: TokenSource) {
     private var current: Token = ts.peek()
 
     private fun error(msg: String = "Parsing error"): Nothing = throw Error(msg)
-    private fun advance() { current = ts.next() }
+    private fun advance() {
+        current = ts.next()
+    }
     private fun check(t: TokenType) = current.type == t
     private fun expect(t: TokenType) {
         if (current.type != t) error("Expected $t, got ${current.type}")
@@ -33,14 +35,16 @@ class Parser(private val ts: TokenSource) {
     }
 
     private fun parseStatement(): Stmt = when {
-        check(TokenType.LET)     -> parseVarDecl()
+        check(TokenType.LET) -> parseVarDecl()
         check(TokenType.PRINTLN) -> parsePrintln()
-        else                     -> parseExprStmt()
+        else -> parseExprStmt()
     }
 
     private fun parseVarDecl(): Stmt {
-        val letTok = current; expect(TokenType.LET)
-        val nameTok = current; expect(TokenType.ID)
+        val letTok = current
+        expect(TokenType.LET)
+        val nameTok = current
+        expect(TokenType.ID)
 
         if (!check(TokenType.COLON)) {
             error("Variable '${nameTok.lexeme}' must have an explicit type")
@@ -68,7 +72,10 @@ class Parser(private val ts: TokenSource) {
         }
 
         var init: AbstractSyntaxTree? = null
-        if (check(TokenType.ASSIGN)) { advance(); init = parseExpr() }
+        if (check(TokenType.ASSIGN)) {
+            advance()
+            init = parseExpr()
+        }
 
         expect(TokenType.SEMI)
 
@@ -76,17 +83,22 @@ class Parser(private val ts: TokenSource) {
     }
 
     private fun parsePrintln(): Stmt {
-        val kw = current; expect(TokenType.PRINTLN)
-        val lp = current; expect(TokenType.LPAREN)
+        val kw = current
+        expect(TokenType.PRINTLN)
+        val lp = current
+        expect(TokenType.LPAREN)
         val arg = if (!check(TokenType.RPAREN)) parseExpr() else null
-        val rp = current; expect(TokenType.RPAREN)
-        val semi = current; expect(TokenType.SEMI)
+        val rp = current
+        expect(TokenType.RPAREN)
+        val semi = current
+        expect(TokenType.SEMI)
         return PrintlnStmt(kw, lp, arg, rp, semi)
     }
 
     private fun parseExprStmt(): Stmt {
         val e = parseExpr()
-        val semi = current; expect(TokenType.SEMI)
+        val semi = current
+        expect(TokenType.SEMI)
         return ExprStmt(e, semi)
     }
 
@@ -102,28 +114,40 @@ class Parser(private val ts: TokenSource) {
             } else {
                 error("Left side of '=' must be an identifier")
             }
-        } else left
+        } else {
+            left
+        }
     }
 
     private fun parseAdditive(): AbstractSyntaxTree {
         var node = parseMultiplicative()
         while (check(TokenType.ADD) || check(TokenType.SUB)) {
-            val op = current; advance()
+            val op = current
+            advance()
             node = BinOp(node, op, parseMultiplicative())
         }
         return node
     }
 
     private fun parseUnary(): AbstractSyntaxTree = when (current.type) {
-        TokenType.ADD -> { val op = current; expect(TokenType.ADD); UnaryOp(op, parseUnary()) }
-        TokenType.SUB -> { val op = current; expect(TokenType.SUB); UnaryOp(op, parseUnary()) }
+        TokenType.ADD -> {
+            val op = current
+            expect(TokenType.ADD)
+            UnaryOp(op, parseUnary())
+        }
+        TokenType.SUB -> {
+            val op = current
+            expect(TokenType.SUB)
+            UnaryOp(op, parseUnary())
+        }
         else -> parsePrimary()
     }
 
     private fun parseMultiplicative(): AbstractSyntaxTree {
         var node = parseUnary()
         while (check(TokenType.MUL) || check(TokenType.DIV)) {
-            val op = current; advance()
+            val op = current
+            advance()
             node = BinOp(node, op, parseUnary())
         }
         return node
@@ -131,7 +155,8 @@ class Parser(private val ts: TokenSource) {
 
     private fun parsePrimary(): AbstractSyntaxTree = when (current.type) {
         TokenType.INT -> {
-            val t = current; advance()
+            val t = current
+            advance()
             val value = if (t.lexeme.contains('.')) {
                 t.lexeme.toDouble().toInt()
             } else {
@@ -140,10 +165,14 @@ class Parser(private val ts: TokenSource) {
             Num(t, value)
         }
         TokenType.STRING -> {
-            val t = current; advance(); Str(t, t.lexeme)
+            val t = current
+            advance()
+            Str(t, t.lexeme)
         }
         TokenType.ID -> {
-            val id = current; advance(); Var(id)
+            val id = current
+            advance()
+            Var(id)
         }
         TokenType.LPAREN -> {
             expect(TokenType.LPAREN)

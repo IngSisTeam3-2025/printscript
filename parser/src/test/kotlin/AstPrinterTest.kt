@@ -414,8 +414,10 @@ class AstPrinterTest {
         """.trimIndent()
         assertEquals(
             expected,
-            printAst("let a: number = 5; let b: number = 10; let result: " +
-                    "number = (a + b) * 2; println(result);")
+            printAst(
+                "let a: number = 5; let b: number = 10; let result: " +
+                    "number = (a + b) * 2; println(result);",
+            ),
         )
     }
 
@@ -443,8 +445,10 @@ class AstPrinterTest {
         """.trimIndent()
         assertEquals(
             expected,
-            printAst("let name: string = \"Alice\"; let age: " +
-                    "number = 25; println(name); println(age);")
+            printAst(
+                "let name: string = \"Alice\"; let age: " +
+                    "number = 25; println(name); println(age);",
+            ),
         )
     }
 
@@ -507,6 +511,4 @@ class AstPrinterTest {
         """.trimIndent()
         assertEquals(expected, printAst("(x + y) * (z - w);"))
     }
-
-
 }

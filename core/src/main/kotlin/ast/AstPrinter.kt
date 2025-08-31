@@ -1,18 +1,17 @@
 import ast.AbstractSyntaxTree
-import ast.BinOp
-import ast.Num
-import ast.UnaryOp
 import ast.Assign
+import ast.BinOp
+import ast.ExprStmt
+import ast.Num
+import ast.PrintlnStmt
+import ast.Program
 import ast.Str
+import ast.UnaryOp
 import ast.Var
 import ast.VarDecl
-import ast.PrintlnStmt
-import ast.ExprStmt
-import ast.Program
 
 class AstPrinter {
     fun print(node: AbstractSyntaxTree, indent: String = ""): String = when (node) {
-
         is Program -> node.statements.joinToString("\n") { s -> print(s, indent) }
 
         is ExprStmt -> print(node.expr, indent)
@@ -20,9 +19,7 @@ class AstPrinter {
         is VarDecl -> buildString {
             append("$indent(VAR_DECL\n")
             append("$indent  NAME ${node.name.lexeme}\n")
-            node.annotatedType?.let { ty ->
-                append("$indent  TYPE ${ty.lexeme}\n")
-            }
+            append("$indent  TYPE ${node.annotatedType.lexeme}\n")
             node.init?.let { init ->
                 append("$indent  INIT\n")
                 append(print(init, "$indent    ")).append("\n")
@@ -31,11 +28,14 @@ class AstPrinter {
         }
 
         is PrintlnStmt -> {
-            if (node.arg == null) "$indent(PRINTLN)"
-            else buildString {
-                append("$indent(PRINTLN\n")
-                append(print(node.arg, "$indent  ")).append("\n")
-                append("$indent)")
+            if (node.arg == null) {
+                "$indent(PRINTLN)"
+            } else {
+                buildString {
+                    append("$indent(PRINTLN\n")
+                    append(print(node.arg, "$indent  ")).append("\n")
+                    append("$indent)")
+                }
             }
         }
 

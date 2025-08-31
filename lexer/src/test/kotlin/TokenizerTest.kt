@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import token.TokenType
 
@@ -158,8 +158,8 @@ class TokenizerTest {
         val tokenizer = Tokenizer(
             StringSource(
                 "let age: number = 25; let name: string " +
-                        "= \"John\";"
-            )
+                    "= \"John\";",
+            ),
         )
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
