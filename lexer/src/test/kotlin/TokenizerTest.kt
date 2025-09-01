@@ -250,7 +250,7 @@ class TokenizerTest {
     fun testPeekFunction() {
         val tokenizer = Tokenizer(StringSource("ab"))
         assertEquals('b', tokenizer.peek()) // Debería ver el siguiente carácter sin avanzar
-        assertEquals(Token(TokenType.ID, "ab"), tokenizer.getNextToken()) // Debería tokenizar todo el identificador
+        assertEquals(Token(TokenType.ID, "ab"), tokenizer.getNextToken()) // Debería tokenizar el identificador
     }
 
     @Test

@@ -25,6 +25,6 @@ Para habilitar los ganchos después de clonar el repositorio, ejecutar:
 git config core.hooksPath .githooks
 ```
 
-Esto configura Git para usar los scripts del directorio `.githooks`, donde `pre-commit` ejecuta `./gradlew spotlessApply` y `./gradlew test`, y `pre-push` ejecuta `./gradlew test`.
+Esto configura Git para usar los scripts del directorio `.git/hooks`, donde `pre-commit` ejecuta `./gradlew spotlessApply` y `./gradlew test`, y `pre-push` ejecuta `./gradlew test`.
 
 
