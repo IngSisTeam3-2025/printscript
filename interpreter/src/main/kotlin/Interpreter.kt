@@ -1,9 +1,13 @@
-package interpreter
-
-import ast.*
-import interpreter.runtime.NodeVisitor
-import interpreter.runtime.RuntimeValue
-
+import ast.Assign
+import ast.BinOp
+import ast.ExprStmt
+import ast.Num
+import ast.PrintlnStmt
+import ast.Program
+import ast.Str
+import ast.UnaryOp
+import ast.Var
+import ast.VarDecl
 import token.TokenType
 
 class Interpreter : NodeVisitor {
@@ -94,23 +98,22 @@ class Interpreter : NodeVisitor {
 
         val init = if (node.init != null) visit(node.init!!) else RuntimeValue.Void
 
-        if (node.annotatedType != null) {
-            val ty = node.annotatedType!!.lexeme
-            if (ty == "number") {
-                if (init !is RuntimeValue.Num && init !is RuntimeValue.Void) {
-                    error("Type error: expected number, got ${init::class.simpleName}")
-                }
-            } else if (ty == "string") {
-                if (init !is RuntimeValue.Str && init !is RuntimeValue.Void) {
-                    error("Type error: expected string, got ${init::class.simpleName}")
-                }
-            } else {
-                error("Unknown type '${ty}'")
+        val ty = node.annotatedType.lexeme
+        if (ty == "number") {
+            if (init !is RuntimeValue.Num && init !is RuntimeValue.Void) {
+                error("Type error: expected number, got ${init::class.simpleName}")
             }
+        } else if (ty == "string") {
+            if (init !is RuntimeValue.Str && init !is RuntimeValue.Void) {
+                error("Type error: expected string, got ${init::class.simpleName}")
+            }
+        } else {
+            error("Unknown type '$ty'")
         }
         env[name] = if (init is RuntimeValue.Void) null else init
         return RuntimeValue.Void
     }
+
     override fun visitPrintln(node: PrintlnStmt): RuntimeValue {
         val out: RuntimeValue?
         if (node.arg != null) {
@@ -120,10 +123,9 @@ class Interpreter : NodeVisitor {
         }
 
         val text = when (out) {
-            null -> ""
             is RuntimeValue.Num -> out.v.toString()
             is RuntimeValue.Str -> out.v
-            is RuntimeValue.Void -> ""
+            else -> ""
         }
 
         println(text)

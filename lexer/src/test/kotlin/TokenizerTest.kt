@@ -1,6 +1,5 @@
-import lexer.Tokenizer
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 import token.TokenType
 
@@ -8,7 +7,7 @@ class TokenizerTest {
 
     @Test
     fun testSimpleVariableDeclaration() {
-        val tokenizer = Tokenizer("let x = 5;")
+        val tokenizer = Tokenizer(StringSource("let x = 5;"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -23,7 +22,7 @@ class TokenizerTest {
 
     @Test
     fun testStringVariableDeclaration() {
-        val tokenizer = Tokenizer("let name = \"Hello World\";")
+        val tokenizer = Tokenizer(StringSource("let name = \"Hello World\";"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -38,7 +37,7 @@ class TokenizerTest {
 
     @Test
     fun testPrintStatement() {
-        val tokenizer = Tokenizer("println(\"Hello\");")
+        val tokenizer = Tokenizer(StringSource("println(\"Hello\");"))
 
         assertEquals(Token(TokenType.PRINTLN, "println"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.LPAREN, "("), tokenizer.getNextToken())
@@ -50,7 +49,7 @@ class TokenizerTest {
 
     @Test
     fun testArithmeticExpression() {
-        val tokenizer = Tokenizer("let result = 10 + 5 - 2 * 3 / 1;")
+        val tokenizer = Tokenizer(StringSource("let result = 10 + 5 - 2 * 3 / 1;"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -81,7 +80,7 @@ class TokenizerTest {
 
     @Test
     fun testIdentifiers() {
-        val tokenizer = Tokenizer("let _variable1 = myFunction123;")
+        val tokenizer = Tokenizer(StringSource("let _variable1 = myFunction123;"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -96,7 +95,7 @@ class TokenizerTest {
 
     @Test
     fun testSingleQuoteString() {
-        val tokenizer = Tokenizer("let msg = 'Hello';")
+        val tokenizer = Tokenizer(StringSource("let msg = 'Hello';"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -111,7 +110,7 @@ class TokenizerTest {
 
     @Test
     fun testEmptyString() {
-        val tokenizer = Tokenizer("let empty = \"\";")
+        val tokenizer = Tokenizer(StringSource("let empty = \"\";"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -126,7 +125,7 @@ class TokenizerTest {
 
     @Test
     fun testWhitespaceHandling() {
-        val tokenizer = Tokenizer("   let   x   =   5   ;   ")
+        val tokenizer = Tokenizer(StringSource("   let   x   =   5   ;   "))
 
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -156,7 +155,12 @@ class TokenizerTest {
 
     @Test
     fun testTypeDeclarations() {
-        val tokenizer = Tokenizer("let age: number = 25; let name: string = \"John\";")
+        val tokenizer = Tokenizer(
+            StringSource(
+                "let age: number = 25; let name: string " +
+                    "= \"John\";",
+            ),
+        )
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -186,7 +190,7 @@ class TokenizerTest {
 
     @Test
     fun testComplexExpression() {
-        val tokenizer = Tokenizer("println((10 + 5) * 2);")
+        val tokenizer = Tokenizer(StringSource("println((10 + 5) * 2);"))
 
         assertEquals(Token(TokenType.PRINTLN, "println"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.LPAREN, "("), tokenizer.getNextToken())
@@ -209,7 +213,7 @@ class TokenizerTest {
     // Tests para casos de error
     @Test
     fun testUnterminatedString() {
-        val tokenizer = Tokenizer("let msg = \"Hello")
+        val tokenizer = Tokenizer(StringSource("let msg = \"Hello"))
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -225,7 +229,7 @@ class TokenizerTest {
 
     @Test
     fun testInvalidCharacter() {
-        val tokenizer = Tokenizer("let x = 5 & 3;") // '&' no es un carácter válido
+        val tokenizer = Tokenizer(StringSource("let x = 5 & 3;")) // '&' no es un carácter válido
 
         assertEquals(Token(TokenType.LET, "let"), tokenizer.getNextToken())
         assertEquals(Token(TokenType.WHITESPACE, " "), tokenizer.getNextToken())
@@ -244,14 +248,14 @@ class TokenizerTest {
     // Tests para verificar funciones auxiliares
     @Test
     fun testPeekFunction() {
-        val tokenizer = Tokenizer("ab")
+        val tokenizer = Tokenizer(StringSource("ab"))
         assertEquals('b', tokenizer.peek()) // Debería ver el siguiente carácter sin avanzar
-        assertEquals(Token(TokenType.ID, "ab"), tokenizer.getNextToken()) // Debería tokenizar todo el identificador
+        assertEquals(Token(TokenType.ID, "ab"), tokenizer.getNextToken()) // Debería tokenizar el identificador
     }
 
     @Test
     fun testColumnTracking() {
-        val tokenizer = Tokenizer("let x")
+        val tokenizer = Tokenizer(StringSource("let x"))
         assertEquals(0, tokenizer.column()) // Posición inicial
 
         tokenizer.getNextToken() // "let"
@@ -267,7 +271,7 @@ class TokenizerTest {
     // Test estilo Python REPL como en tu ejemplo
     @Test
     fun testPythonStyleExample() {
-        val tokenizer = Tokenizer("let a = 2;")
+        val tokenizer = Tokenizer(StringSource("let a = 2;"))
 
         // Simula el comportamiento del ejemplo de Python
         var token = tokenizer.getNextToken()

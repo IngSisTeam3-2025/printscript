@@ -1,0 +1,5 @@
+let x: number = 42;
+let message: string = "Hello World";
+let result: number = x + 8;
+println(message);
+println(result);

@@ -1,5 +1,6 @@
 plugins {
     id("shared-build-config")
+    application
 }
 
 dependencies {

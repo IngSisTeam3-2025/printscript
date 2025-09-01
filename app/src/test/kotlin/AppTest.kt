@@ -1,25 +1,23 @@
-import interpreter.Interpreter
-import lexer.Tokenizer
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import interpreter.runtime.RuntimeValue
 
 class AppTest {
 
     private fun evaluate(src: String): Any {
-        val tokenizer = Tokenizer(src)
+        val tokenizer = Tokenizer(StringSource(src))
         val stream = ParserTokenStream(tokenizer)
         val parser = Parser(stream)
         val program = parser.parseProgram()
 
-        val rv = Interpreter().visit(program) // o interpret(program)
+        val rv = Interpreter().visit(program)
         return when (rv) {
-            is RuntimeValue.Num  -> rv.v
+            is RuntimeValue.Num -> rv.v
             is RuntimeValue.Void -> error("La última sentencia no produce valor (Void)")
-            is RuntimeValue.Str  -> rv.v
+            is RuntimeValue.Str -> rv.v
+            else -> {}
         }
     }
-
 
     @Test
     fun `should parse and evaluate addition and subtraction correctly`() {
@@ -31,7 +29,6 @@ class AppTest {
         assertEquals(-5, evaluate("-5;"))
         assertEquals(8, evaluate("-3 * -2 + 2;"))
     }
-
 
     @Test
     fun `should handle single operand correctly`() {
@@ -304,5 +301,4 @@ class AppTest {
     fun `should print string variable correctly`() {
         assertEquals("goodbye", evaluate("let farewell: string = \"goodbye\"; farewell;"))
     }
-
 }
