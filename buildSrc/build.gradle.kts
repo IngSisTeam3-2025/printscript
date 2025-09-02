@@ -5,6 +5,16 @@ plugins {
     `maven-publish`
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 repositories {
     gradlePluginPortal()
     mavenCentral()
