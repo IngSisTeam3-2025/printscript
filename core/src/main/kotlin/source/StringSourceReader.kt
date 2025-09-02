@@ -1,6 +1,6 @@
+import source.ISourceReader
 import source.SourcePosition
 import source.SourceReadResult
-import source.ISourceReader
 
 class StringSourceReader(private val content: String) : ISourceReader {
     private var index = 0

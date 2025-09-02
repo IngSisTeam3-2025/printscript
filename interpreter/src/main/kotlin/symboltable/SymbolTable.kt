@@ -1,3 +1,4 @@
 package symboltable
 
-class SymbolTable : ISymbolTable {}
+@SuppressWarnings("all")
+class SymbolTable : ISymbolTable

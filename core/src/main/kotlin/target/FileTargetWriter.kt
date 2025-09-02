@@ -1,5 +1,4 @@
 package target
 
-class FileTargetWriter : ITargetWriter {
-
-}
+@SuppressWarnings("all")
+class FileTargetWriter : ITargetWriter

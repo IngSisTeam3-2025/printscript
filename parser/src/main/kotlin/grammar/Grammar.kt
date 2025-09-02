@@ -1,3 +1,3 @@
 package grammar
 
-class Grammar {}
+class Grammar

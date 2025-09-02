@@ -1,4 +1,4 @@
 package symboltable
 
-interface ISymbolTable {
-}
+@SuppressWarnings("all")
+interface ISymbolTable

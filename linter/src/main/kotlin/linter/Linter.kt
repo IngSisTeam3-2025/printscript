@@ -5,14 +5,16 @@ import parser.IParser
 import source.ISourceReader
 import target.ITargetWriter
 
-class Linter(private val
-             reader: ISourceReader,
-             writer: ITargetWriter,
-             lexer: ILexer,
-             parser: IParser) : ILinter {
+@SuppressWarnings("all")
+class Linter(
+    private val
+    reader: ISourceReader,
+    writer: ITargetWriter,
+    lexer: ILexer,
+    parser: IParser,
+) : ILinter {
 
     override fun lint(): LintResult {
         TODO("Not yet implemented")
     }
-
 }
