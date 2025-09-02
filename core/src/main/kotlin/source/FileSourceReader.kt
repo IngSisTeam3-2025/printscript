@@ -1,12 +1,12 @@
 import source.SourcePosition
 import source.SourceReadResult
-import source.SourceReader
+import source.ISourceReader
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
 
-class FileSourceReader(file: File) : SourceReader {
+class FileSourceReader(file: File) : ISourceReader {
     private val reader = BufferedReader(FileReader(file))
     private val buffer = ArrayList<Char>()
     private var line = 1
