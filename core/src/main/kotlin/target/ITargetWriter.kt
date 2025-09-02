@@ -1,3 +1,4 @@
 package target
 
-interface ITargetWriter {}
+@SuppressWarnings("all")
+interface ITargetWriter

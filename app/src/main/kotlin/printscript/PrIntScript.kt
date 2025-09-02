@@ -1,19 +1,21 @@
 package printscript
 
+import intepreter.IInterpreter
 import lexer.ILexer
 import parser.IParser
-import intepreter.IInterpreter
 import target.ITargetWriter
 import value.Value
 
-class PrIntScript(private val
-                  target: ITargetWriter,
-                  lexer: ILexer,
-                  parser: IParser,
-                  interpreter: IInterpreter) {
+@SuppressWarnings("all")
+class PrIntScript(
+    private val
+    target: ITargetWriter,
+    lexer: ILexer,
+    parser: IParser,
+    interpreter: IInterpreter,
+) {
 
-    fun run() : Value {
+    fun run(): Value {
         TODO()
     }
-
 }

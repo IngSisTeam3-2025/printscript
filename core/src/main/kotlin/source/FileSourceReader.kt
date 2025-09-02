@@ -1,6 +1,6 @@
+import source.ISourceReader
 import source.SourcePosition
 import source.SourceReadResult
-import source.ISourceReader
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader

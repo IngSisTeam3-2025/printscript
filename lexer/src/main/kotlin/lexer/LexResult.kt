@@ -1,4 +1,5 @@
 package lexer
+
 import source.SourcePosition
 import token.Token
 

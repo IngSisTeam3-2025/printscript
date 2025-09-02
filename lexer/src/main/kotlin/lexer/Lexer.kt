@@ -2,9 +2,9 @@ package lexer
 
 import matcher.MatchResult
 import matcher.TokenRuleMatcher
+import source.ISourceReader
 import source.SourcePosition
 import source.SourceReadResult
-import source.ISourceReader
 import token.Token
 
 class Lexer(
@@ -91,7 +91,7 @@ class Lexer(
         reader.advance(1)
         return LexResult.Error(
             "Lexical Error: " +
-                    "Unexpected character '${buffer.firstOrNull()}'",
+                "Unexpected character '${buffer.firstOrNull()}'",
             startPosition,
         )
     }

@@ -1,5 +1,5 @@
 package parser
 
 interface IParser {
-    fun parse() : ParseResult
+    fun parse(): ParseResult
 }
