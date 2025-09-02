@@ -1,152 +1,94 @@
-import token.TokenType
-import java.io.Reader
+import source.SourcePosition
+import source.SourceReadResult
+import source.SourceReader
+import token.Token
 
-class Tokenizer(source: Source) {
-    private val reader: Reader = source.getReader()
-    private var column: Int = 0
-    private var currentChar: Int = reader.read()
+class Tokenizer(
+    private val reader: SourceReader,
+    private val symbolMatcher: SymbolMatcher,
+) : Lexer {
 
-    private val keywords = mapOf(
-        "let" to TokenType.LET,
-        "number" to TokenType.INT,
-        "string" to TokenType.STRING,
-        "println" to TokenType.PRINTLN,
-    )
+    override fun lex(): LexerResult {
+        val startPosition = reader.position()
+        val buffer = StringBuilder()
+        var longestMatch: Token? = null
+        var lastSuccessLength = 0
+        var lookahead = 0
 
-    private fun isIdStart(c: Char) = c.isLetter() || c == '_'
-    private fun isIdPart(c: Char) = c.isLetterOrDigit() || c == '_'
+        while (!reader.isEOF()) {
+            when (val peekResult = readNextChar(lookahead)) {
+                is SourceReadResult.EOF -> break
+                is SourceReadResult.Failure -> return ioError(peekResult)
+                is SourceReadResult.Success -> {
+                    buffer.append(peekResult.char)
+                    val lexeme = buffer.toString()
 
-    fun column(): Int = column
-
-    private fun advance() {
-        column++
-        currentChar = reader.read()
-    }
-
-    fun peek(): Char? {
-        reader.mark(1)
-        val nextChar = reader.read()
-        reader.reset()
-        return if (nextChar == -1) null else nextChar.toChar()
-    }
-
-    private fun id(): Token {
-        var res = ""
-        while (currentChar != -1 && isIdPart(currentChar.toChar())) {
-            res += currentChar.toChar()
-            advance()
-        }
-        val lexeme = res
-        val type = keywords[lexeme] ?: TokenType.ID
-        return Token(type, lexeme)
-    }
-
-    private fun string(): Token {
-        val quote = currentChar.toChar()
-        advance()
-        var res = ""
-        while (currentChar != -1 && currentChar.toChar() != quote) {
-            res += currentChar.toChar()
-            advance()
-        }
-        if (currentChar != -1 && currentChar.toChar() == quote) {
-            advance()
-        } else {
-            throw Error("String sin cerrar en columna $column")
-        }
-        return Token(TokenType.STRING, res)
-    }
-
-    private fun number(): String {
-        var res = ""
-        while (currentChar != -1 && currentChar.toChar().isDigit()) {
-            res += currentChar.toChar()
-            advance()
-        }
-        if (currentChar != -1 && currentChar.toChar() == '.') {
-            res += currentChar.toChar()
-            advance()
-            while (currentChar != -1 && currentChar.toChar().isDigit()) {
-                res += currentChar.toChar()
-                advance()
-            }
-        }
-        return res
-    }
-
-    fun getNextToken(): Token {
-        while (currentChar != -1) {
-            val ch = currentChar.toChar()
-
-            if (ch.isWhitespace()) {
-                advance()
-                return Token(TokenType.WHITESPACE, ch.toString())
-            }
-
-            if (ch.isDigit()) {
-                return Token(TokenType.INT, number())
-            }
-
-            when (ch) {
-                '=' -> {
-                    advance()
-                    return Token(TokenType.ASSIGN, "=")
-                }
-                ';' -> {
-                    advance()
-                    return Token(TokenType.SEMI, ";")
-                }
-                ':' -> {
-                    advance()
-                    return Token(TokenType.COLON, ":")
-                }
-                '.' -> {
-                    advance()
-                    return Token(TokenType.DOT, ".")
-                }
-                '+' -> {
-                    advance()
-                    return Token(TokenType.ADD, "+")
-                }
-                '-' -> {
-                    advance()
-                    return Token(TokenType.SUB, "-")
-                }
-                '/' -> {
-                    advance()
-                    return Token(TokenType.DIV, "/")
-                }
-                '*' -> {
-                    advance()
-                    return Token(TokenType.MUL, "*")
-                }
-                '(' -> {
-                    advance()
-                    return Token(TokenType.LPAREN, "(")
-                }
-                ')' -> {
-                    advance()
-                    return Token(TokenType.RPAREN, ")")
-                }
-                '"', '\'' -> {
-                    return string()
-                }
-                else -> {
-                    if (isIdStart(ch)) {
-                        return id()
+                    when (val matchResult = matchLexeme(lexeme)) {
+                        is MatchResult.None -> return handleNoMatch(
+                            buffer,
+                            startPosition,
+                            longestMatch,
+                            lastSuccessLength,
+                        )
+                        is MatchResult.Skip -> return handleSkip(buffer)
+                        is MatchResult.Partial -> {}
+                        is MatchResult.Full -> {
+                            longestMatch = createToken(matchResult, buffer, startPosition)
+                            lastSuccessLength = buffer.length
+                        }
                     }
-                    error()
                 }
             }
+            lookahead++
         }
-        return Token(TokenType.EOF, "")
+
+        if (longestMatch != null) {
+            reader.advance(lastSuccessLength)
+            return LexerResult.Success(longestMatch)
+        }
+
+        return LexerResult.EOF
     }
 
-    private fun error(): Nothing {
-        throw Error("Col: $column -> Lexical error:: Invalid character: '${currentChar.toChar()}'")
+    private fun matchLexeme(lexeme: String) = symbolMatcher.match(lexeme)
+
+    private fun readNextChar(lookahead: Int): SourceReadResult {
+        return reader.peek(lookahead)
     }
 
-    fun close() {
-        reader.close()
+    private fun ioError(peekResult: SourceReadResult.Failure): LexerResult.IOError {
+        return LexerResult.IOError("Error reading source: ${peekResult.message}")
+    }
+
+    private fun createToken(
+        matchResult: MatchResult.Full,
+        buffer: StringBuilder,
+        startPosition: SourcePosition,
+    ): Token {
+        return Token(matchResult.symbol.tokenType, buffer.toString(), startPosition)
+    }
+
+    private fun handleSkip(buffer: StringBuilder): LexerResult {
+        reader.advance(buffer.length)
+        return lex()
+    }
+
+    private fun handleNoMatch(
+        buffer: StringBuilder,
+        startPosition: SourcePosition,
+        longestMatch: Token?,
+        lastSuccessLength: Int,
+    ): LexerResult {
+        if (longestMatch != null) {
+            reader.advance(lastSuccessLength)
+            return LexerResult.Success(longestMatch)
+        }
+
+        reader.advance(1)
+        return LexerResult.Error(
+            "Lexical Error: " +
+                "Unexpected character '${buffer.firstOrNull()}'",
+            startPosition,
+        )
     }
 }
