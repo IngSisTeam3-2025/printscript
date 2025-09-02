@@ -1,27 +1,21 @@
-import token.TokenType
+import source.TokenSource
+import token.TokenTemp
 
-class ParserTokenStream(private val tokenizer: Tokenizer) : TokenSource {
-    private var lookahead: Token? = null
+class ParserTokenStream : TokenSource {
+    private var lookahead: TokenTemp? = null
 
-    private fun readNonWhiteSpaces(): Token {
-        var token = tokenizer.getNextToken()
-        while (token.type == TokenType.WHITESPACE) {
-            token = tokenizer.getNextToken()
-        }
-        return token
+    private fun readNonWhiteSpaces(): TokenTemp {
+        return lookahead!!
     }
 
-    override fun next(): Token {
+    override fun next(): TokenTemp {
         val token = lookahead ?: readNonWhiteSpaces()
         lookahead = null
         return token
     }
 
-    override fun peek(): Token {
+    override fun peek(): TokenTemp {
         if (lookahead == null) lookahead = readNonWhiteSpaces()
         return lookahead!!
-    }
-    fun close() {
-        tokenizer.close()
     }
 }

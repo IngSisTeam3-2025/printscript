@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 class AstPrinterTest {
 
     private fun printAst(src: String): String {
-        val tokenizer = Tokenizer(StringSource(src))
+        val tokenizer = Tokenizer(StringSourceReader(src))
         val stream = ParserTokenStream(tokenizer)
         val parser = Parser(stream)
         val ast = parser.parseProgram()

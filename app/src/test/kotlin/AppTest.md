@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 class AppTest {
 
     private fun evaluate(src: String): Any {
-        val tokenizer = Tokenizer(StringSource(src))
+        val tokenizer = Tokenizer(StringSourceReader(src))
         val stream = ParserTokenStream(tokenizer)
         val parser = Parser(stream)
         val program = parser.parseProgram()

@@ -8,7 +8,7 @@ import ast.Str
 import ast.UnaryOp
 import ast.Var
 import ast.VarDecl
-import token.TokenType
+import token.TokenTypeTemp
 
 class Interpreter : NodeVisitor {
 
@@ -36,7 +36,7 @@ class Interpreter : NodeVisitor {
         val left = visit(node.left)
         val right = visit(node.right)
         return when (node.op.type) {
-            TokenType.ADD -> {
+            TokenTypeTemp.ADD -> {
                 when {
                     left is RuntimeValue.Num && right is RuntimeValue.Num ->
                         RuntimeValue.Num(left.v + right.v)
@@ -49,17 +49,17 @@ class Interpreter : NodeVisitor {
                     else -> error("Operador + no soportado para tipos: $left y $right")
                 }
             }
-            TokenType.SUB -> {
+            TokenTypeTemp.SUB -> {
                 val l = num(left)
                 val r = num(right)
                 RuntimeValue.Num(l - r)
             }
-            TokenType.MUL -> {
+            TokenTypeTemp.MUL -> {
                 val l = num(left)
                 val r = num(right)
                 RuntimeValue.Num(l * r)
             }
-            TokenType.DIV -> {
+            TokenTypeTemp.DIV -> {
                 val l = num(left)
                 val r = num(right)
                 RuntimeValue.Num(l / r)
@@ -71,8 +71,8 @@ class Interpreter : NodeVisitor {
     override fun visitUnaryOp(node: UnaryOp): RuntimeValue {
         val value = num(visit(node.expr))
         val res = when (node.op.type) {
-            TokenType.ADD -> +value
-            TokenType.SUB -> -value
+            TokenTypeTemp.ADD -> +value
+            TokenTypeTemp.SUB -> -value
             else -> error("Unario no soportado: ${node.op.type}")
         }
         return RuntimeValue.Num(res)
