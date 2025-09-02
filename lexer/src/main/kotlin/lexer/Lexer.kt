@@ -1,14 +1,18 @@
+package lexer
+
+import matcher.MatchResult
+import matcher.TokenRuleMatcher
 import source.SourcePosition
 import source.SourceReadResult
-import source.SourceReader
+import source.ISourceReader
 import token.Token
 
-class Tokenizer(
-    private val reader: SourceReader,
-    private val symbolMatcher: SymbolMatcher,
-) : Lexer {
+class Lexer(
+    private val reader: ISourceReader,
+    private val tokenRuleMatcher: TokenRuleMatcher,
+) : ILexer {
 
-    override fun lex(): LexerResult {
+    override fun lex(): LexResult {
         val startPosition = reader.position()
         val buffer = StringBuilder()
         var longestMatch: Token? = null
@@ -44,20 +48,20 @@ class Tokenizer(
 
         if (longestMatch != null) {
             reader.advance(lastSuccessLength)
-            return LexerResult.Success(longestMatch)
+            return LexResult.Success(longestMatch)
         }
 
-        return LexerResult.EOF
+        return LexResult.EOF
     }
 
-    private fun matchLexeme(lexeme: String) = symbolMatcher.match(lexeme)
+    private fun matchLexeme(lexeme: String) = tokenRuleMatcher.match(lexeme)
 
     private fun readNextChar(lookahead: Int): SourceReadResult {
         return reader.peek(lookahead)
     }
 
-    private fun ioError(peekResult: SourceReadResult.Failure): LexerResult.IOError {
-        return LexerResult.IOError("Error reading source: ${peekResult.message}")
+    private fun ioError(peekResult: SourceReadResult.Failure): LexResult.IOError {
+        return LexResult.IOError("Error reading source: ${peekResult.message}")
     }
 
     private fun createToken(
@@ -65,10 +69,10 @@ class Tokenizer(
         buffer: StringBuilder,
         startPosition: SourcePosition,
     ): Token {
-        return Token(matchResult.symbol.tokenType, buffer.toString(), startPosition)
+        return Token(matchResult.tokenRule.tokenType, buffer.toString(), startPosition)
     }
 
-    private fun handleSkip(buffer: StringBuilder): LexerResult {
+    private fun handleSkip(buffer: StringBuilder): LexResult {
         reader.advance(buffer.length)
         return lex()
     }
@@ -78,16 +82,16 @@ class Tokenizer(
         startPosition: SourcePosition,
         longestMatch: Token?,
         lastSuccessLength: Int,
-    ): LexerResult {
+    ): LexResult {
         if (longestMatch != null) {
             reader.advance(lastSuccessLength)
-            return LexerResult.Success(longestMatch)
+            return LexResult.Success(longestMatch)
         }
 
         reader.advance(1)
-        return LexerResult.Error(
+        return LexResult.Error(
             "Lexical Error: " +
-                "Unexpected character '${buffer.firstOrNull()}'",
+                    "Unexpected character '${buffer.firstOrNull()}'",
             startPosition,
         )
     }

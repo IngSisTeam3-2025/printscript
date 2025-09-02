@@ -1,7 +1,7 @@
 import source.TokenSource
 import token.TokenTemp
 
-class ParserTokenStream : TokenSource {
+class TempParserTokenStream : TokenSource {
     private var lookahead: TokenTemp? = null
 
     private fun readNonWhiteSpaces(): TokenTemp {

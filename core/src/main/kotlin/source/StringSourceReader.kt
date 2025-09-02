@@ -1,8 +1,8 @@
 import source.SourcePosition
 import source.SourceReadResult
-import source.SourceReader
+import source.ISourceReader
 
-class StringSourceReader(private val content: String) : SourceReader {
+class StringSourceReader(private val content: String) : ISourceReader {
     private var index = 0
     private var line = 1
     private var column = 1

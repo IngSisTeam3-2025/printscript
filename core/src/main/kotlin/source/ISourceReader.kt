@@ -1,6 +1,6 @@
 package source
 
-interface SourceReader {
+interface ISourceReader {
 
     fun peek(offset: Int = 1): SourceReadResult
     fun advance(offset: Int = 1): SourceReadResult

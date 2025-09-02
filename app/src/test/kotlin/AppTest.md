@@ -7,7 +7,7 @@ class AppTest {
     private fun evaluate(src: String): Any {
         val tokenizer = Tokenizer(StringSourceReader(src))
         val stream = ParserTokenStream(tokenizer)
-        val parser = Parser(stream)
+        val parser = parser.Parser(stream)
         val program = parser.parseProgram()
 
         val rv = Interpreter().visit(program)

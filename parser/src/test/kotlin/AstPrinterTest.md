@@ -6,7 +6,7 @@ class AstPrinterTest {
     private fun printAst(src: String): String {
         val tokenizer = Tokenizer(StringSourceReader(src))
         val stream = ParserTokenStream(tokenizer)
-        val parser = Parser(stream)
+        val parser = parser.Parser(stream)
         val ast = parser.parseProgram()
         return AstPrinter().print(ast)
     }

@@ -1,10 +1,12 @@
-import symbol.Symbol
+package matcher
 
-class SymbolMatcher(private val alphabet: List<Symbol>) {
+import rule.TokenRule
+
+class TokenRuleMatcher(private val alphabet: List<TokenRule>) {
 
     fun match(lexeme: String): MatchResult {
-        var bestFullMatch: Symbol? = null
-        var bestPartialMatch: Symbol? = null
+        var bestFullMatch: TokenRule? = null
+        var bestPartialMatch: TokenRule? = null
 
         for (symbol in alphabet) {
             val matcher = symbol.pattern.matcher(lexeme)
@@ -35,8 +37,8 @@ class SymbolMatcher(private val alphabet: List<Symbol>) {
     }
 
     private fun buildMatchResult(
-        fullMatch: Symbol?,
-        partialMatch: Symbol?,
+        fullMatch: TokenRule?,
+        partialMatch: TokenRule?,
         lexeme: String,
     ): MatchResult {
         return when {
