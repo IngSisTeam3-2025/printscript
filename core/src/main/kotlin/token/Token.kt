@@ -1,3 +1,9 @@
-import token.TokenType
+package token
 
-data class Token(val type: TokenType, val lexeme: String)
+import source.SourcePosition
+
+data class Token(
+    val type: TokenType,
+    val lexeme: String,
+    val position: SourcePosition,
+)
