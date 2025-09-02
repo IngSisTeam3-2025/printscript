@@ -10,7 +10,7 @@ import ast.Var
 import ast.VarDecl
 import token.TokenTypeTemp
 
-class Interpreter : NodeVisitor {
+class TempInterpreter : NodeVisitor {
 
     private val env = mutableMapOf<String, RuntimeValue?>()
 

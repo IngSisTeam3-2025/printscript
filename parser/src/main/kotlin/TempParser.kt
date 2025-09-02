@@ -10,11 +10,13 @@ import ast.Str
 import ast.UnaryOp
 import ast.Var
 import ast.VarDecl
+import parser.IParser
+import parser.ParseResult
 import source.TokenSource
 import token.TokenTemp
 import token.TokenTypeTemp
 
-class Parser(private val ts: TokenSource) {
+class TempParser(private val ts: TokenSource) : IParser {
     private var current: TokenTemp = ts.peek()
 
     private fun error(msg: String = "Parsing error"): Nothing = throw Error(msg)
@@ -183,5 +185,9 @@ class Parser(private val ts: TokenSource) {
             e
         }
         else -> error("Unexpected token in primary: ${current.type}")
+    }
+
+    override fun parse(): ParseResult {
+        TODO("Not yet implemented")
     }
 }

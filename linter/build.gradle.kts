@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(project(":lexer"))
     implementation(project(":parser"))
 }

@@ -1,0 +1,4 @@
+package symboltable
+
+interface ISymbolTable {
+}

@@ -1,3 +1,6 @@
+import lexer.LexResult
+import lexer.Lexer
+import matcher.TokenRuleMatcher
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.DefaultAsserter.fail
@@ -8,8 +11,8 @@ class LexerTest {
     fun `Given JSON input When lexed Then produces correct tokens`() {
         // Given
         val input = """{ "key": true, "num": 123 }"""
-        val matcher = SymbolMatcher(JsonAlphabet.alphabet)
-        val tokenizer = Tokenizer(StringSourceReader(input), matcher)
+        val matcher = TokenRuleMatcher(JsonAlphabet.alphabet)
+        val lexer = Lexer(StringSourceReader(input), matcher)
 
         val expected = listOf(
             JsonTokenType.LBRACE to "{",
@@ -25,23 +28,23 @@ class LexerTest {
 
         // When / Then
         for ((expectedType, expectedLexeme) in expected) {
-            when (val result = tokenizer.lex()) {
-                is LexerResult.Success -> {
+            when (val result = lexer.lex()) {
+                is LexResult.Success -> {
                     assertEquals(expectedType, result.token.type)
                     assertEquals(expectedLexeme, result.token.lexeme)
                 }
                 else -> fail("Expected $expectedType but got $result")
             }
         }
-        assertEquals(LexerResult.EOF, tokenizer.lex())
+        assertEquals(LexResult.EOF, lexer.lex())
     }
 
     @Test
     fun `Given Python input When lexed Then produces correct tokens`() {
         // Given
         val input = "def add(x, y): return x + y"
-        val matcher = SymbolMatcher(PythonAlphabet.alphabet)
-        val tokenizer = Tokenizer(StringSourceReader(input), matcher)
+        val matcher = TokenRuleMatcher(PythonAlphabet.alphabet)
+        val lexer = Lexer(StringSourceReader(input), matcher)
 
         val expected = listOf(
             PythonTokenType.DEF to "def",
@@ -60,8 +63,8 @@ class LexerTest {
 
         // When / Then
         for ((expectedType, expectedLexeme) in expected) {
-            when (val result = tokenizer.lex()) {
-                is LexerResult.Success -> {
+            when (val result = lexer.lex()) {
+                is LexResult.Success -> {
                     assertEquals(expectedType, result.token.type)
                     assertEquals(expectedLexeme, result.token.lexeme)
                 }
@@ -74,8 +77,8 @@ class LexerTest {
     fun `Given JavaScript input When lexed Then produces correct tokens`() {
         // Given
         val input = "let total = 3 + 5;"
-        val matcher = SymbolMatcher(JavaScriptAlphabet.alphabet)
-        val tokenizer = Tokenizer(StringSourceReader(input), matcher)
+        val matcher = TokenRuleMatcher(JavaScriptAlphabet.alphabet)
+        val lexer = Lexer(StringSourceReader(input), matcher)
 
         val expected = listOf(
             JsTokenType.LET to "let",
@@ -89,8 +92,8 @@ class LexerTest {
 
         // When / Then
         for ((expectedType, expectedLexeme) in expected) {
-            when (val result = tokenizer.lex()) {
-                is LexerResult.Success -> {
+            when (val result = lexer.lex()) {
+                is LexResult.Success -> {
                     assertEquals(expectedType, result.token.type)
                     assertEquals(expectedLexeme, result.token.lexeme)
                 }
@@ -103,8 +106,8 @@ class LexerTest {
     fun `Given arithmetic input When lexed Then produces correct tokens`() {
         // Given
         val input = "(3 + 4.5) * 2"
-        val matcher = SymbolMatcher(ArithmeticAlphabet.alphabet)
-        val tokenizer = Tokenizer(StringSourceReader(input), matcher)
+        val matcher = TokenRuleMatcher(ArithmeticAlphabet.alphabet)
+        val lexer = Lexer(StringSourceReader(input), matcher)
 
         val expected = listOf(
             ArithmeticTokenType.LPAREN to "(",
@@ -118,8 +121,8 @@ class LexerTest {
 
         // When / Then
         for ((expectedType, expectedLexeme) in expected) {
-            when (val result = tokenizer.lex()) {
-                is LexerResult.Success -> {
+            when (val result = lexer.lex()) {
+                is LexResult.Success -> {
                     assertEquals(expectedType, result.token.type)
                     assertEquals(expectedLexeme, result.token.lexeme)
                 }
