@@ -1,9 +1,10 @@
 package token
 
-import source.SourcePosition
+import location.SourceLocation
 
 data class Token(
     val type: TokenType,
     val lexeme: String,
-    val position: SourcePosition,
+    val start: SourceLocation,
+    val end: SourceLocation
 )

@@ -1,20 +1,20 @@
 package formatter
 
-import lexer.ILexer
-import parser.IParser
-import source.ISourceReader
-import target.ITargetWriter
+import ast.AstNode
+import cli.CliTool
+import java.io.Reader
+import java.io.Writer
 
-@SuppressWarnings("all")
-class Formatter(
-    private val
-    reader: ISourceReader,
-    writer: ITargetWriter,
-    lexer: ILexer,
-    parser: IParser,
-) : IFormatter {
+class Formatter : IFormatter, CliTool {
 
-    override fun format(): FormatResult {
+    override fun analyze(
+        source: Reader,
+        config: Reader,
+        target: Writer,
+        parser: Iterator<Result<AstNode>>,
+        reporter: IDiagnosticReporter
+    ) {
         TODO("Not yet implemented")
     }
+
 }

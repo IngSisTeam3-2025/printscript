@@ -1,3 +1,0 @@
-package grammar
-
-class Grammar

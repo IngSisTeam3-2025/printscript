@@ -1,20 +1,18 @@
 package linter
 
-import lexer.ILexer
-import parser.IParser
-import source.ISourceReader
-import target.ITargetWriter
+import ast.AstNode
+import cli.CliTool
+import java.io.Reader
 
-@SuppressWarnings("all")
-class Linter(
-    private val
-    reader: ISourceReader,
-    writer: ITargetWriter,
-    lexer: ILexer,
-    parser: IParser,
-) : ILinter {
+class Linter : ILinter, CliTool {
 
-    override fun lint(): LintResult {
+    override fun analyze(
+        source: Reader,
+        config: Reader,
+        parser: Iterator<Result<AstNode>>,
+        reporter: IDiagnosticReporter
+    ) {
         TODO("Not yet implemented")
     }
+
 }
