@@ -3,7 +3,6 @@ plugins {
     id("com.diffplug.spotless")
     id("org.jetbrains.kotlinx.kover")
     kotlin("jvm")
-    // no 'application' aquí
 }
 
 repositories { mavenCentral() }
