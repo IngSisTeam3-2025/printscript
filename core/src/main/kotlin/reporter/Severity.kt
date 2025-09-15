@@ -1,7 +1,7 @@
 package reporter
 
 enum class Severity {
-    INFO,
+    DETAIL,
     MISTAKE,
     ERROR,
 }

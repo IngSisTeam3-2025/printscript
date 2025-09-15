@@ -3,5 +3,5 @@ package reporter
 import location.SourceLocation
 
 interface DiagnosticReporter {
-    fun reportError(message: String, start: SourceLocation, end: SourceLocation)
+    fun reportError(severity: Severity, message: String, start: SourceLocation, end: SourceLocation)
 }
