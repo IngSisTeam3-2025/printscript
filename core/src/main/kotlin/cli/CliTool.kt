@@ -1,0 +1,3 @@
+package cli
+
+interface CliTool
