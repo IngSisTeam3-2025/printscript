@@ -1,11 +1,22 @@
 package visitors
 
-import ast.*
+import ast.AssignmentNode
+import ast.AstNode
+import ast.BinaryOp
+import ast.BinaryOpNode
+import ast.IfNode
+import ast.LiteralNode
+import ast.PrintNode
+import ast.ReadEnvNode
+import ast.ReadInputNode
+import ast.VarDeclNode
+import ast.VariableNode
 import provider.DependencyProvider
 import table.SymbolTable
 import visitor.AstVisitor
 import visitor.VisitResult
 import visitor.VisitorDispatcher
+import java.io.IOError
 
 class LiteralVisitor : AstVisitor {
     override fun visit(node: AstNode, dispatcher: VisitorDispatcher, provider: DependencyProvider): VisitResult {
@@ -24,7 +35,7 @@ class VariableVisitor : AstVisitor {
 
         return table.lookup(node.name).fold(
             { VisitResult.Success(it) },
-            { VisitResult.Error(it.message ?: "Undefined variable ${node.name}", node.start(), node.end()) }
+            { VisitResult.Error(it.message ?: "Undefined variable ${node.name}", node.start(), node.end()) },
         )
     }
 }
@@ -54,19 +65,25 @@ class BinaryOpVisitor : AstVisitor {
                         else -> VisitResult.Error("Invalid operands for +", node.start(), node.end())
                     }
                 }
-                BinaryOp.SUB -> if (left is Number && right is Number)
+                BinaryOp.SUB -> if (left is Number && right is Number) {
                     VisitResult.Success(left.toDouble() - right.toDouble())
-                else VisitResult.Error("Invalid operands for -", node.start(), node.end())
+                } else {
+                    VisitResult.Error("Invalid operands for -", node.start(), node.end())
+                }
 
-                BinaryOp.MUL -> if (left is Number && right is Number)
+                BinaryOp.MUL -> if (left is Number && right is Number) {
                     VisitResult.Success(left.toDouble() * right.toDouble())
-                else VisitResult.Error("Invalid operands for *", node.start(), node.end())
+                } else {
+                    VisitResult.Error("Invalid operands for *", node.start(), node.end())
+                }
 
-                BinaryOp.DIV -> if (left is Number && right is Number)
+                BinaryOp.DIV -> if (left is Number && right is Number) {
                     VisitResult.Success(left.toDouble() / right.toDouble())
-                else VisitResult.Error("Invalid operands for /", node.start(), node.end())
+                } else {
+                    VisitResult.Error("Invalid operands for /", node.start(), node.end())
+                }
             }
-        } catch (e: Exception) {
+        } catch (e: UnsupportedOperationException) {
             VisitResult.Error("Error in binary operation: ${e.message}", node.start(), node.end())
         }
     }
@@ -131,7 +148,7 @@ class ReadInputVisitor : AstVisitor {
             output.flush()
             val buf = input.readLines().firstOrNull() ?: ""
             return VisitResult.Success(buf)
-        } catch (e: Exception) {
+        } catch (e: IOError) {
             return VisitResult.Error("Input failed: ${e.message}", node.start(), node.end())
         }
     }
@@ -175,7 +192,7 @@ class VarDeclVisitor : AstVisitor {
         val result = table.declare(node.name, value, node.constant)
         return result.fold(
             { VisitResult.Success(Unit) },
-            { VisitResult.Error(it.message ?: "Declaration failed", node.start(), node.end()) }
+            { VisitResult.Error(it.message ?: "Declaration failed", node.start(), node.end()) },
         )
     }
 }
@@ -197,18 +214,7 @@ class AssignmentVisitor : AstVisitor {
         val result = table.assign(node.name, value)
         return result.fold(
             { VisitResult.Success(Unit) },
-            { VisitResult.Error(it.message ?: "Assignment failed", node.start(), node.end()) }
+            { VisitResult.Error(it.message ?: "Assignment failed", node.start(), node.end()) },
         )
     }
 }
-
-
-
-
-
-
-
-
-
-
-

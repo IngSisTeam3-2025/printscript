@@ -7,7 +7,7 @@ import visitor.VisitorDispatcher
 
 abstract class AstNode(
     val leadingTrivia: String = "",
-    val trailingTrivia: String = ""
+    val trailingTrivia: String = "",
 ) {
     abstract val children: List<AstNode>
     abstract fun start(): SourceLocation

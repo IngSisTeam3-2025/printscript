@@ -5,5 +5,3 @@ data class SourceLocation(val line: Int, val column: Int) {
         return "[$line, $column]"
     }
 }
-
-

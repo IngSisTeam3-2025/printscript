@@ -1,7 +1,6 @@
 package command
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 
 class Platypus : CliktCommand(name = "platypus") {
@@ -18,8 +17,7 @@ class Platypus : CliktCommand(name = "platypus") {
         )
     }
 
-    override fun run() {}
-
+    override fun run() {
+        return
+    }
 }
-
-

@@ -13,5 +13,4 @@ class ExecuteCommand : CliktCommand(name = "execute") {
     }
 
     override fun help(context: Context) = "ps> Executes from source [file]."
-
 }

@@ -19,9 +19,11 @@ class SymbolTable {
     }
 
     fun lookup(name: String): Result<Any?> =
-        if (vars.containsKey(name)) Result.success(vars[name]) else Result.failure(IllegalStateException("Undefined variable $name"))
+        if (vars.containsKey(name)) {
+            Result.success(vars[name])
+        } else {
+            Result.failure(IllegalStateException("Undefined variable $name"))
+        }
 
     fun clear() = vars.clear()
 }
-
-

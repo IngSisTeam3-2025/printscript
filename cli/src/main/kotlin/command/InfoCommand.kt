@@ -12,11 +12,11 @@ class InfoCommand : CliktCommand(name = "info") {
             ╔════════════════════════════════════════════════════╗
             ║            Platypus CLI (v1.0) — INFO              ║
             ╚════════════════════════════════════════════════════╝
-            
+
             Welcome to Platypus — a command-line interface for working with PrintScript source files.
-            
+
             Available Commands:
-            
+
               validate   → Runs lexical, syntactical, and semantic checks on source [file].
               execute    → Executes the given source [file].
               format     → Formats the source [file] to match style conventions.
@@ -25,13 +25,12 @@ class InfoCommand : CliktCommand(name = "info") {
               help       → Shows usage help for a command.
               info       → Shows this CLI info screen.
               exit       → Exits the REPL.
-            
+
             Type `command --help` for more details on any command.
-            
-            """.trimIndent()
+
+            """.trimIndent(),
         )
     }
 
     override fun help(context: Context) = "\"Show CLI info and available commands.\""
-
 }

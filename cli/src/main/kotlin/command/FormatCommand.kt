@@ -14,5 +14,4 @@ class FormatCommand : CliktCommand(name = "format") {
     }
 
     override fun help(context: Context) = "ps> Formats code from source [file]."
-
 }

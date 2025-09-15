@@ -21,5 +21,3 @@ class ErrorHandlerRegistry(
         println("${red}X - ${e::class.simpleName}: ${e.message ?: "Unknown error"}")
     }
 }
-
-

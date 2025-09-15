@@ -13,5 +13,4 @@ class AnalyzeCommand : CliktCommand(name = "analyze") {
     }
 
     override fun help(context: Context) = "ps> Runs Code Analysis on source [file]."
-
 }

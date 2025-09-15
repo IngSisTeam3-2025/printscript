@@ -12,4 +12,3 @@ class VisitorDispatcher(private val visitors: List<AstVisitor>) {
         return VisitResult.NotHandled(node)
     }
 }
-

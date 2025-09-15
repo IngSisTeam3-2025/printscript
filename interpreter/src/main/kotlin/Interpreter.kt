@@ -8,12 +8,11 @@ import java.io.Reader
 import java.io.Writer
 
 class Interpreter(
-    private val visitors: List<AstVisitor>
+    private val visitors: List<AstVisitor>,
 ) {
     private val symbolTable = SymbolTable()
 
     fun interpret(parser: Iterator<Result<AstNode>>, output: Writer, input: Reader, env: Map<String, String>) {
-
         val provider = DependencyProvider().apply {
             register(SymbolTable::class.java, symbolTable)
             register(java.io.Writer::class.java, output)
@@ -43,4 +42,3 @@ class Interpreter(
         symbolTable.clear()
     }
 }
-

@@ -12,6 +12,6 @@ class ValidateCommand : CliktCommand(name = "validate") {
         TODO("Not yet implemented")
     }
 
-    override fun help(context: Context) = "Runs Lexical, Syntactical and Semantic Analysis on source [file]."
-
+    override fun help(context: Context) = "Runs Lexical, " +
+        "Syntactical and Semantic Analysis on source [file]."
 }

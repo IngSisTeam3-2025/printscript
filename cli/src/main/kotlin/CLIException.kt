@@ -1,1 +1,0 @@
-class CLIException(message: String, val showUsage: Boolean = false) : Exception(message)

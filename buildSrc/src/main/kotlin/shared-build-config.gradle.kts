@@ -43,7 +43,7 @@ detekt {
     )
 }
 
-kotlin { jvmToolchain(21) }
+kotlin { jvmToolchain(17) }
 
 spotless {
     kotlin {
@@ -60,7 +60,7 @@ tasks.named("build") {
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    jvmTarget = "20"
+    jvmTarget = "17"
 }
 
 spotless {
