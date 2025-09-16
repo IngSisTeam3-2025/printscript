@@ -1,5 +1,8 @@
 package lexer
 
+import lexer.matcher.Matcher
+import lexer.matcher.token.TokenMatch
+import lexer.matcher.trivia.TriviaMatch
 import lexer.processor.SourceProcessor
 import lexer.processor.TokenProcessor
 import lexer.processor.TriviaProcessor
@@ -7,48 +10,39 @@ import token.Token
 
 class Lexer(
     charIterator: Iterator<Char>,
-    recognizers: List<TokenRecognizer>,
+    tokenMatchers: List<Matcher<TokenMatch>>,
+    triviaMatchers: List<Matcher<TriviaMatch>>,
+    private val maxLookahead: Int = 64,
 ) : Iterator<Result<Token>> {
 
     private val source = SourceProcessor(charIterator)
-    private val triviaProcessor = TriviaProcessor(source)
-    private val tokenProcessor = TokenProcessor(source, recognizers)
+    private val triviaProcessor = TriviaProcessor(source, triviaMatchers, maxLookahead)
+    private val tokenProcessor = TokenProcessor(source, tokenMatchers, maxLookahead)
 
     override fun hasNext(): Boolean = !source.eof()
 
     override fun next(): Result<Token> {
         if (!hasNext()) throw NoSuchElementException()
-        return lex()
-    }
 
-    private fun lex(): Result<Token> {
-        val prefix = triviaProcessor.capturePrefix()
+        val prefix = triviaProcessor.captureTrivia()
+        val start = source.location()
 
-        if (source.eof()) {
-            return Result.failure(Exception("Unexpected end of input"))
-        }
+        val token = tokenProcessor.matchToken()
+            ?: run {
+                val badChar = source.peekSlice(1).first()
+                source.advance(1)
+                return Result.failure(
+                    Exception(
+                        "Unexpected character " +
+                            "'$badChar' at " +
+                            "${source.location()}",
+                    ),
+                )
+            }
 
-        val match = tokenProcessor.matchToken() ?: run {
-            val invalidChar = source.peek()
-            source.advance(1)
-            return Result.failure(Exception("Unknown token starting with '$invalidChar'"))
-        }
+        val end = source.location()
+        val suffix = triviaProcessor.captureTrivia()
 
-        val tokenStart = source.position
-        source.advance(match.length)
-        val tokenEnd = source.position
-
-        val suffix = triviaProcessor.captureSuffix()
-
-        val token = Token(
-            type = match.type,
-            value = match.value,
-            prefixTrivia = prefix,
-            suffixTrivia = suffix,
-            start = tokenStart,
-            end = tokenEnd,
-        )
-
-        return Result.success(token)
+        return Result.success(Token(token.type, token.value, prefix, suffix, start, end))
     }
 }

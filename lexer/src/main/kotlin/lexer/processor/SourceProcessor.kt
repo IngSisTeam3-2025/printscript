@@ -1,32 +1,26 @@
 package lexer.processor
 
+import location.SourceLocation
+
 class SourceProcessor(private val iter: Iterator<Char>) {
-    private val lookahead = ArrayDeque<Char>()
-    var position = 0
+    private val buffer = ArrayDeque<Char>()
+    private var location: SourceLocation = SourceLocation()
         private set
 
-    fun eof(): Boolean = !iter.hasNext() && lookahead.isEmpty()
+    fun eof(): Boolean = buffer.isEmpty() && !iter.hasNext()
 
-    fun peek(n: Int = 1): String {
-        while (lookahead.size < n && iter.hasNext()) {
-            lookahead.addLast(iter.next())
-        }
-        return lookahead.take(n).joinToString("")
+    fun peekSlice(n: Int): CharSequence {
+        while (buffer.size < n && iter.hasNext()) buffer.addLast(iter.next())
+        return buffer.joinToString("").take(n)
     }
 
+    /** Advance n characters, updating location */
     fun advance(n: Int) {
         repeat(n) {
-            if (lookahead.isNotEmpty()) {
-                lookahead.removeFirst()
-            } else if (iter.hasNext()) {
-                iter.next()
-            }
-            position++
+            val c = if (buffer.isNotEmpty()) buffer.removeFirst() else iter.next()
+            location = location.advance(c)
         }
     }
 
-    fun remainingString(limit: Int = 64): String {
-        peek(limit)
-        return lookahead.take(limit).joinToString("")
-    }
+    fun location(): SourceLocation = location
 }
