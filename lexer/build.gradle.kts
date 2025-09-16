@@ -6,3 +6,6 @@ plugins {
 dependencies {
     implementation(project(":core"))
 }
+
+group = "io.github.ingsis"
+version = "0.1.0"
