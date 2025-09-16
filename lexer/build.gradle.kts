@@ -1,11 +1,20 @@
 plugins {
     id("shared-build-config")
     id("org.jetbrains.kotlinx.kover")
+    `maven-publish`
 }
 
 dependencies {
     implementation(project(":core"))
 }
 
-group = "io.github.ingsis"
-version = "0.1.0"
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = "io.github.ingsis"
+            artifactId = "lexer"
+            version = "0.1.0"
+        }
+    }
+}
