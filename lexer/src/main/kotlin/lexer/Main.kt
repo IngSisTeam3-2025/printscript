@@ -1,10 +1,24 @@
 package lexer
 
+import lexer.matcher.token.BooleanLiteralMatcher
+import lexer.matcher.token.IdentifierMatcher
+import lexer.matcher.token.NumberMatcher
+import lexer.matcher.token.SymbolMatcher
+import lexer.matcher.trivia.WhitespaceMatcher
+import token.TokenType
+
 fun main() {
-    val input = "  abc123 + 456 - xyz "
+    val input = "true3 true. true"
     val lexer = Lexer(
         input.iterator(),
-        listOf(IdentifierRecognizer(), NumberRecognizer(), PlusRecognizer(), MinusRecognizer()),
+        listOf(
+            IdentifierMatcher(),
+            NumberMatcher(),
+            BooleanLiteralMatcher(),
+            SymbolMatcher('+', TokenType.PLUS),
+            SymbolMatcher('-', TokenType.MINUS),
+        ),
+        listOf(WhitespaceMatcher()),
     )
 
     while (lexer.hasNext()) {
