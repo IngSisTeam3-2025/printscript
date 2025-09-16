@@ -22,7 +22,7 @@ https://deepwiki.com/IngSisTeam3-2025/printscript/
 Para habilitar los ganchos después de clonar el repositorio, ejecutar:
 
 ```
-git config core.hooksPath .githooks
+git config core.hooksPath .git/hooks
 ```
 
 Esto configura Git para usar los scripts del directorio `.git/hooks`, donde `pre-commit` ejecuta `./gradlew spotlessApply` y `./gradlew test`, y `pre-push` ejecuta `./gradlew test`.
