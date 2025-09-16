@@ -1,0 +1,7 @@
+CONST(const)
+IDENTIFIER(flag)
+COLON(:)
+IDENTIFIER(boolean)
+ASSIGN(=)
+BOOLEAN_LITERAL(true)
+SEMICOLON(;)
