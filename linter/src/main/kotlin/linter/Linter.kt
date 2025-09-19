@@ -1,5 +1,3 @@
-package linter
-
 import reporter.DiagnosticReporter
 import java.io.Reader
 
@@ -7,6 +5,6 @@ import java.io.Reader
 class Linter {
 
     fun lint(source: Reader, config: Reader, reporter: DiagnosticReporter) {
-        TODO()
+        TODO("not implemented")
     }
 }
