@@ -1,7 +1,3 @@
 package reporter
 
-enum class Severity {
-    DETAIL,
-    MISTAKE,
-    ERROR,
-}
+enum class Severity { NOTICE, WARNING, ERROR }
