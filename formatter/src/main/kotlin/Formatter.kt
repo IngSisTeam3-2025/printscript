@@ -1,16 +1,14 @@
 import error.ParseError
-import node.AstNode
+import node.CstNode
 import reporter.DiagnosticReporter
 import result.Result
-import java.io.Reader
 import java.io.Writer
 
 @Suppress("UNUSED_PARAMETER")
-class Interpreter {
+class Formatter {
 
-    fun interpret(
-        source: Sequence<Result<AstNode, ParseError>>,
-        input: Reader,
+    fun format(
+        source: Sequence<Result<CstNode, ParseError>>,
         output: Writer,
         reporter: DiagnosticReporter,
     ) {
