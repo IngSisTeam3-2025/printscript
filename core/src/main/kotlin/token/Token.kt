@@ -1,12 +1,17 @@
 package token
 
-import location.SourceLocation
+import span.Position
+import span.Span
+import trivia.Trivia
 
 data class Token(
     val type: TokenType,
-    val value: String,
-    val prefixTrivia: String = "",
-    val suffixTrivia: String = "",
-    val start: SourceLocation,
-    val end: SourceLocation,
-)
+    val lexeme: String,
+    val span: Span,
+    val leadingTrivia: List<Trivia> = emptyList(),
+    val trailingTrivia: List<Trivia> = emptyList(),
+) {
+    companion object {
+        val EOF = Token(TokenType.EOF, "", Span(Position(-1, 0, 0), (Position(-1, 0, 0))))
+    }
+}

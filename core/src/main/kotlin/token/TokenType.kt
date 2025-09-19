@@ -2,6 +2,9 @@ package token
 
 enum class TokenType(val priority: Int = 0) {
 
+    // Special
+    EOF(priority = 0),
+
     // Keywords
     LET(priority = 100),
     PRINT_LN(priority = 100),

@@ -1,3 +1,5 @@
 package trivia
 
-data class Trivia(val text: String, val type: TriviaType)
+import span.Span
+
+data class Trivia(val type: TriviaType, val text: String, val span: Span)

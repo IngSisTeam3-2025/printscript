@@ -1,4 +1,3 @@
-import lexer.Lexer
 import lexer.matcher.token.BooleanLiteralMatcher
 import lexer.matcher.token.IdentifierMatcher
 import lexer.matcher.token.KeywordMatcher
