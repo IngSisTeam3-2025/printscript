@@ -1,8 +1,8 @@
 package visitor
 
-import ast.AstNode
-import provider.DependencyProvider
+import node.AstNode
 
-interface AstVisitor {
-    fun visit(node: AstNode, dispatcher: VisitorDispatcher, provider: DependencyProvider): VisitResult
+interface AstVisitor<R> {
+    fun visit(node: AstNode.Leaf): R
+    fun visit(node: AstNode.Composite): R
 }
