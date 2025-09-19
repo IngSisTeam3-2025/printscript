@@ -5,6 +5,12 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lexer"))
+    implementation(project(":parser"))
+    implementation(project(":linter"))
+    implementation(project(":formatter"))
+    implementation(project(":validator"))
+    implementation(project(":interpreter"))
     implementation("com.github.ajalt.clikt:clikt:5.0.1")
     implementation("com.github.ajalt.clikt:clikt-markdown:5.0.1")
 }

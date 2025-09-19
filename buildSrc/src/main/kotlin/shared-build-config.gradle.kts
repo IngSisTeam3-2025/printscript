@@ -30,13 +30,10 @@ detekt {
                 active: false
             complexity:
               TooManyFunctions:
-                active: false
+                active: true
               CyclomaticComplexMethod:
-                active: false
+                active: true
               LongMethod:
-                active: false
-            exceptions:
-              TooGenericExceptionThrown:
                 active: false
             """.trimIndent()
         )
