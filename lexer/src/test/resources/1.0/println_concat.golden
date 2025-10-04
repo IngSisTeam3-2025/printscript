@@ -1,7 +1,0 @@
-PRINT_LN(println)
-LPAREN(()
-STRING("Result: ")
-PLUS(+)
-NUMBER(3)
-RPAREN())
-SEMICOLON(;)

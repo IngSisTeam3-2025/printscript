@@ -1,6 +1,0 @@
-LET(let)
-IDENTIFIER(x)
-COLON(:)
-IDENTIFIER(number)
-ASSIGN(=)
-<ERROR '@'>
