@@ -1,0 +1,9 @@
+plugins {
+    id("shared-build-config")
+    id("org.jetbrains.kotlinx.kover")
+}
+
+dependencies {
+    implementation(project(":printscript-core"))
+    implementation(project(":printscript-api"))
+}
