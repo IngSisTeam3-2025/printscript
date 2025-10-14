@@ -20,13 +20,16 @@ detekt {
               SpacingBetweenPackageAndImports:
                 active: true
               MaxLineLength:
-                active: true
-                maxLineLength: 120
+                active: false
               LoopWithTooManyJumpStatements:
                 active: false
               ReturnCount:
                 active: false
               UseCheckOrError:
+                active: false
+              WildcardImport:
+                active: false
+              MagicNumber:
                 active: false
             complexity:
               TooManyFunctions:

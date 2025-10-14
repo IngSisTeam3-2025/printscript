@@ -2,39 +2,30 @@ package model.node
 
 import model.span.Span
 import model.trivia.Trivia
-import visitor.Visitor
 
 sealed class Node {
-    abstract val type: model.node.NodeType
+    abstract val type: NodeType
     abstract val span: Span
-
-    abstract fun toSourceString(): String
     abstract fun <R> accept(visitor: Visitor<R>): R
+    abstract fun toSourceString(): String
 
     data class Leaf(
+        override val type: NodeType,
         val value: Any,
+        override val span: Span,
         val leading: Collection<Trivia> = emptyList(),
-        val trailing: Collection<Trivia> = emptyList(),
-        override val type: model.node.NodeType,
-        override val span: Span
-    ) : model.node.Node() {
-        override fun toSourceString() =
-            leading.joinToString("") { it.lexeme } +
-                    value.toString() +
-                    trailing.joinToString("") { it.lexeme }
-
+        val trailing: Collection<Trivia> = emptyList()
+    ) : Node() {
         override fun <R> accept(visitor: Visitor<R>) = visitor.visit(this)
+        override fun toSourceString() = leading.joinToString("") { it.lexeme } + value.toString() + trailing.joinToString("") { it.lexeme }
     }
 
     data class Composite(
-        val children: List<model.node.Node>,
-        override val type: model.node.NodeType,
+        override val type: NodeType,
+        val children: Collection<Node>,
         override val span: Span
-    ) : model.node.Node() {
-        override fun toSourceString() = children.joinToString("") { it.toSourceString() }
-
+    ) : Node() {
         override fun <R> accept(visitor: Visitor<R>) = visitor.visit(this)
+        override fun toSourceString() = children.joinToString("") { it.toSourceString() }
     }
 }
-
-

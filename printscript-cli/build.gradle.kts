@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":printscript-api"))
     implementation(project(":printscript-core"))
     implementation(project(":printscript-lexer"))
     implementation(project(":printscript-parser"))

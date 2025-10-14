@@ -4,4 +4,14 @@ plugins {
 
 rootProject.name = "printscript"
 
-include("printscript-core", "printscript-api", "printscript-lexer", "printscript-parser", "printscript-linter", "printscript-formatter", "printscript-validator", "printscript-interpreter", "printscript-cli")
+include(
+    "printscript-core",
+    "printscript-api",
+    "printscript-lexer",
+    "printscript-parser",
+    "printscript-linter",
+    "printscript-formatter",
+    "printscript-validator",
+    "printscript-interpreter",
+    "printscript-cli"
+)
