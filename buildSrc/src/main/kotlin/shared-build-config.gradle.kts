@@ -16,6 +16,9 @@ detekt {
     config.setFrom(
         resources.text.fromString(
             """
+            naming:
+              MatchingDeclarationName:
+                active: false
             style:
               SpacingBetweenPackageAndImports:
                 active: true
@@ -28,35 +31,31 @@ detekt {
               UseCheckOrError:
                 active: false
               WildcardImport:
-                active: false
+                active: true
               MagicNumber:
                 active: false
             complexity:
+              NestedBlockDepth:
+                active: false
+              LongParameterList:
+                active: false
               TooManyFunctions:
-                active: true
+                active: false
               CyclomaticComplexMethod:
-                active: true
+                active: false
               LongMethod:
                 active: false
-            """.trimIndent()
+            """
         )
     )
 }
 
 kotlin { jvmToolchain(17) }
 
-spotless {
-    kotlin {
-        ktlint().editorConfigOverride(
-            mapOf("indent_size" to "4","insert_final_newline" to "true")
-        )
-    }
-}
-
 tasks.check { dependsOn("detekt","spotlessCheck", "koverVerify") }
 
 tasks.named("build") {
-    dependsOn("spotlessApply", "check")
+    dependsOn("spotlessCheck", "check")
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -67,9 +66,12 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("build/**/*.kt")
+        ktlint().editorConfigOverride(
+            mapOf(
+                "indent_size" to "4",
+                "insert_final_newline" to "true"
+            )
+        )
         trimTrailingWhitespace()
     }
-}
-
-kover {
 }

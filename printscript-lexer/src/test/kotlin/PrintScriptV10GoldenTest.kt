@@ -1,27 +1,27 @@
+import lexer.PrintScriptLexer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import util.GoldenTester
 import kotlin.io.path.Path
 
-import util.PrintScriptV1_0Terminals
-import internal.table.TerminalTableRegistry
-import util.GoldenTester
-
-class PrintScriptV1_0GoldenTest {
-    companion object { const val VERSION = "1.0" }
+class PrintScriptV10GoldenTest {
+    companion object {
+        const val VERSION = "1.0"
+    }
 
     private fun run(testName: String) {
-        TerminalTableRegistry.register(VERSION, PrintScriptV1_0Terminals)
-        val lexer = PrintScriptLexer(VERSION)
+        val lexer = PrintScriptLexer()
         val mainPath = Path("src/test/resources/$VERSION/$testName/main.ps")
         val goldenPath = Path("src/test/resources/$VERSION/$testName/golden.ps")
 
         val main = GoldenTester.read(mainPath)
-        val golden = GoldenTester.read(goldenPath)
+        val source = main.asSequence()
 
-        val tokens = lexer.lex(main.asSequence())
-        val output = GoldenTester.format(tokens)
+        val results = lexer.lex(VERSION, source)
+        val actual = GoldenTester.format(results)
+        val expected = GoldenTester.read(goldenPath)
 
-        assertEquals(golden.trim(), output.trim(), "FAILURE: $testName")
+        assertEquals(expected.trim(), actual.trim(), "FAILURE: $testName")
     }
 
     @Test
@@ -76,7 +76,11 @@ class PrintScriptV1_0GoldenTest {
 
     @Test
     fun `test case 11`() {
-        run("unterminated-string")
+        run("unterminated-dq-string")
     }
 
+    @Test
+    fun `test case 12`() {
+        run("unterminated-sq-string")
+    }
 }

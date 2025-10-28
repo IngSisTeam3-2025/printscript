@@ -1,12 +1,12 @@
-package internal.spanner
+package lexer.internal.spanner
 
 import model.span.Position
 import model.span.Span
 
 internal class Spanner {
-    private var line: Int = 0
-    private var column: Int = 0
-    private var offset: Int = 0
+    private var line: Int = 1
+    private var column: Int = 1
+    private var index: Int = 0
 
     fun span(text: String): Span {
         val start = mark()
@@ -15,16 +15,18 @@ internal class Spanner {
         return Span(start, end)
     }
 
-    private fun mark(): Position = Position(line, column, offset)
+    private fun mark(): Position = Position(line, column, index)
 
     private fun advance(text: String) {
         text.forEach { c ->
             when (c) {
-                '\n' -> { line++; column = 0 }
+                '\n' -> {
+                    line++
+                    column = 1
+                }
                 else -> column++
             }
-            offset++
+            index++
         }
     }
-
 }

@@ -1,47 +1,35 @@
 package util
 
-import java.nio.file.Files
-import java.nio.file.Path
-
 import model.diagnostic.Diagnostic
 import model.token.Token
-import util.outcome.Outcome
+import type.outcome.Outcome
+import java.nio.file.Files
+import java.nio.file.Path
 
 internal object GoldenTester {
 
     fun read(path: Path): String {
-        return Files.readString(path).replace("\r\n", "\n").replace("\r", "\n")
+        return Files.readString(path)
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
     }
 
     fun format(tokens: Sequence<Outcome<Token, Diagnostic>>): String {
-        val builder = StringBuilder()
+        val lines = mutableListOf<String>()
 
         for (outcome in tokens) {
             when (outcome) {
                 is Outcome.Ok -> {
-                    val t = outcome.value
-                    builder.append("${t.span.format()}:TOKEN: ${t.type} '${t.lexeme}'\n")
-
-                    if (t.leading.isNotEmpty()) {
-                        t.leading.forEach {
-                            val lexemeEscaped = it.lexeme.replace("\n", "\\n").replace("\r", "\\r")
-                            builder.append("${it.span.format()}:LEADING: ${it.type} '$lexemeEscaped'\n")
-                        }
-                    }
-                    if (t.trailing.isNotEmpty()) {
-                        t.trailing.forEach {
-                            val lexemeEscaped = it.lexeme.replace("\n", "\\n").replace("\r", "\\r")
-                            builder.append("${it.span.format()}:TRAILING: ${it.type} '$lexemeEscaped'\n")
-                        }
-                    }
+                    val token = outcome.value
+                    val tokenLines = TestToken(token).format()
+                    lines.addAll(tokenLines)
                 }
-                is Outcome.Err -> {
-                    builder.appendLine(outcome.error.format())
+                is Outcome.Error -> {
+                    val diagnostic = outcome.error
+                    lines.add(diagnostic.format())
                 }
             }
         }
-
-        return builder.toString().trimEnd()
+        return lines.joinToString("\n")
     }
 }
-
