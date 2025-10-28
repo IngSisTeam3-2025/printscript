@@ -1,0 +1,361 @@
+@startuml
+class parser.internal.model.grammar.expression.BlockExpression {
++  type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,MutableList<Node>,void,Token)
++ void null()
+}
+
+
+class parser.internal.model.grammar.primary.BooleanLiteralPrimary {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- Node buildNode(Token)
+}
+
+
+interface parser.internal.model.grammar.expression.Expression {
+}
+interface parser.internal.model.grammar.Grammar {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
+}
+
+
+class parser.internal.buffer.TokenBuffer$Companion {
+-  LOOKAHEAD
+}
+
+class parser.internal.buffer.TokenBuffer {
+-  iterator
+-  inner
++ <<Create>> TokenBuffer(Sequence<Token>)
+- void fill()
++ Collection<Token> peek(Int)
++ void advance(Int)
++ Boolean hasNext(Int)
+}
+
+
+class parser.internal.scanner.NodeScanner {
++ void scan(TokenBuffer,void,GrammarTable)
++ void null()
+}
+
+class parser.internal.model.grammar.primary.NumberLiteralPrimary {
++  type
+-  transformers
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- Option<Value> transformValue(String)
+- void buildNode(Token,void,Value)
++ void null()
+}
+
+
+class parser.internal.table.GrammarTableRegistry {
+- Map<String, Lazy<GrammarTable>> tables
++ void null()
++ void null()
++ Option<GrammarTable> get(String)
+}
+
+
+class parser.internal.model.grammar.expression.ReadEnvPrimary {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,Token,void,Node,void,Token,void,List<Token>)
++ void null()
+}
+
+
+class parser.internal.model.category.InvalidNumberLiteral {
++ String name
+}
+
+class parser.internal.model.category.InvalidOperator {
++ String name
+}
+
+class parser.internal.model.category.InvalidTypeDeclaration {
++ String name
+}
+
+class parser.internal.model.category.MissingAssignment {
++ String name
+}
+
+class parser.internal.model.category.MissingBooleanLiteral {
++ String name
+}
+
+class parser.internal.model.category.MissingClosingBrace {
++ String name
+}
+
+class parser.internal.model.category.MissingClosingParenthesis {
++ String name
+}
+
+class parser.internal.model.category.MissingColon {
++ String name
+}
+
+class parser.internal.model.category.MissingConstDeclaration {
++ String name
+}
+
+class parser.internal.model.category.MissingEndOfLine {
++ String name
+}
+
+class parser.internal.model.category.MissingExpression {
++ String name
+}
+
+class parser.internal.model.category.MissingIdentifier {
++ String name
+}
+
+class parser.internal.model.category.MissingIfDeclaration {
++ String name
+}
+
+class parser.internal.model.category.MissingLetDeclaration {
++ String name
+}
+
+class parser.internal.model.category.MissingNumberLiteral {
++ String name
+}
+
+class parser.internal.model.category.MissingOpeningBrace {
++ String name
+}
+
+class parser.internal.model.category.MissingOpeningParenthesis {
++ String name
+}
+
+class parser.internal.model.category.MissingOperator {
++ String name
+}
+
+class parser.internal.model.category.MissingStatement {
++ String name
+}
+
+class parser.internal.model.category.MissingStringLiteral {
++ String name
+}
+
+class parser.internal.model.category.MissingTypeDeclaration {
++ String name
+}
+
+class parser.internal.model.category.UnrecognizedStatement {
++ String name
+}
+
+class parser.internal.model.grammar.statement.LetDeclarationStatement {
++ <<Create>> LetDeclarationStatement(,Map<TokenType, NodeType>)
+}
+
+class parser.internal.table.PrintScriptV1_0 {
++ Collection<Statement> statements
++ Collection<Primary> primaries
++ Collection<Expression> expressions
+}
+
+class parser.internal.table.PrintScriptV1_1 {
++ Collection<Statement> statements
++ Collection<Primary> primaries
++ Collection<Expression> expressions
+}
+
+class parser.internal.model.grammar.primary.UnaryOperationPrimary {
++ <<Create>> UnaryOperationPrimary(,Map<TokenType, NodeType>)
+}
+
+class parser.internal.model.grammar.statement.ConstDeclarationStatement {
++ <<Create>> ConstDeclarationStatement(,Map<TokenType, NodeType>)
+}
+
+class parser.internal.model.scan.NodeScan$Empty {
+}
+class parser.internal.model.scan.NodeScan$Error {
++ <<Create>> Error(,String,,Category,,Int)
+}
+
+class parser.internal.model.scan.NodeScan$Ok {
++ <<Create>> Ok(,Node,,Int)
+}
+
+interface parser.internal.model.scan.NodeScan {
+}
+interface parser.internal.model.grammar.primary.Primary {
+}
+interface parser.internal.table.GrammarTable {
++ Collection<Statement> statements
++ Collection<Expression> expressions
++ Collection<Primary> primaries
++ Outcome<GrammarMatch, GrammarFail> dispatchStatement(List<Token>)
++ Outcome<GrammarMatch, GrammarFail> dispatchExpression(List<Token>)
++ Outcome<GrammarMatch, GrammarFail> dispatchPrimary(List<Token>)
+- void dispatch(List<Token>,void,Collection<Grammar>)
++ void null()
+}
+
+
+class parser.PrintScriptParser {
++ void parse(String,void,Sequence<Token>)
++ void null()
+- Option<GrammarTable> getGrammarTable(String)
+- Diagnostic buildConfigurationError(String)
+- void parseTokens(Sequence<Token>,void,GrammarTable)
++ void null()
+- void buildParseError(NodeScan.Error,void,TokenBuffer)
++ void null()
+}
+
+class parser.internal.model.grammar.GrammarFail {
++ <<Create>> GrammarFail(,String,,Category,,Int)
+}
+
+class parser.internal.model.grammar.primary.StringLiteralPrimary {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- Node buildNode(Token)
+}
+
+
+class parser.internal.model.grammar.statement.PrintlnStatement {
++  type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void parseInner(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,Token,void,Option<GrammarMatch>,void,Token,void,Token,void,List<Token>)
++ void null()
+}
+
+
+interface parser.internal.model.grammar.statement.Statement {
+}
+class parser.internal.model.grammar.statement.IfStatement {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void parseOptionalElse(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,Token,void,GrammarMatch,void,Token,void,GrammarMatch,void,Option<GrammarMatch>,void,List<Token>)
++ void null()
+}
+
+
+class parser.internal.model.grammar.expression.BinaryOperationExpression {
++ <<Create>> BinaryOperationExpression(,Map<TokenType, BinaryOperator>)
+}
+
+class parser.internal.model.grammar.primary.ParenthesizedPrimary {
++  type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(Token,void,GrammarMatch,void,Token)
++ void null()
+}
+
+
+class parser.internal.model.operator.BinaryOperator {
++ <<Create>> BinaryOperator(,NodeType,,Int)
+}
+
+class parser.internal.model.grammar.GrammarMatch {
++ <<Create>> GrammarMatch(Node,Int)
+}
+
+class parser.internal.model.error.ParseError {
++ <<Create>> ParseError(,String,,Category,,Span,,Severity)
+}
+
+class parser.internal.model.grammar.statement.AssignStatement {
++  type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,Token,void,Node,void,Token,void,List<Token>)
++ void null()
+}
+
+
+class parser.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category)
+}
+
+class parser.internal.model.grammar.primary.IdentifierPrimary {
++  type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- Node buildNode(Token)
+}
+
+
+class parser.internal.model.grammar.expression.ReadInputPrimary {
++ NodeType type
++ void match(List<Token>,void,GrammarTable)
++ void null()
+- void buildNode(void,Token,void,Token,void,Node,void,Token,void,List<Token>)
++ void null()
+}
+
+
+
+
+parser.internal.model.grammar.expression.Expression <|.. parser.internal.model.grammar.expression.BlockExpression
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.primary.BooleanLiteralPrimary
+parser.internal.model.grammar.Grammar <|.. parser.internal.model.grammar.expression.Expression
+parser.internal.buffer.TokenBuffer +.. parser.internal.buffer.TokenBuffer$Companion
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.primary.NumberLiteralPrimary
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.expression.ReadEnvPrimary
+model.diagnostic.category.Category <|.. parser.internal.model.category.InvalidNumberLiteral
+model.diagnostic.category.Category <|.. parser.internal.model.category.InvalidOperator
+model.diagnostic.category.Category <|.. parser.internal.model.category.InvalidTypeDeclaration
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingAssignment
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingBooleanLiteral
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingClosingBrace
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingClosingParenthesis
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingColon
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingConstDeclaration
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingEndOfLine
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingExpression
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingIdentifier
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingIfDeclaration
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingLetDeclaration
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingNumberLiteral
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingOpeningBrace
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingOpeningParenthesis
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingOperator
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingStatement
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingStringLiteral
+model.diagnostic.category.Category <|.. parser.internal.model.category.MissingTypeDeclaration
+model.diagnostic.category.Category <|.. parser.internal.model.category.UnrecognizedStatement
+parser.internal.table.GrammarTable <|.. parser.internal.table.PrintScriptV1_0
+parser.internal.table.GrammarTable <|.. parser.internal.table.PrintScriptV1_1
+parser.internal.model.scan.NodeScan +.. parser.internal.model.scan.NodeScan$Empty
+parser.internal.model.scan.NodeScan <|.. parser.internal.model.scan.NodeScan$Empty
+parser.internal.model.scan.NodeScan +.. parser.internal.model.scan.NodeScan$Error
+parser.internal.model.scan.NodeScan +.. parser.internal.model.scan.NodeScan$Ok
+parser.internal.model.grammar.Grammar <|.. parser.internal.model.grammar.primary.Primary
+Parser <|.. parser.PrintScriptParser
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.primary.StringLiteralPrimary
+parser.internal.model.grammar.statement.Statement <|.. parser.internal.model.grammar.statement.PrintlnStatement
+parser.internal.model.grammar.Grammar <|.. parser.internal.model.grammar.statement.Statement
+parser.internal.model.grammar.statement.Statement <|.. parser.internal.model.grammar.statement.IfStatement
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.primary.ParenthesizedPrimary
+parser.internal.model.grammar.statement.Statement <|.. parser.internal.model.grammar.statement.AssignStatement
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.primary.IdentifierPrimary
+parser.internal.model.grammar.primary.Primary <|.. parser.internal.model.grammar.expression.ReadInputPrimary
+@enduml
