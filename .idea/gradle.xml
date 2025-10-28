@@ -21,14 +21,15 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/cli" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/formatter" />
-            <option value="$PROJECT_DIR$/interpreter" />
-            <option value="$PROJECT_DIR$/lexer" />
-            <option value="$PROJECT_DIR$/linter" />
-            <option value="$PROJECT_DIR$/parser" />
-            <option value="$PROJECT_DIR$/validator" />
+            <option value="$PROJECT_DIR$/printscript-api" />
+            <option value="$PROJECT_DIR$/printscript-cli" />
+            <option value="$PROJECT_DIR$/printscript-core" />
+            <option value="$PROJECT_DIR$/printscript-formatter" />
+            <option value="$PROJECT_DIR$/printscript-interpreter" />
+            <option value="$PROJECT_DIR$/printscript-lexer" />
+            <option value="$PROJECT_DIR$/printscript-linter" />
+            <option value="$PROJECT_DIR$/printscript-parser" />
+            <option value="$PROJECT_DIR$/printscript-validator" />
           </set>
         </option>
       </GradleProjectSettings>
