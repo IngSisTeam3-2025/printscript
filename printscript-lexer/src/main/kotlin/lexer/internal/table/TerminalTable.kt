@@ -1,7 +1,7 @@
-package internal.table
+package lexer.internal.table
 
-import internal.model.terminal.TokenTerminal
-import internal.model.terminal.TriviaTerminal
+import lexer.internal.model.terminal.TokenTerminal
+import lexer.internal.model.terminal.TriviaTerminal
 
 internal interface TerminalTable {
     val tokenTerminals: Collection<TokenTerminal>

@@ -1,12 +1,14 @@
-package internal.collector
+package lexer.internal.collector
 
-import internal.buffer.LexemeBuffer
-import internal.spanner.Spanner
-import internal.model.terminal.TriviaTerminal
+import lexer.internal.buffer.LexemeBuffer
+import lexer.internal.model.terminal.TriviaTerminal
+import lexer.internal.spanner.Spanner
 import model.trivia.Trivia
-import util.option.Option
+import type.option.Option
 
 internal class TriviaCollector(private val terminals: Collection<TriviaTerminal>) {
+
+    private data class TriviaMatch(val lexeme: String, val terminal: TriviaTerminal)
 
     fun collect(buffer: LexemeBuffer, spanner: Spanner): Collection<Trivia> {
         val trivia = mutableListOf<Trivia>()
@@ -28,9 +30,9 @@ internal class TriviaCollector(private val terminals: Collection<TriviaTerminal>
         return trivia
     }
 
-    private fun findLongestMatch(buffer: LexemeBuffer): Option<Pair<String, TriviaTerminal>> {
+    private fun findLongestMatch(buffer: LexemeBuffer): Option<TriviaMatch> {
         var lookahead = 1
-        var best: Option<Pair<String, TriviaTerminal>> = Option.None
+        var best: Option<TriviaMatch> = Option.None
         var lastLength = 0
 
         while (buffer.hasNext()) {
@@ -38,7 +40,7 @@ internal class TriviaCollector(private val terminals: Collection<TriviaTerminal>
             if (slice.length <= lastLength) break
             lastLength = slice.length
 
-            val match = matchTerminals(slice)
+            val match = findBestTerminal(slice)
             if (match is Option.Some) best = match
 
             lookahead++
@@ -47,11 +49,12 @@ internal class TriviaCollector(private val terminals: Collection<TriviaTerminal>
         return best
     }
 
-    private fun matchTerminals(slice: String): Option<Pair<String, TriviaTerminal>> {
+    private fun findBestTerminal(slice: String): Option<TriviaMatch> {
         for (terminal in terminals) {
             val match = terminal.pattern.matchAt(slice, 0)
-            if (match != null && match.range.first == 0)
-                return Option.Some(match.value to terminal)
+            if (match != null && match.range.first == 0) {
+                return Option.Some(TriviaMatch(match.value, terminal))
+            }
         }
         return Option.None
     }
