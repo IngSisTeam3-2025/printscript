@@ -1,13 +1,15 @@
+package cli
+
+import cli.internal.command.InitCommand
+import cli.internal.command.Platypus
+import cli.internal.error.ErrorHandlerRegistry
+import cli.internal.repl.PlatypusRepl
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.MissingArgument
 import com.github.ajalt.clikt.core.MissingOption
 import com.github.ajalt.clikt.core.NoSuchSubcommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.main
-import command.InitCommand
-import command.Platypus
-import error.ErrorHandlerRegistry
-import repl.PlatypusRepl
 
 fun main() {
     InitCommand().main(emptyArray())

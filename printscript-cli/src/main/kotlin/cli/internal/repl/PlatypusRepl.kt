@@ -1,9 +1,9 @@
-package repl
+package cli.internal.repl
 
+import cli.internal.error.ErrorHandlerRegistry
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.CliktError
 import com.github.ajalt.clikt.core.parse
-import error.ErrorHandlerRegistry
 import java.io.IOError
 
 class PlatypusRepl(

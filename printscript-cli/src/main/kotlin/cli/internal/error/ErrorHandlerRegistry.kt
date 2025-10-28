@@ -1,4 +1,4 @@
-package error
+package cli.internal.error
 
 import com.github.ajalt.clikt.core.CliktError
 import kotlin.reflect.KClass

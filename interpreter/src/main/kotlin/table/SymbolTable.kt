@@ -1,3 +1,0 @@
-package table
-
-interface SymbolTable

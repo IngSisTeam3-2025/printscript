@@ -1,4 +1,4 @@
-package command
+package cli.internal.command
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
