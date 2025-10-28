@@ -1,8 +1,8 @@
-package rulekit.transformer
+package util.transformer
 
 import model.rule.RuleValue
 
 interface RuleValueTransformer {
-    fun canTransform(value: Any): Boolean
+    fun supports(value: Any): Boolean
     fun transform(value: Any): RuleValue
 }
