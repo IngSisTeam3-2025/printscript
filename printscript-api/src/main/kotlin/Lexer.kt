@@ -3,5 +3,8 @@ import model.token.Token
 import type.outcome.Outcome
 
 interface Lexer {
-    fun lex(chars: Sequence<Char>): Sequence<Outcome<Token, Diagnostic>>
+    fun lex(
+        version: String,
+        chars: Sequence<Char>,
+    ): Sequence<Outcome<Token, Diagnostic>>
 }

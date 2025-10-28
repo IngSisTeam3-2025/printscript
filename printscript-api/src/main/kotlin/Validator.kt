@@ -1,6 +1,10 @@
 import model.diagnostic.Diagnostic
 import model.node.Node
+import type.outcome.Outcome
 
 interface Validator {
-    fun validate(nodes: Sequence<Node>): Sequence<Diagnostic>
+    fun validate(
+        version: String,
+        nodes: Sequence<Node>,
+    ): Sequence<Outcome<Node, Diagnostic>>
 }

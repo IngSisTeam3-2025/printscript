@@ -1,11 +1,11 @@
 package model.diagnostic
 
-import model.origin.Origin
-import model.severity.Severity
+import model.diagnostic.category.Category
+import model.diagnostic.severity.Severity
 
 interface Diagnostic {
     val message: String
     val severity: Severity
-    val origin: Origin
-    fun format(): String = "${severity.name} [${origin.name}] $message"
+    val category: Category
+    fun format(): String = "${severity.name} -> (${category.name}): $message"
 }

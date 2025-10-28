@@ -4,5 +4,8 @@ import model.token.Token
 import type.outcome.Outcome
 
 interface Parser {
-    fun parse(tokens: Sequence<Token>): Sequence<Outcome<Node, Diagnostic>>
+    fun parse(
+        version: String,
+        tokens: Sequence<Token>,
+    ): Sequence<Outcome<Node, Diagnostic>>
 }
