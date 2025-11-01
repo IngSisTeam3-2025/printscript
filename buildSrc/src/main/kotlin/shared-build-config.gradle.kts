@@ -13,41 +13,7 @@ tasks.test { useJUnitPlatform() }
 
 detekt {
     buildUponDefaultConfig = true
-    config.setFrom(
-        resources.text.fromString(
-            """
-            naming:
-              MatchingDeclarationName:
-                active: false
-            style:
-              SpacingBetweenPackageAndImports:
-                active: true
-              MaxLineLength:
-                active: false
-              LoopWithTooManyJumpStatements:
-                active: false
-              ReturnCount:
-                active: false
-              UseCheckOrError:
-                active: false
-              WildcardImport:
-                active: true
-              MagicNumber:
-                active: false
-            complexity:
-              NestedBlockDepth:
-                active: false
-              LongParameterList:
-                active: false
-              TooManyFunctions:
-                active: false
-              CyclomaticComplexMethod:
-                active: false
-              LongMethod:
-                active: false
-            """
-        )
-    )
+    config.setFrom(files("$rootDir/detekt/detekt.yml"))
 }
 
 kotlin { jvmToolchain(17) }
