@@ -1,15 +1,14 @@
 package formatter
 
 import Formatter
-import formatter.internal.model.error.ConfigurationError
 import formatter.internal.model.value.DocValue
 import formatter.internal.table.VisitorTableRegistry
+import formatter.internal.type.toDoc
 import model.diagnostic.Diagnostic
 import model.doc.Doc
 import model.node.Node
 import model.rule.Rule
 import model.visitor.VisitorTable
-import type.option.Option
 import type.outcome.Outcome
 
 class PrintScriptFormatter : Formatter {
@@ -21,8 +20,12 @@ class PrintScriptFormatter : Formatter {
     ): Sequence<Outcome<Doc, Diagnostic>> {
         return sequence {
             when (val table = getVisitorTable(version, rules)) {
-                is Option.Some -> yieldAll(formatNodes(nodes, table.value))
-                is Option.None -> yield(Outcome.Error(buildConfigurationError(version)))
+                is Outcome.Ok -> {
+                    yieldAll(formatNodes(nodes, table.value))
+                }
+                is Outcome.Error -> {
+                    yield(Outcome.Error(table.error))
+                }
             }
         }
     }
@@ -30,13 +33,7 @@ class PrintScriptFormatter : Formatter {
     private fun getVisitorTable(
         version: String,
         rules: Collection<Rule>,
-    ): Option<VisitorTable> {
-        return VisitorTableRegistry.get(version, rules)
-    }
-
-    private fun buildConfigurationError(version: String): Diagnostic {
-        return ConfigurationError("Unsupported language version '$version'")
-    }
+    ): Outcome<VisitorTable, Diagnostic> = VisitorTableRegistry.get(version, rules)
 
     private fun formatNodes(
         nodes: Sequence<Node>,
@@ -44,6 +41,7 @@ class PrintScriptFormatter : Formatter {
     ): Sequence<Outcome<Doc, Diagnostic>> {
         return sequence {
             for (node in nodes) {
+                var yielded = false
                 for (visitor in table.visitors) {
                     val visit = node.accept(visitor, table)
                     when (visit) {
@@ -51,10 +49,15 @@ class PrintScriptFormatter : Formatter {
                             val result = visit.value
                             if (result is DocValue) {
                                 yield(Outcome.Ok(result.value))
+                                yielded = true
                             }
                         }
                         is Outcome.Error -> yield(visit)
                     }
+                }
+                if (!yielded) {
+                    val fallback = node.toDoc()
+                    yield(Outcome.Ok(fallback))
                 }
             }
         }

@@ -11,7 +11,7 @@ style:
   ReturnCount:
     active: false
   UseCheckOrError:
-    active: false
+    active: true
   WildcardImport:
     active: true
   MagicNumber:
@@ -24,6 +24,6 @@ complexity:
   TooManyFunctions:
     active: false
   CyclomaticComplexMethod:
-    active: false
+    active: true
   LongMethod:
     active: false

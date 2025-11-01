@@ -1,16 +1,16 @@
 package formatter.internal.visitor
 
 import formatter.internal.model.value.DocValue
-import formatter.internal.type.addLeadingSpace
 import formatter.internal.type.addTrailingSpace
 import formatter.internal.type.findChildOfType
 import formatter.internal.type.getChildAt
 import formatter.internal.type.hasSpaceAfter
-import formatter.internal.type.hasSpaceBefore
 import formatter.internal.type.toDoc
 import formatter.internal.type.updateChildAt
 import model.diagnostic.Diagnostic
-import model.node.AssignNode
+import model.node.ColonNode
+import model.node.ConstDeclarationStatementNode
+import model.node.LetDeclarationStatementNode
 import model.node.Node
 import model.value.NoneValue
 import model.value.Value
@@ -18,7 +18,7 @@ import model.visitor.Visitor
 import model.visitor.VisitorTable
 import type.outcome.Outcome
 
-internal class SpacingAroundEqualsVisitor(
+internal class SpacingAfterColonVisitor(
     private val enforce: Boolean,
 ) : Visitor {
 
@@ -33,36 +33,28 @@ internal class SpacingAroundEqualsVisitor(
     ): Outcome<Value, Diagnostic> {
         if (!enforce) return Outcome.Ok(NoneValue)
 
-        val assignIndex = node.findChildOfType(AssignNode)
-        if (assignIndex == -1) return Outcome.Ok(NoneValue)
+        val isDeclaration = node.type == LetDeclarationStatementNode ||
+            node.type == ConstDeclarationStatementNode
 
-        val assignNode = when (val child = node.getChildAt(assignIndex)) {
+        if (!isDeclaration) return Outcome.Ok(NoneValue)
+
+        val colonIndex = node.findChildOfType(ColonNode)
+        if (colonIndex == -1) return Outcome.Ok(NoneValue)
+
+        val colonNode = when (val child = node.getChildAt(colonIndex)) {
             is Node.Leaf -> child
             is Node.Composite -> return Outcome.Ok(NoneValue)
         }
 
-        val hasSpaceBefore = node.hasSpaceBefore(assignIndex)
-        val hasSpaceAfter = node.hasSpaceAfter(assignIndex)
+        val hasSpaceAfter = node.hasSpaceAfter(colonIndex)
 
-        if (hasSpaceBefore && hasSpaceAfter) {
+        if (hasSpaceAfter) {
             return Outcome.Ok(NoneValue)
         }
 
-        val updated = when {
-            !hasSpaceBefore && !hasSpaceAfter ->
-                assignNode
-                    .addLeadingSpace(assignNode.span)
-                    .addTrailingSpace(assignNode.span)
-            !hasSpaceBefore ->
-                assignNode
-                    .addLeadingSpace(assignNode.span)
-            !hasSpaceAfter ->
-                assignNode
-                    .addTrailingSpace(assignNode.span)
-            else -> assignNode
-        }
+        val updated = colonNode.addTrailingSpace(colonNode.span)
+        val result = node.updateChildAt(colonIndex) { updated }
 
-        val result = node.updateChildAt(assignIndex) { updated }
         return Outcome.Ok(DocValue(result.toDoc()))
     }
 }
