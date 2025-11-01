@@ -23,13 +23,15 @@ class PrintScriptInterpreter : Interpreter {
         input: InputReader,
         output: OutputWriter,
         env: EnvReader,
-    ): Option<Diagnostic> {
-        return when (val table = getVisitorTable(version)) {
-            is Option.Some -> {
-                interpretNodes(nodes, table.value, input, output, env)
-            }
-            is Option.None -> {
-                Option.Some(buildConfigurationError(version))
+    ): Sequence<Diagnostic> {
+        return sequence {
+            when (val table = getVisitorTable(version)) {
+                is Option.Some -> {
+                    yieldAll(interpretNodes(nodes, table.value, input, output, env))
+                }
+                is Option.None -> {
+                    yield(buildConfigurationError(version))
+                }
             }
         }
     }
@@ -48,26 +50,28 @@ class PrintScriptInterpreter : Interpreter {
         input: InputReader,
         output: OutputWriter,
         env: EnvReader,
-    ): Option<Diagnostic> {
-        var context = VisitorContext()
+    ): Sequence<Diagnostic> {
+        return sequence {
+            var context = VisitorContext()
 
-        context = context.register(InputReader::class, input)
-        context = context.register(OutputWriter::class, output)
-        context = context.register(EnvReader::class, env)
-        context = context.register(SymbolTable::class, DefaultSymbolTable())
+            context = context.register(InputReader::class, input)
+            context = context.register(OutputWriter::class, output)
+            context = context.register(EnvReader::class, env)
+            context = context.register(SymbolTable::class, DefaultSymbolTable())
 
-        for (node in nodes) {
-            val visit = table.dispatch(node, context)
+            for (node in nodes) {
+                val visit = table.dispatch(node, context)
 
-            when (val outcome = visit.outcome) {
-                is Outcome.Error -> {
-                    return Option.Some(outcome.error)
-                }
-                is Outcome.Ok -> {
-                    context = visit.context
+                when (val outcome = visit.outcome) {
+                    is Outcome.Error -> {
+                        yield(outcome.error)
+                        return@sequence
+                    }
+                    is Outcome.Ok -> {
+                        context = visit.context
+                    }
                 }
             }
         }
-        return Option.None
     }
 }

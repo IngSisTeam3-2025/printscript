@@ -1,13 +1,16 @@
 package model.rule
 
 data class IntRuleValue(val value: Int) : RuleValue {
-    override fun asString() = value.toString()
+    override fun format() = value.toString()
+    override fun type(): String = "integer"
 }
 
-data class BoolRuleValue(val value: Boolean) : RuleValue {
-    override fun asString() = value.toString()
+data class BooleanRuleValue(val value: Boolean) : RuleValue {
+    override fun format() = value.toString()
+    override fun type(): String = "boolean"
 }
 
 data class StringRuleValue(val value: String) : RuleValue {
-    override fun asString() = value
+    override fun format() = value
+    override fun type(): String = "string"
 }

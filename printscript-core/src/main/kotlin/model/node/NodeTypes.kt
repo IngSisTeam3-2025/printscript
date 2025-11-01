@@ -29,8 +29,8 @@ data object PrintlnKeywordNode : NodeType
 data object PrintlnStatementNode : NodeType
 data object ReadEnvExpressionNode : NodeType
 data object ReadEnvKeywordNode : NodeType
+data object ReadInputExpressionNode : NodeType
 data object ReadInputKeywordNode : NodeType
-data object ReadInputStatementNode : NodeType
 data object RightBraceNode : NodeType
 data object RightParenthesisNode : NodeType
 data object SemicolonNode : NodeType

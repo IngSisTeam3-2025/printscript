@@ -4,14 +4,13 @@ import Interpreter
 import Lexer
 import Parser
 import Validator
+import error.ErrorFlag
+import error.onError
+import error.onErrorCollectAll
 import io.reader.env.EnvReader
 import io.reader.input.InputReader
 import io.reporter.DiagnosticReporter
 import io.writer.OutputWriter
-import model.node.Node
-import model.token.Token
-import type.option.onSome
-import type.outcome.Outcome
 
 class InterpreterRunner(
     private val lexer: Lexer,
@@ -27,43 +26,24 @@ class InterpreterRunner(
         env: EnvReader,
         reporter: DiagnosticReporter,
     ) {
-        var stop = false
+        val flag = ErrorFlag()
 
         val chars = source.read()
-
         val tokens = lexer.lex(version, chars)
-            .takeWhile { !stop }
-            .onEach {
-                if (it is Outcome.Error) {
-                    reporter.report(it.error)
-                    stop = true
-                }
-            }
-            .filterIsInstance<Outcome.Ok<Token>>()
-            .map { it.value }
-
+            .onError(reporter, flag)
         val nodes = parser.parse(version, tokens)
-            .takeWhile { !stop }
-            .onEach {
-                if (it is Outcome.Error) {
-                    reporter.report(it.error)
-                    stop = true
-                }
-            }
-            .filterIsInstance<Outcome.Ok<Node>>()
-            .map { it.value }
+            .takeWhile { !flag.hasError }
+            .onError(reporter, flag)
+        val validations = validator.validate(version, nodes)
+            .takeWhile { !flag.hasError }
+            .onErrorCollectAll(reporter, flag)
+            .toList()
 
-        val validated = validator.validate(version, nodes)
-            .takeWhile { !stop }
-            .onEach {
-                if (it is Outcome.Error) {
-                    reporter.report(it.error)
-                    stop = true
-                }
+        if (!flag.hasError) {
+            val interpretations = interpreter.interpret(version, validations.asSequence(), input, output, env)
+            for (error in interpretations) {
+                reporter.report(error)
             }
-            .filterIsInstance<Outcome.Ok<Node>>()
-            .map { it.value }
-
-        interpreter.interpret(version, validated, input, output, env).onSome(reporter::report)
+        }
     }
 }

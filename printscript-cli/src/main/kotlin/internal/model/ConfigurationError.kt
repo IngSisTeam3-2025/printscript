@@ -1,4 +1,4 @@
-package linter.internal.model.error
+package internal.model
 
 import model.diagnostic.Diagnostic
 import model.diagnostic.category.Category

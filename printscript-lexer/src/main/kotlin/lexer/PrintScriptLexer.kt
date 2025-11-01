@@ -3,7 +3,7 @@ package lexer
 import Lexer
 import lexer.internal.buffer.LexemeBuffer
 import lexer.internal.collector.TriviaCollector
-import lexer.internal.model.category.Syntax
+import lexer.internal.model.category.Lexical
 import lexer.internal.model.error.ConfigurationError
 import lexer.internal.model.error.LexError
 import lexer.internal.model.scan.TokenScan
@@ -26,10 +26,13 @@ class PrintScriptLexer : Lexer {
         return sequence {
             when (val table = getTerminalTable(version)) {
                 is Option.Some -> {
-                    yieldAll(lexCharacters(chars, table.value))
+                    for (token in lexCharacters(chars, table.value)) {
+                        yield(token)
+                    }
                 }
                 is Option.None -> {
                     yield(Outcome.Error(buildConfigurationError(version)))
+                    return@sequence
                 }
             }
         }
@@ -89,6 +92,6 @@ class PrintScriptLexer : Lexer {
         val char = buffer.peek().first()
         val span = spanner.span(char.toString())
         val message = "Invalid character '$char'"
-        return LexError(message, Syntax, span)
+        return LexError(message, Lexical, span)
     }
 }

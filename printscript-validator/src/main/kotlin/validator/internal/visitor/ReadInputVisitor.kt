@@ -2,7 +2,7 @@ package validator.internal.visitor
 
 import model.node.LeftParenthesisNode
 import model.node.Node
-import model.node.ReadInputStatementNode
+import model.node.ReadInputExpressionNode
 import model.node.RightParenthesisNode
 import model.value.NoneValue
 import model.value.StringValue
@@ -30,7 +30,7 @@ internal class ReadInputVisitor : ContextVisitor {
         table: ContextVisitorTable,
         context: VisitorContext,
     ): VisitResult {
-        if (node.type != ReadInputStatementNode) {
+        if (node.type != ReadInputExpressionNode) {
             return VisitResult(Outcome.Ok(NoneValue), context)
         }
 
