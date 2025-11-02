@@ -1,0 +1,29 @@
+naming:
+  MatchingDeclarationName:
+    active: false
+style:
+  SpacingBetweenPackageAndImports:
+    active: true
+  MaxLineLength:
+    active: true
+  LoopWithTooManyJumpStatements:
+    active: false
+  ReturnCount:
+    active: false
+  UseCheckOrError:
+    active: true
+  WildcardImport:
+    active: true
+  MagicNumber:
+    active: false
+complexity:
+  NestedBlockDepth:
+    active: false
+  LongParameterList:
+    active: false
+  TooManyFunctions:
+    active: false
+  CyclomaticComplexMethod:
+    active: true
+  LongMethod:
+    active: false

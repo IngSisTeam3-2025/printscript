@@ -1,5 +1,6 @@
 package model.rule
 
 interface RuleValue {
-    fun asString(): String
+    fun format(): String
+    fun type(): String
 }

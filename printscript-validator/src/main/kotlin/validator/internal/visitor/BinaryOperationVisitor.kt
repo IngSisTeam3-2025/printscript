@@ -4,6 +4,7 @@ import model.node.BinaryOperationExpressionNode
 import model.node.Node
 import model.node.NodeType
 import model.value.NoneValue
+import model.value.Value
 import model.value.operation.BinaryValueOperation
 import model.value.operation.OperationResult
 import model.visitor.context.ContextVisitor
@@ -54,56 +55,74 @@ internal class BinaryOperationVisitor(
         val symbol = (operatorNode as Node.Leaf).value.format()
 
         if (!operations.containsKey(operatorType)) {
-            val error = ValidationError(
-                "Unsupported binary operator '$symbol'",
-                UnsupportedOperator,
-                operatorNode.span,
-            )
-            return VisitResult(Outcome.Error(error), rhsVisit.context)
+            return createUnsupportedOperatorError(symbol, operatorNode.span, rhsVisit.context)
         }
 
         if (lhsValue is RuntimeValue || rhsValue is RuntimeValue) {
-            val lhsType = if (lhsValue is RuntimeValue) lhsValue.type else lhsValue.type
-            val rhsType = if (rhsValue is RuntimeValue) rhsValue.type else rhsValue.type
-
-            val ops = operations[operatorType] ?: run {
-                val error = ValidationError(
-                    "Unsupported binary operator '$symbol'",
-                    UnsupportedOperator,
-                    operatorNode.span,
-                )
-                return VisitResult(Outcome.Error(error), rhsVisit.context)
-            }
-
-            for (op in ops) {
-                if (op.supports(lhsType, rhsType)) {
-                    return VisitResult(Outcome.Ok(RuntimeValue(op.resultType)), rhsVisit.context)
-                }
-            }
-
-            val lhs = lhsType.name
-            val rhs = rhsType.name
-            val error = ValidationError(
-                "Cannot apply operator '$symbol' to operands of type $lhs and $rhs",
-                TypeMismatch,
-                node.span,
+            return handleRuntimeValues(
+                lhsValue,
+                rhsValue,
+                operatorType,
+                symbol,
+                operatorNode,
+                node,
+                rhsVisit.context,
             )
-            return VisitResult(Outcome.Error(error), rhsVisit.context)
         }
 
+        return handleConcreteValues(
+            lhsValue,
+            rhsValue,
+            operatorType,
+            symbol,
+            operatorNode,
+            node,
+            rhsVisit.context,
+        )
+    }
+
+    private fun handleRuntimeValues(
+        lhsValue: Value,
+        rhsValue: Value,
+        operatorType: NodeType,
+        symbol: String,
+        operatorNode: Node,
+        node: Node.Composite,
+        context: VisitorContext,
+    ): VisitResult {
+        val lhsType = if (lhsValue is RuntimeValue) lhsValue.type else lhsValue.type
+        val rhsType = if (rhsValue is RuntimeValue) rhsValue.type else rhsValue.type
+
+        val ops = operations[operatorType]
+            ?: return createUnsupportedOperatorError(symbol, operatorNode.span, context)
+
+        for (op in ops) {
+            if (op.supports(lhsType, rhsType)) {
+                return VisitResult(Outcome.Ok(RuntimeValue(op.resultType)), context)
+            }
+        }
+
+        return createTypeMismatchError(lhsType.name, rhsType.name, symbol, node.span, context)
+    }
+
+    private fun handleConcreteValues(
+        lhsValue: Value,
+        rhsValue: Value,
+        operatorType: NodeType,
+        symbol: String,
+        operatorNode: Node,
+        node: Node.Composite,
+        context: VisitorContext,
+    ): VisitResult {
         val ops = operations.getValue(operatorType)
+
         for (op in ops) {
             when (val result = op.apply(lhsValue, rhsValue)) {
                 is OperationResult.Ok -> {
-                    return VisitResult(Outcome.Ok(result.value), rhsVisit.context)
+                    return VisitResult(Outcome.Ok(result.value), context)
                 }
                 is OperationResult.Error -> {
-                    val error = ValidationError(
-                        result.message,
-                        InvalidValue,
-                        operatorNode.span,
-                    )
-                    return VisitResult(Outcome.Error(error), rhsVisit.context)
+                    return createInvalidValueError(result.message, operatorNode.span, context)
                 }
                 is OperationResult.Unsupported -> continue
             }
@@ -111,11 +130,47 @@ internal class BinaryOperationVisitor(
 
         val lhsType = lhsValue.type.name
         val rhsType = rhsValue.type.name
+        return createTypeMismatchError(lhsType, rhsType, symbol, node.span, context)
+    }
+
+    private fun createUnsupportedOperatorError(
+        symbol: String,
+        span: model.span.Span,
+        context: VisitorContext,
+    ): VisitResult {
+        val error = ValidationError(
+            "Unsupported binary operator '$symbol'",
+            UnsupportedOperator,
+            span,
+        )
+        return VisitResult(Outcome.Error(error), context)
+    }
+
+    private fun createTypeMismatchError(
+        lhsType: String,
+        rhsType: String,
+        symbol: String,
+        span: model.span.Span,
+        context: VisitorContext,
+    ): VisitResult {
         val error = ValidationError(
             "Cannot apply operator '$symbol' to operands of type $lhsType and $rhsType",
             TypeMismatch,
-            node.span,
+            span,
         )
-        return VisitResult(Outcome.Error(error), rhsVisit.context)
+        return VisitResult(Outcome.Error(error), context)
+    }
+
+    private fun createInvalidValueError(
+        message: String,
+        span: model.span.Span,
+        context: VisitorContext,
+    ): VisitResult {
+        val error = ValidationError(
+            message,
+            InvalidValue,
+            span,
+        )
+        return VisitResult(Outcome.Error(error), context)
     }
 }

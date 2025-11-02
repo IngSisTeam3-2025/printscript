@@ -3,8 +3,8 @@ package parser.internal.model.grammar.expression
 import model.node.LeftParenthesisNode
 import model.node.Node
 import model.node.NodeType
+import model.node.ReadInputExpressionNode
 import model.node.ReadInputKeywordNode
-import model.node.ReadInputStatementNode
 import model.node.RightParenthesisNode
 import model.span.Span
 import model.token.LeftParenthesisToken
@@ -23,7 +23,7 @@ import type.outcome.Outcome
 import type.outcome.getOrElse
 
 internal class ReadInputPrimary : Primary {
-    override val type: NodeType = ReadInputStatementNode
+    override val type: NodeType = ReadInputExpressionNode
 
     override fun match(
         tokens: List<Token>,

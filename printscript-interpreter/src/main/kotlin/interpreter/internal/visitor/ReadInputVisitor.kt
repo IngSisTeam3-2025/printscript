@@ -5,7 +5,7 @@ import io.reader.input.InputReader
 import io.writer.OutputWriter
 import model.node.LeftParenthesisNode
 import model.node.Node
-import model.node.ReadInputStatementNode
+import model.node.ReadInputExpressionNode
 import model.node.RightParenthesisNode
 import model.value.NoneValue
 import model.value.transformer.ValueTransformer
@@ -33,7 +33,7 @@ internal class ReadInputVisitor(
         table: ContextVisitorTable,
         context: VisitorContext,
     ): VisitResult {
-        if (node.type != ReadInputStatementNode) {
+        if (node.type != ReadInputExpressionNode) {
             return VisitResult(Outcome.Ok(NoneValue), context)
         }
 

@@ -1,7 +1,7 @@
-package util.registry
+package internal.util.registry
 
+import internal.util.transformer.RuleValueTransformer
 import model.rule.RuleValue
-import util.transformer.RuleValueTransformer
 
 object RuleValueRegistry {
     fun transform(

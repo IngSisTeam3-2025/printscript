@@ -1,13 +1,21 @@
 package formatter.internal.visitor
 
 import formatter.internal.model.value.DocValue
+import formatter.internal.type.findChildOfType
+import formatter.internal.type.getChildAt
+import formatter.internal.type.hasSpace
+import formatter.internal.type.hasSpaceAfter
+import formatter.internal.type.hasSpaceBefore
+import formatter.internal.type.removeLeadingSpaces
+import formatter.internal.type.removeTrailingSpaces
+import formatter.internal.type.toDoc
+import formatter.internal.type.updateChildAt
 import model.diagnostic.Diagnostic
-import model.doc.Doc
 import model.node.AssignNode
+import model.node.AssignStatementNode
+import model.node.ConstDeclarationStatementNode
+import model.node.LetDeclarationStatementNode
 import model.node.Node
-import model.trivia.SpaceTrivia
-import model.trivia.TabTrivia
-import model.trivia.Trivia
 import model.value.NoneValue
 import model.value.Value
 import model.visitor.Visitor
@@ -18,95 +26,85 @@ internal class NoSpacingAroundEqualsVisitor(
     private val enforce: Boolean,
 ) : Visitor {
 
-    override fun visit(node: Node.Leaf, table: VisitorTable): Outcome<Value, Diagnostic> {
-        return Outcome.Ok(NoneValue)
-    }
+    override fun visit(
+        node: Node.Leaf,
+        table: VisitorTable,
+    ): Outcome<Value, Diagnostic> = Outcome.Ok(NoneValue)
 
-    override fun visit(node: Node.Composite, table: VisitorTable): Outcome<Value, Diagnostic> {
-        if (!enforce) {
-            return Outcome.Ok(DocValue(childToDoc(node)))
-        }
+    override fun visit(
+        node: Node.Composite,
+        table: VisitorTable,
+    ): Outcome<Value, Diagnostic> {
+        if (!enforce) return Outcome.Ok(NoneValue)
+        if (!isRelevantNode(node)) return Outcome.Ok(NoneValue)
 
-        val assignIndex = node.children.indexOfFirst { child ->
-            child is Node.Leaf && child.type == AssignNode
-        }
+        val assignIndex = node.findChildOfType(AssignNode)
+        if (assignIndex == -1) return Outcome.Ok(NoneValue)
 
-        if (assignIndex == -1) {
+        val assignNode = node.getChildAt(assignIndex) as? Node.Leaf
+            ?: return Outcome.Ok(NoneValue)
+
+        if (!hasSpacesAround(node, assignIndex)) {
             return Outcome.Ok(NoneValue)
         }
 
-        val formattedChildren = node.children.mapIndexed { index, child ->
-            when {
-                child is Node.Leaf && child.type == AssignNode -> {
-                    Doc(
-                        text = child.value.format(),
-                        span = child.span,
-                        leading = removeSpacing(child.leading),
-                        trailing = removeSpacing(child.trailing),
-                    )
-                }
-
-                index == assignIndex + 1 -> {
-                    when (child) {
-                        is Node.Leaf -> Doc(
-                            text = child.value.format(),
-                            span = child.span,
-                            leading = removeSpacing(child.leading),
-                            trailing = child.trailing,
-                        )
-                        is Node.Composite -> Doc(
-                            text = child.format(),
-                            span = child.span,
-                            leading = emptyList(),
-                            trailing = emptyList(),
-                        )
-                    }
-                }
-
-                index == assignIndex - 1 && child is Node.Leaf -> {
-                    Doc(
-                        text = child.value.format(),
-                        span = child.span,
-                        leading = child.leading,
-                        trailing = removeSpacing(child.trailing),
-                    )
-                }
-                else -> childToDoc(child)
-            }
-        }
-
-        return Outcome.Ok(
-            DocValue(
-                Doc(
-                    text = formattedChildren.joinToString("") { it.format() },
-                    span = node.span,
-                    leading = emptyList(),
-                    trailing = emptyList(),
-                ),
-            ),
-        )
+        val updated = removeSpacesAroundEquals(node, assignIndex, assignNode)
+        return Outcome.Ok(DocValue(updated.toDoc()))
     }
 
-    private fun childToDoc(child: Node): Doc {
-        return when (child) {
-            is Node.Leaf -> Doc(
-                text = child.value.format(),
-                span = child.span,
-                leading = child.leading,
-                trailing = child.trailing,
-            )
-            is Node.Composite -> Doc(
-                text = child.format(),
-                span = child.span,
-                leading = emptyList(),
-                trailing = emptyList(),
-            )
-        }
+    private fun isRelevantNode(node: Node.Composite): Boolean {
+        return node.type == LetDeclarationStatementNode ||
+            node.type == ConstDeclarationStatementNode ||
+            node.type == AssignStatementNode
     }
 
-    private fun removeSpacing(trivia: Collection<Trivia>): Collection<Trivia> {
-        return trivia.filter {
-            it.type != SpaceTrivia && it.type != TabTrivia
+    private fun hasSpacesAround(node: Node.Composite, assignIndex: Int): Boolean {
+        val hasSpaceBefore = node.hasSpaceBefore(assignIndex)
+        val hasSpaceAfter = node.hasSpaceAfter(assignIndex)
+        return hasSpaceBefore || hasSpaceAfter
+    }
+
+    private fun removeSpacesAroundEquals(
+        node: Node.Composite,
+        assignIndex: Int,
+        assignNode: Node.Leaf,
+    ): Node.Composite {
+        var updated = node
+
+        val cleaned = assignNode
+            .removeLeadingSpaces()
+            .removeTrailingSpaces()
+        updated = updated.updateChildAt(assignIndex) { cleaned }
+
+        updated = cleanPreviousNode(updated, assignIndex)
+        updated = cleanNextNode(updated, assignIndex)
+
+        return updated
+    }
+
+    private fun cleanPreviousNode(node: Node.Composite, assignIndex: Int): Node.Composite {
+        val prevIndex = assignIndex - 1
+        if (prevIndex < 0) return node
+
+        val prevNode = node.getChildAt(prevIndex)
+        if (prevNode is Node.Leaf && prevNode.trailing.hasSpace()) {
+            val cleanedPrev = prevNode.removeTrailingSpaces()
+            return node.updateChildAt(prevIndex) { cleanedPrev }
         }
+
+        return node
+    }
+
+    private fun cleanNextNode(node: Node.Composite, assignIndex: Int): Node.Composite {
+        val nextIndex = assignIndex + 1
+        if (nextIndex >= node.children.size) return node
+
+        val nextNode = node.getChildAt(nextIndex)
+        if (nextNode is Node.Leaf && nextNode.leading.hasSpace()) {
+            val cleanedNext = nextNode.removeLeadingSpaces()
+            return node.updateChildAt(nextIndex) { cleanedNext }
+        }
+
+        return node
     }
 }

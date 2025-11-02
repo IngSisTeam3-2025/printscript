@@ -18,7 +18,7 @@ data object SpacingAfterColonRule : RuleType {
 }
 
 data object SpacingBeforeColonRule : RuleType {
-    override val signature = "enforce-no-spacing-before-colon-in-declaration"
+    override val signature = "enforce-spacing-before-colon-in-declaration"
     override val name = "SpacingAroundEquals"
 }
 
@@ -27,14 +27,14 @@ data object MandatorySingleSpaceRule : RuleType {
     override val name = "MandatorySingleSpace"
 }
 
-data object EnforceSpaceAroundOperatorRule : RuleType {
+data object SpacingAroundOperatorRule : RuleType {
     override val signature = "mandatory-space-surrounding-operations"
-    override val name = "EnforceSpaceAroundOperator"
+    override val name = "SpacingAroundOperator"
 }
 
-data object EnforceLineBreakAfterStatementRule : RuleType {
+data object LineBreakAfterStatementRule : RuleType {
     override val signature = "mandatory-line-break-after-statement"
-    override val name = "EnforceLineBreakAfterStatement"
+    override val name = "LineBreakAfterStatement"
 }
 
 data object LineBreaksAfterPrintlnRule : RuleType {

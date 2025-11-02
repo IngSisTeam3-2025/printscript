@@ -1,6 +1,7 @@
 package validator
 
 import Validator
+import buffer.NodeBuffer
 import model.diagnostic.Diagnostic
 import model.node.Node
 import model.visitor.context.ContextVisitorTable
@@ -20,8 +21,15 @@ class PrintScriptValidator : Validator {
     ): Sequence<Outcome<Node, Diagnostic>> {
         return sequence {
             when (val table = getVisitorTable(version)) {
-                is Option.Some -> yieldAll(validateNodes(nodes, table.value))
-                is Option.None -> yield(Outcome.Error(buildConfigurationError(version)))
+                is Option.Some -> {
+                    for (node in validateNodes(nodes, table.value)) {
+                        yield(node)
+                    }
+                }
+                is Option.None -> {
+                    yield(Outcome.Error(buildConfigurationError(version)))
+                    return@sequence
+                }
             }
         }
     }
@@ -39,15 +47,19 @@ class PrintScriptValidator : Validator {
         table: ContextVisitorTable,
     ): Sequence<Outcome<Node, Diagnostic>> = sequence {
         var context = VisitorContext()
-
         context = context.register(StaticSymbolTable::class, DefaultStaticSymbolTable())
 
-        for (node in nodes) {
+        val buffer = NodeBuffer(nodes)
+
+        while (buffer.hasNext()) {
+            val node = buffer.next()
             val visit = table.dispatch(node, context)
             context = visit.context
 
             when (val outcome = visit.outcome) {
-                is Outcome.Ok -> yield(Outcome.Ok(node))
+                is Outcome.Ok -> {
+                    yield(Outcome.Ok(node))
+                }
                 is Outcome.Error -> {
                     yield(outcome)
                 }

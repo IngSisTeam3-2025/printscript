@@ -23,8 +23,15 @@ class PrintScriptParser : Parser {
     ): Sequence<Outcome<Node, Diagnostic>> {
         return sequence {
             when (val table = getGrammarTable(version)) {
-                is Option.Some -> yieldAll(parseTokens(tokens, table.value))
-                is Option.None -> yield(Outcome.Error(buildConfigurationError(version)))
+                is Option.Some -> {
+                    for (node in parseTokens(tokens, table.value)) {
+                        yield(node)
+                    }
+                }
+                is Option.None -> {
+                    yield(Outcome.Error(buildConfigurationError(version)))
+                    return@sequence
+                }
             }
         }
     }
