@@ -50,40 +50,40 @@ object PrintScriptV11TestSnippets {
             listOf(
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(1,1,0), Position(1,39,38)),
+                    span = Span(Position(1, 1, 0), Position(1, 39, 38)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1,1,0), Position(1,6,5))),
-                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1,7,6), Position(1,8,7))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1,8,7), Position(1,9,8))),
-                        Node.Leaf(NumberTypeNode, StringValue("number"), Span(Position(1,10,9), Position(1,16,15))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1,17,16), Position(1,18,17))),
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1, 1, 0), Position(1, 6, 5))),
+                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1, 7, 6), Position(1, 8, 7))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1, 8, 7), Position(1, 9, 8))),
+                        Node.Leaf(NumberTypeNode, StringValue("number"), Span(Position(1, 10, 9), Position(1, 16, 15))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1, 17, 16), Position(1, 18, 17))),
                         Node.Composite(
                             type = ReadEnvExpressionNode,
-                            span = Span(Position(1,19,18), Position(1,38,37)),
+                            span = Span(Position(1, 19, 18), Position(1, 38, 37)),
                             children = listOf(
-                                Node.Leaf(ReadEnvKeywordNode, StringValue("readEnv"), Span(Position(1,19,18), Position(1,26,25))),
-                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1,26,25), Position(1,27,26))),
-                                Node.Leaf(StringLiteralNode, StringValue("NUMBER"), Span(Position(1,27,26), Position(1,35,34))),
-                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1,35,34), Position(1,36,35)))
-                            )
+                                Node.Leaf(ReadEnvKeywordNode, StringValue("readEnv"), Span(Position(1, 19, 18), Position(1, 26, 25))),
+                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1, 26, 25), Position(1, 27, 26))),
+                                Node.Leaf(StringLiteralNode, StringValue("NUMBER"), Span(Position(1, 27, 26), Position(1, 35, 34))),
+                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1, 35, 34), Position(1, 36, 35))),
+                            ),
                         ),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1,38,37), Position(1,39,38)))
-                    )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 38, 37), Position(1, 39, 38))),
+                    ),
                 ),
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(2,1,39), Position(2,24,62)),
+                    span = Span(Position(2, 1, 39), Position(2, 24, 62)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(2,1,39), Position(2,6,44))),
-                        Node.Leaf(IdentifierNode, StringValue("y"), Span(Position(2,7,45), Position(2,8,46))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(2,8,46), Position(2,9,47))),
-                        Node.Leaf(StringTypeNode, StringValue("string"), Span(Position(2,10,48), Position(2,16,54))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(2,17,55), Position(2,18,56))),
-                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(2,19,57), Position(2,20,58))),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2,23,61), Position(2,24,62)))
-                    )
-                )
-            )
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(2, 1, 39), Position(2, 6, 44))),
+                        Node.Leaf(IdentifierNode, StringValue("y"), Span(Position(2, 7, 45), Position(2, 8, 46))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(2, 8, 46), Position(2, 9, 47))),
+                        Node.Leaf(StringTypeNode, StringValue("string"), Span(Position(2, 10, 48), Position(2, 16, 54))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(2, 17, 55), Position(2, 18, 56))),
+                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(2, 19, 57), Position(2, 20, 58))),
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2, 23, 61), Position(2, 24, 62))),
+                    ),
+                ),
+            ),
         )
 
         TestSnippetRegistry.register(
@@ -135,50 +135,50 @@ object PrintScriptV11TestSnippets {
             listOf(
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(1,1,0), Position(1,39,38)),
+                    span = Span(Position(1, 1, 0), Position(1, 39, 38)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1,1,0), Position(1,6,5))),
-                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1,7,6), Position(1,8,7))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1,8,7), Position(1,9,8))),
-                        Node.Leaf(NumberTypeNode, StringValue("number"), Span(Position(1,10,9), Position(1,16,15))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1,17,16), Position(1,18,17))),
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1, 1, 0), Position(1, 6, 5))),
+                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1, 7, 6), Position(1, 8, 7))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1, 8, 7), Position(1, 9, 8))),
+                        Node.Leaf(NumberTypeNode, StringValue("number"), Span(Position(1, 10, 9), Position(1, 16, 15))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1, 17, 16), Position(1, 18, 17))),
                         Node.Composite(
                             type = ReadInputExpressionNode,
-                            span = Span(Position(1,19,18), Position(1,39,38)),
+                            span = Span(Position(1, 19, 18), Position(1, 39, 38)),
                             children = listOf(
-                                Node.Leaf(ReadInputKeywordNode, StringValue("readInput"), Span(Position(1,19,18), Position(1,28,27))),
-                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1,28,27), Position(1,29,28))),
-                                Node.Leaf(StringLiteralNode, StringValue("Enter a number: "), Span(Position(1,29,28), Position(1,39,38))),
-                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1,39,38), Position(1,40,39)))
-                            )
+                                Node.Leaf(ReadInputKeywordNode, StringValue("readInput"), Span(Position(1, 19, 18), Position(1, 28, 27))),
+                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1, 28, 27), Position(1, 29, 28))),
+                                Node.Leaf(StringLiteralNode, StringValue("Enter a number: "), Span(Position(1, 29, 28), Position(1, 39, 38))),
+                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1, 39, 38), Position(1, 40, 39))),
+                            ),
                         ),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1,40,39), Position(1,41,40)))
-                    )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 40, 39), Position(1, 41, 40))),
+                    ),
                 ),
 
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(2,1,41), Position(2,26,66)),
+                    span = Span(Position(2, 1, 41), Position(2, 26, 66)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(2,1,41), Position(2,6,46))),
-                        Node.Leaf(IdentifierNode, StringValue("y"), Span(Position(2,7,47), Position(2,8,48))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(2,8,48), Position(2,9,49))),
-                        Node.Leaf(StringTypeNode, StringValue("string"), Span(Position(2,10,50), Position(2,16,56))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(2,17,57), Position(2,18,58))),
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(2, 1, 41), Position(2, 6, 46))),
+                        Node.Leaf(IdentifierNode, StringValue("y"), Span(Position(2, 7, 47), Position(2, 8, 48))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(2, 8, 48), Position(2, 9, 49))),
+                        Node.Leaf(StringTypeNode, StringValue("string"), Span(Position(2, 10, 50), Position(2, 16, 56))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(2, 17, 57), Position(2, 18, 58))),
                         Node.Composite(
                             type = ReadEnvExpressionNode,
-                            span = Span(Position(2,19,59), Position(2,26,66)),
+                            span = Span(Position(2, 19, 59), Position(2, 26, 66)),
                             children = listOf(
-                                Node.Leaf(ReadEnvKeywordNode, StringValue("readEnv"), Span(Position(2,19,59), Position(2,25,65))),
-                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(2,25,65), Position(2,26,66))),
-                                Node.Leaf(StringLiteralNode, StringValue("KEY"), Span(Position(2,26,66), Position(2,29,69))),
-                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(2,29,69), Position(2,30,70)))
-                            )
+                                Node.Leaf(ReadEnvKeywordNode, StringValue("readEnv"), Span(Position(2, 19, 59), Position(2, 25, 65))),
+                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(2, 25, 65), Position(2, 26, 66))),
+                                Node.Leaf(StringLiteralNode, StringValue("KEY"), Span(Position(2, 26, 66), Position(2, 29, 69))),
+                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(2, 29, 69), Position(2, 30, 70))),
+                            ),
                         ),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2,30,70), Position(2,31,71)))
-                    )
-                )
-            )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2, 30, 70), Position(2, 31, 71))),
+                    ),
+                ),
+            ),
         )
 
         TestSnippetRegistry.register(
@@ -186,46 +186,46 @@ object PrintScriptV11TestSnippets {
             listOf(
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(1,1,0), Position(1,38,37)),
+                    span = Span(Position(1, 1, 0), Position(1, 38, 37)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1,1,0), Position(1,6,5))),
-                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1,7,6), Position(1,8,7))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1,8,7), Position(1,9,8))),
-                        Node.Leaf(BooleanTypeNode, StringValue("boolean"), Span(Position(1,10,9), Position(1,17,16))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1,18,17), Position(1,19,18))),
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1, 1, 0), Position(1, 6, 5))),
+                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1, 7, 6), Position(1, 8, 7))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1, 8, 7), Position(1, 9, 8))),
+                        Node.Leaf(BooleanTypeNode, StringValue("boolean"), Span(Position(1, 10, 9), Position(1, 17, 16))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1, 18, 17), Position(1, 19, 18))),
                         Node.Composite(
                             type = ReadEnvExpressionNode,
-                            span = Span(Position(1,20,19), Position(1,37,36)),
+                            span = Span(Position(1, 20, 19), Position(1, 37, 36)),
                             children = listOf(
-                                Node.Leaf(ReadEnvKeywordNode, StringValue("reaEnv"), Span(Position(1,20,19), Position(1,26,25))),
-                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1,26,25), Position(1,27,26))),
-                                Node.Leaf(StringLiteralNode, StringValue("BOOLEAN"), Span(Position(1,27,26), Position(1,36,35))),
-                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1,36,35), Position(1,37,36)))
-                            )
+                                Node.Leaf(ReadEnvKeywordNode, StringValue("reaEnv"), Span(Position(1, 20, 19), Position(1, 26, 25))),
+                                Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(1, 26, 25), Position(1, 27, 26))),
+                                Node.Leaf(StringLiteralNode, StringValue("BOOLEAN"), Span(Position(1, 27, 26), Position(1, 36, 35))),
+                                Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(1, 36, 35), Position(1, 37, 36))),
+                            ),
                         ),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1,37,36), Position(1,38,37)))
-                    )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 37, 36), Position(1, 38, 37))),
+                    ),
                 ),
                 Node.Composite(
                     type = PrintlnStatementNode,
-                    span = Span(Position(2,1,38), Position(2,18,55)),
+                    span = Span(Position(2, 1, 38), Position(2, 18, 55)),
                     children = listOf(
-                        Node.Leaf(PrintlnKeywordNode, StringValue("println"), Span(Position(2,1,38), Position(2,8,45))),
-                        Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(2,8,45), Position(2,9,46))),
+                        Node.Leaf(PrintlnKeywordNode, StringValue("println"), Span(Position(2, 1, 38), Position(2, 8, 45))),
+                        Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(2, 8, 45), Position(2, 9, 46))),
                         Node.Composite(
                             type = BinaryOperationExpressionNode,
-                            span = Span(Position(2,9,46), Position(2,15,52)),
+                            span = Span(Position(2, 9, 46), Position(2, 15, 52)),
                             children = listOf(
-                                Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(2,9,46), Position(2,10,47))),
-                                Node.Leaf(MultiplyNode, StringValue("*"), Span(Position(2,11,48), Position(2,12,49))),
-                                Node.Leaf(NumberLiteralNode, IntegerValue(5), Span(Position(2,13,50), Position(2,14,51)))
-                            )
+                                Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(2, 9, 46), Position(2, 10, 47))),
+                                Node.Leaf(MultiplyNode, StringValue("*"), Span(Position(2, 11, 48), Position(2, 12, 49))),
+                                Node.Leaf(NumberLiteralNode, IntegerValue(5), Span(Position(2, 13, 50), Position(2, 14, 51))),
+                            ),
                         ),
-                        Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(2,15,52), Position(2,16,53))),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2,17,54), Position(2,18,55)))
-                    )
-                )
-            )
+                        Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(2, 15, 52), Position(2, 16, 53))),
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(2, 17, 54), Position(2, 18, 55))),
+                    ),
+                ),
+            ),
         )
 
         TestSnippetRegistry.register(
@@ -291,25 +291,25 @@ object PrintScriptV11TestSnippets {
             listOf(
                 Node.Composite(
                     type = ConstDeclarationStatementNode,
-                    span = Span(Position(1,1,0), Position(1,27,26)),
+                    span = Span(Position(1, 1, 0), Position(1, 27, 26)),
                     children = listOf(
-                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1,1,0), Position(1,6,5))),
-                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1,7,6), Position(1,8,7))),
-                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1,8,7), Position(1,9,8))),
-                        Node.Leaf(BooleanTypeNode, StringValue("boolean"), Span(Position(1,10,9), Position(1,17,16))),
-                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1,18,17), Position(1,19,18))),
+                        Node.Leaf(ConstNode, StringValue("const"), Span(Position(1, 1, 0), Position(1, 6, 5))),
+                        Node.Leaf(IdentifierNode, StringValue("x"), Span(Position(1, 7, 6), Position(1, 8, 7))),
+                        Node.Leaf(ColonNode, StringValue(":"), Span(Position(1, 8, 7), Position(1, 9, 8))),
+                        Node.Leaf(BooleanTypeNode, StringValue("boolean"), Span(Position(1, 10, 9), Position(1, 17, 16))),
+                        Node.Leaf(AssignNode, StringValue("="), Span(Position(1, 18, 17), Position(1, 19, 18))),
                         Node.Composite(
                             type = UnaryOperationNode,
-                            span = Span(Position(1,20,19), Position(1,26,25)),
+                            span = Span(Position(1, 20, 19), Position(1, 26, 25)),
                             children = listOf(
-                                Node.Leaf(PlusNode, StringValue("+"), Span(Position(1,20,19), Position(1,21,20))),
-                                Node.Leaf(BooleanLiteralNode, BooleanValue(true), Span(Position(1,21,20), Position(1,25,24)))
-                            )
+                                Node.Leaf(PlusNode, StringValue("+"), Span(Position(1, 20, 19), Position(1, 21, 20))),
+                                Node.Leaf(BooleanLiteralNode, BooleanValue(true), Span(Position(1, 21, 20), Position(1, 25, 24))),
+                            ),
                         ),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1,26,25), Position(1,27,26)))
-                    )
-                )
-            )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 26, 25), Position(1, 27, 26))),
+                    ),
+                ),
+            ),
         )
 
         TestSnippetRegistry.register(
@@ -381,8 +381,8 @@ object PrintScriptV11TestSnippets {
                         Node.Leaf(BooleanTypeNode, StringValue("boolean"), Span(Position(1, 10, 9), Position(1, 17, 16))),
                         Node.Leaf(AssignNode, StringValue("="), Span(Position(1, 18, 17), Position(1, 19, 18))),
                         Node.Leaf(BooleanLiteralNode, BooleanValue(true), Span(Position(1, 20, 19), Position(1, 22, 21))),
-                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 22, 21), Position(1, 23, 22)))
-                    )
+                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(1, 22, 21), Position(1, 23, 22))),
+                    ),
                 ),
 
                 Node.Composite(
@@ -407,11 +407,11 @@ object PrintScriptV11TestSnippets {
                                         Node.Leaf(LeftParenthesisNode, StringValue("("), Span(Position(4, 12, 44), Position(4, 13, 45))),
                                         Node.Leaf(StringLiteralNode, StringValue("x is true"), Span(Position(4, 13, 45), Position(4, 25, 57))),
                                         Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(4, 25, 57), Position(4, 26, 58))),
-                                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(4, 26, 58), Position(4, 27, 59)))
-                                    )
+                                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(4, 26, 58), Position(4, 27, 59))),
+                                    ),
                                 ),
-                                Node.Leaf(RightBraceNode, StringValue("}"), Span(Position(5, 1, 59), Position(5, 2, 60)))
-                            )
+                                Node.Leaf(RightBraceNode, StringValue("}"), Span(Position(5, 1, 59), Position(5, 2, 60))),
+                            ),
                         ),
 
                         Node.Composite(
@@ -440,25 +440,25 @@ object PrintScriptV11TestSnippets {
                                                         Node.Leaf(NumberLiteralNode, IntegerValue(5), Span(Position(7, 14, 81), Position(7, 15, 82))),
                                                         Node.Leaf(MultiplyNode, StringValue("*"), Span(Position(7, 15, 82), Position(7, 16, 83))),
                                                         Node.Leaf(NumberLiteralNode, IntegerValue(2), Span(Position(7, 16, 83), Position(7, 17, 84))),
-                                                        Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(7, 18, 85), Position(7, 19, 86)))
-                                                    )
+                                                        Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(7, 18, 85), Position(7, 19, 86))),
+                                                    ),
                                                 ),
                                                 Node.Leaf(PlusNode, StringValue("+"), Span(Position(7, 20, 87), Position(7, 21, 88))),
-                                                Node.Leaf(StringLiteralNode, StringValue("Number"), Span(Position(7, 22, 89), Position(7, 35, 102)))
-                                            )
+                                                Node.Leaf(StringLiteralNode, StringValue("Number"), Span(Position(7, 22, 89), Position(7, 35, 102))),
+                                            ),
                                         ),
 
                                         Node.Leaf(RightParenthesisNode, StringValue(")"), Span(Position(7, 35, 102), Position(7, 36, 103))),
-                                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(7, 36, 103), Position(7, 37, 104)))
-                                    )
+                                        Node.Leaf(SemicolonNode, StringValue(";"), Span(Position(7, 36, 103), Position(7, 37, 104))),
+                                    ),
                                 ),
 
-                                Node.Leaf(RightBraceNode, StringValue("}"), Span(Position(9, 1, 119), Position(9, 2, 120)))
-                            )
-                        )
-                    )
-                )
-            )
+                                Node.Leaf(RightBraceNode, StringValue("}"), Span(Position(9, 1, 119), Position(9, 2, 120))),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }
