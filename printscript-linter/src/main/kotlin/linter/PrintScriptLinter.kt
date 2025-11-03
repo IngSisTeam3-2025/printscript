@@ -1,7 +1,6 @@
 package linter
 
 import Linter
-import linter.internal.model.error.ConfigurationError
 import linter.internal.table.VisitorTableRegistry
 import model.diagnostic.Diagnostic
 import model.node.Node
