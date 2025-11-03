@@ -42,18 +42,24 @@ internal class LineBreakAfterStatementVisitor(
 
         val state = getOrInitializeState(context)
 
-        val nodeWithLeading = TriviaManipulator.addLeading(node, state.pendingNewlines)
+        val (nodeWithoutOriginalLeading, originalLeadingNewlines) =
+            TriviaManipulator.extractLeading(node, NewlineTrivia)
+
+        val nodeWithLeading = if (state.isFirstNode) {
+            nodeWithoutOriginalLeading
+        } else {
+            val newlinesToAdd = if (originalLeadingNewlines.isEmpty()) {
+                state.pendingNewlines
+            } else {
+                originalLeadingNewlines
+            }
+            TriviaManipulator.addLeading(nodeWithoutOriginalLeading, newlinesToAdd)
+        }
 
         val transformed = NodeTransformer.transformRecursive(nodeWithLeading, table, context)
 
         val (nodeWithoutTrailing, extractedNewlines) =
             TriviaManipulator.extractTrailing(transformed, NewlineTrivia)
-
-        if (state.isFirstNode) {
-            val newState = LineBreakState(pendingNewlines = emptyList(), isFirstNode = false)
-            val newContext = context.register(LineBreakState::class, newState)
-            return VisitResult(Outcome.Ok(DocValue(nodeWithoutTrailing.toDoc())), newContext)
-        }
 
         val newlinesToTransfer = calculateNewlinesToTransfer(
             nodeWithoutTrailing,

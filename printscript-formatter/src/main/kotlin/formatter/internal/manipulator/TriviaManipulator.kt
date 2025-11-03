@@ -4,14 +4,8 @@ import model.node.Node
 import model.trivia.Trivia
 import model.trivia.TriviaType
 
-/**
- * Helper class for manipulating trivia on nodes
- */
 internal object TriviaManipulator {
 
-    /**
-     * Extracts trivia of a specific type from trailing trivia and returns cleaned node + extracted trivia
-     */
     fun extractTrailing(node: Node, triviaType: TriviaType): Pair<Node, List<Trivia>> {
         return when (node) {
             is Node.Leaf -> {
@@ -30,9 +24,6 @@ internal object TriviaManipulator {
         }
     }
 
-    /**
-     * Extracts trivia of a specific type from leading trivia and returns cleaned node + extracted trivia
-     */
     fun extractLeading(node: Node, triviaType: TriviaType): Pair<Node, List<Trivia>> {
         return when (node) {
             is Node.Leaf -> {
@@ -69,9 +60,6 @@ internal object TriviaManipulator {
         }
     }
 
-    /**
-     * Removes trivia of a specific type from leading trivia
-     */
     fun removeLeading(node: Node, triviaType: TriviaType): Node {
         return when (node) {
             is Node.Leaf -> {
@@ -88,9 +76,6 @@ internal object TriviaManipulator {
         }
     }
 
-    /**
-     * Removes trivia of a specific type from trailing trivia
-     */
     fun removeTrailing(node: Node, triviaType: TriviaType): Node {
         return when (node) {
             is Node.Leaf -> {
@@ -107,9 +92,6 @@ internal object TriviaManipulator {
         }
     }
 
-    /**
-     * Adds trivia to the trailing trivia of a node
-     */
     fun addTrailing(node: Node, trivia: List<Trivia>): Node {
         if (trivia.isEmpty()) return node
 

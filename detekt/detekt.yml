@@ -17,13 +17,15 @@ style:
   MagicNumber:
     active: false
 complexity:
+  CyclomaticComplexMethod:
+    active: true
+  LargeClass:
+    active: false
   NestedBlockDepth:
     active: false
   LongParameterList:
     active: false
   TooManyFunctions:
     active: false
-  CyclomaticComplexMethod:
-    active: true
   LongMethod:
     active: false
