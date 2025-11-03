@@ -1,60 +1,76 @@
 package formatter.internal.visitor
 
+import formatter.internal.manipulator.TriviaManipulator
 import formatter.internal.model.value.DocValue
-import formatter.internal.type.addTrailingSpace
-import formatter.internal.type.findChildOfType
-import formatter.internal.type.getChildAt
-import formatter.internal.type.hasSpaceAfter
 import formatter.internal.type.toDoc
-import formatter.internal.type.updateChildAt
-import model.diagnostic.Diagnostic
 import model.node.ColonNode
 import model.node.ConstDeclarationStatementNode
 import model.node.LetDeclarationStatementNode
 import model.node.Node
+import model.trivia.SpaceTrivia
+import model.trivia.Trivia
 import model.value.NoneValue
-import model.value.Value
-import model.visitor.Visitor
-import model.visitor.VisitorTable
+import model.visitor.context.ContextVisitor
+import model.visitor.context.ContextVisitorTable
+import model.visitor.context.VisitResult
+import model.visitor.context.VisitorContext
 import type.outcome.Outcome
 
 internal class SpacingAfterColonVisitor(
     private val enforce: Boolean,
-) : Visitor {
+) : ContextVisitor {
 
     override fun visit(
         node: Node.Leaf,
-        table: VisitorTable,
-    ): Outcome<Value, Diagnostic> = Outcome.Ok(NoneValue)
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        return VisitResult(Outcome.Ok(NoneValue), context)
+    }
 
     override fun visit(
         node: Node.Composite,
-        table: VisitorTable,
-    ): Outcome<Value, Diagnostic> {
-        if (!enforce) return Outcome.Ok(NoneValue)
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        if (!enforce || !isDeclarationStatement(node)) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
 
-        val isDeclaration = node.type == LetDeclarationStatementNode ||
+        val children = node.children.toList()
+        val colonIndex = children.indexOfFirst {
+            it is Node.Leaf && it.type == ColonNode
+        }
+
+        if (colonIndex == -1) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
+
+        val colonNode = children[colonIndex]
+        if (colonNode !is Node.Leaf) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
+
+        val nextNode = children.getOrNull(colonIndex + 1)
+            ?: return VisitResult(Outcome.Ok(NoneValue), context)
+
+        val colonWithoutSpaces = TriviaManipulator.removeTrailing(colonNode, SpaceTrivia) as Node.Leaf
+        val nextWithoutSpaces = TriviaManipulator.removeLeading(nextNode, SpaceTrivia)
+
+        val space = listOf(Trivia(SpaceTrivia, " ", colonNode.span))
+        val updatedColon = TriviaManipulator.addTrailing(colonWithoutSpaces, space)
+
+        val updatedChildren = children.toMutableList().apply {
+            set(colonIndex, updatedColon)
+            set(colonIndex + 1, nextWithoutSpaces)
+        }
+
+        val updatedNode = node.copy(children = updatedChildren)
+        return VisitResult(Outcome.Ok(DocValue(updatedNode.toDoc())), context)
+    }
+
+    private fun isDeclarationStatement(node: Node.Composite): Boolean {
+        return node.type == LetDeclarationStatementNode ||
             node.type == ConstDeclarationStatementNode
-
-        if (!isDeclaration) return Outcome.Ok(NoneValue)
-
-        val colonIndex = node.findChildOfType(ColonNode)
-        if (colonIndex == -1) return Outcome.Ok(NoneValue)
-
-        val colonNode = when (val child = node.getChildAt(colonIndex)) {
-            is Node.Leaf -> child
-            is Node.Composite -> return Outcome.Ok(NoneValue)
-        }
-
-        val hasSpaceAfter = node.hasSpaceAfter(colonIndex)
-
-        if (hasSpaceAfter) {
-            return Outcome.Ok(NoneValue)
-        }
-
-        val updated = colonNode.addTrailingSpace(colonNode.span)
-        val result = node.updateChildAt(colonIndex) { updated }
-
-        return Outcome.Ok(DocValue(result.toDoc()))
     }
 }

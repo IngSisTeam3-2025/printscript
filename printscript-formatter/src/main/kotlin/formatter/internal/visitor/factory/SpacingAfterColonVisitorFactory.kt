@@ -5,12 +5,12 @@ import formatter.internal.visitor.SpacingAfterColonVisitor
 import model.rule.BooleanRuleValue
 import model.rule.Rule
 import model.rule.RuleType
-import model.visitor.Visitor
+import model.visitor.context.ContextVisitor
 
-internal class SpacingAfterColonVisitorFactory : VisitorFactory {
+internal class SpacingAfterColonVisitorFactory : ContextVisitorFactory {
     override val ruleType: RuleType = SpacingAfterColonRule
 
-    override fun create(rule: Rule): Visitor {
+    override fun create(rule: Rule): ContextVisitor {
         val enforce = (rule.value as BooleanRuleValue).value
         return SpacingAfterColonVisitor(enforce)
     }
