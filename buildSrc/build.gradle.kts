@@ -24,35 +24,3 @@ dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.22.0")
     implementation("org.jetbrains.kotlinx:kover:0.6.1")
 }
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-
-    group = "io.github.ingsis"
-    version = System.getenv("GITHUB_REF_NAME") ?: "0.1.0-SNAPSHOT"
-}
-
-subprojects {
-    apply(plugin = "maven-publish")
-
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                from(components["java"])
-            }
-        }
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                val repo = System.getenv("GITHUB_REPOSITORY")
-                url = uri("https://maven.pkg.github.com/$repo")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
-    }
-}
