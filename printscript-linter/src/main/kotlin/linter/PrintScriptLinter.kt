@@ -19,7 +19,7 @@ class PrintScriptLinter : Linter {
         return sequence {
             when (val table = getVisitorTable(version, rules)) {
                 is Outcome.Ok -> yieldAll(lintNodes(nodes, table.value))
-                is Outcome.Error -> yield(buildConfigurationError(version))
+                is Outcome.Error -> yield(table.error)
             }
         }
     }
@@ -28,10 +28,6 @@ class PrintScriptLinter : Linter {
         version: String,
         rules: Collection<Rule>,
     ): Outcome<VisitorTable, Diagnostic> = VisitorTableRegistry.get(version, rules)
-
-    private fun buildConfigurationError(version: String): Diagnostic {
-        return ConfigurationError("Unsupported language version '$version'")
-    }
 
     private fun lintNodes(
         nodes: Sequence<Node>,
