@@ -6,7 +6,7 @@ import io.reader.input.FileInputReader
 import io.reporter.ConsoleDiagnosticReporter
 import io.writer.ConsoleOutputWriter
 import lexer.PrintScriptLexer
-import model.value.BooleanValue
+import model.value.StringValue
 import parser.PrintScriptParser
 import validator.PrintScriptValidator
 
@@ -16,7 +16,7 @@ fun main() {
     val output = ConsoleOutputWriter()
     val env = MapEnvReader(
         mapOf(
-            "BOOLEAN" to BooleanValue(true),
+            "BEST_FOOTBALL_CLUB" to StringValue("San Lorenzo"),
         ),
     )
     val reporter = ConsoleDiagnosticReporter()

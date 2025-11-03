@@ -1,6 +1,6 @@
 package model.rule
 
-data class IntRuleValue(val value: Int) : RuleValue {
+data class IntegerRuleValue(val value: Int) : RuleValue {
     override fun format() = value.toString()
     override fun type(): String = "integer"
 }

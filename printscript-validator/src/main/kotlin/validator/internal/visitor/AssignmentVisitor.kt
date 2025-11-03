@@ -64,7 +64,7 @@ internal class AssignmentVisitor : ContextVisitor {
         }
 
         val symbolInfo = symbolTable.get(identifierName).getOrElse {
-            val message = "Variable '$identifierName' not declared in this scope"
+            val message = "Identifier '$identifierName' not declared in this scope"
             val error = ValidationError(
                 message,
                 UndefinedIdentifier,

@@ -40,7 +40,13 @@ class InterpreterRunner(
             .toList()
 
         if (!flag.hasError) {
-            val interpretations = interpreter.interpret(version, validations.asSequence(), input, output, env)
+            val interpretations = interpreter.interpret(
+                version,
+                validations.asSequence(),
+                input,
+                output,
+                env,
+            )
             for (error in interpretations) {
                 reporter.report(error)
             }

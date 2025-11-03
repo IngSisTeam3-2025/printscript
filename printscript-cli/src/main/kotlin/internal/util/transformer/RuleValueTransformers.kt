@@ -1,12 +1,12 @@
 package internal.util.transformer
 
 import model.rule.BooleanRuleValue
-import model.rule.IntRuleValue
+import model.rule.IntegerRuleValue
 import model.rule.StringRuleValue
 
 class IntegerTransformer : RuleValueTransformer {
     override fun supports(value: Any) = value is Int
-    override fun transform(value: Any) = IntRuleValue(value as Int)
+    override fun transform(value: Any) = IntegerRuleValue(value as Int)
 }
 
 class BooleanTransformer : RuleValueTransformer {
