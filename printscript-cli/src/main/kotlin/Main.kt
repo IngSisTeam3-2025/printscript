@@ -1,6 +1,6 @@
 import interpreter.InterpreterRunner
 import interpreter.PrintScriptInterpreter
-import io.reader.env.MapEnvReader
+import io.reader.env.MockEnvReader
 import io.reader.input.ConsoleInputReader
 import io.reader.input.FileInputReader
 import io.reporter.ConsoleDiagnosticReporter
@@ -14,7 +14,7 @@ fun main() {
     val source = FileInputReader("C:\\Users\\julir\\faculty\\ingsis\\printscript\\printscript-cli\\main.ps")
     val input = ConsoleInputReader()
     val output = ConsoleOutputWriter()
-    val env = MapEnvReader(
+    val env = MockEnvReader(
         mapOf(
             "BEST_FOOTBALL_CLUB" to StringValue("San Lorenzo"),
         ),

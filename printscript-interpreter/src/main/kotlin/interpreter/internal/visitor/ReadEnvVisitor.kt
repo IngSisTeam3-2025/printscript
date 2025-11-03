@@ -1,6 +1,8 @@
 package interpreter.internal.visitor
 
+import interpreter.internal.model.category.IncorrectMethodCall
 import interpreter.internal.model.error.IOError
+import interpreter.internal.model.error.RuntimeError
 import interpreter.internal.model.error.SystemError
 import io.reader.env.EnvReader
 import model.node.LeftParenthesisNode
@@ -58,7 +60,7 @@ internal class ReadEnvVisitor : ContextVisitor {
 
         if (keyValue !is StringValue) {
             val message = "readEnv() argument must be a string, got ${keyValue.type.name}"
-            val error = IOError(message)
+            val error = RuntimeError(message, IncorrectMethodCall, keyNode.span)
             return VisitResult(Outcome.Error(error), context)
         }
 

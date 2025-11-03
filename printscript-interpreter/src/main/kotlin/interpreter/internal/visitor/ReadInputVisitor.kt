@@ -66,7 +66,7 @@ internal class ReadInputVisitor(
         val promptValue = promptVisit.outcome.getOrElse { return promptVisit }
         val prompt = promptValue.format()
 
-        writer.write(sequenceOf(prompt))
+        writer.write(sequenceOf(prompt) + "\n")
 
         val input = reader.read().joinToString("") { it.toString() }
 

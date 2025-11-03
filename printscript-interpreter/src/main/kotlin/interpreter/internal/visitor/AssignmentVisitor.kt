@@ -47,7 +47,7 @@ internal class AssignmentVisitor : ContextVisitor {
         val identifierName = ((identifierNode as Node.Leaf).value as StringValue).value
 
         if (!symbolTable.contains(identifierName)) {
-            val message = "Identifier '$identifierName' is not defined"
+            val message = "Identifier '$identifierName' is undefined"
             return VisitResult(
                 Outcome.Error(
                     RuntimeError(
