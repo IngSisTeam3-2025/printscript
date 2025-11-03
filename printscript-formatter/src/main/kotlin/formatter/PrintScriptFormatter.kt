@@ -8,7 +8,9 @@ import model.diagnostic.Diagnostic
 import model.doc.Doc
 import model.node.Node
 import model.rule.Rule
-import model.visitor.VisitorTable
+import model.value.NoneValue
+import model.visitor.context.ContextVisitorTable
+import model.visitor.context.VisitorContext
 import type.outcome.Outcome
 
 class PrintScriptFormatter : Formatter {
@@ -33,31 +35,33 @@ class PrintScriptFormatter : Formatter {
     private fun getVisitorTable(
         version: String,
         rules: Collection<Rule>,
-    ): Outcome<VisitorTable, Diagnostic> = VisitorTableRegistry.get(version, rules)
+    ): Outcome<ContextVisitorTable, Diagnostic> = VisitorTableRegistry.get(version, rules)
 
     private fun formatNodes(
         nodes: Sequence<Node>,
-        table: VisitorTable,
+        table: ContextVisitorTable,
     ): Sequence<Outcome<Doc, Diagnostic>> {
         return sequence {
+            var currentContext = VisitorContext()
+
             for (node in nodes) {
-                var yielded = false
-                for (visitor in table.visitors) {
-                    val visit = node.accept(visitor, table)
-                    when (visit) {
-                        is Outcome.Ok -> {
-                            val result = visit.value
-                            if (result is DocValue) {
-                                yield(Outcome.Ok(result.value))
-                                yielded = true
-                            }
+                val visitResult = table.dispatch(node, currentContext)
+                currentContext = visitResult.context
+
+                when (val outcome = visitResult.outcome) {
+                    is Outcome.Ok -> {
+                        val result = outcome.value
+                        if (result is DocValue) {
+                            yield(Outcome.Ok(result.value))
+                        } else if (result is NoneValue) {
+                            yield(Outcome.Ok(node.toDoc()))
+                        } else {
+                            yield(Outcome.Ok(node.toDoc()))
                         }
-                        is Outcome.Error -> yield(visit)
                     }
-                }
-                if (!yielded) {
-                    val fallback = node.toDoc()
-                    yield(Outcome.Ok(fallback))
+                    is Outcome.Error -> {
+                        yield(outcome)
+                    }
                 }
             }
         }

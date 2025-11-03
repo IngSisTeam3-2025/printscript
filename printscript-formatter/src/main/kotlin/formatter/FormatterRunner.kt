@@ -9,8 +9,6 @@ import io.reader.config.ConfigReader
 import io.reader.input.InputReader
 import io.reporter.DiagnosticReporter
 import io.writer.OutputWriter
-import model.diagnostic.Diagnostic
-import model.rule.Rule
 import type.outcome.Outcome
 
 class FormatterRunner(
@@ -27,7 +25,7 @@ class FormatterRunner(
     ) {
         val flag = ErrorFlag()
 
-        val rulesOutcome: Outcome<Collection<Rule>, Diagnostic> = config.read()
+        val rulesOutcome = config.read()
         val rules = when (rulesOutcome) {
             is Outcome.Ok -> rulesOutcome.value
             is Outcome.Error -> {
@@ -37,7 +35,6 @@ class FormatterRunner(
         }
 
         val chars = source.read()
-
         val tokens = lexer.lex(version, chars)
             .onError(reporter, flag)
         val nodes = parser.parse(version, tokens)

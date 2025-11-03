@@ -52,7 +52,7 @@ data object IfBraceBelowLineRule : RuleType {
     override val name = "IfBraceBelowLine"
 }
 
-data object IfBraceInSameLineRule : RuleType {
+data object IfBraceSameLineRule : RuleType {
     override val signature = "if-brace-same-line"
     override val name = "IfBraceInSameLine"
 }

@@ -1,5 +1,8 @@
 package formatter.internal.table
 
+import formatter.internal.rule.IfBraceBelowLineRule
+import formatter.internal.rule.IfBraceSameLineRule
+import formatter.internal.rule.IndentsInsideIfBlockRule
 import formatter.internal.rule.LineBreakAfterStatementRule
 import formatter.internal.rule.LineBreaksAfterPrintlnRule
 import formatter.internal.rule.MandatorySingleSpaceRule
@@ -8,6 +11,10 @@ import formatter.internal.rule.SpacingAfterColonRule
 import formatter.internal.rule.SpacingAroundEqualsRule
 import formatter.internal.rule.SpacingAroundOperatorRule
 import formatter.internal.rule.SpacingBeforeColonRule
+import formatter.internal.visitor.factory.ContextVisitorFactory
+import formatter.internal.visitor.factory.IfBraceBelowLineVisitorFactory
+import formatter.internal.visitor.factory.IfBraceSameLineVisitorFactory
+import formatter.internal.visitor.factory.IndentsInsideIfVisitorFactory
 import formatter.internal.visitor.factory.LineBreakAfterStatementVisitorFactory
 import formatter.internal.visitor.factory.LineBreaksAfterPrintlnVisitorFactory
 import formatter.internal.visitor.factory.MandatorySingleSpaceVisitorFactory
@@ -16,14 +23,13 @@ import formatter.internal.visitor.factory.SpacingAfterColonVisitorFactory
 import formatter.internal.visitor.factory.SpacingAroundEqualsVisitorFactory
 import formatter.internal.visitor.factory.SpacingAroundOperatorVisitorFactory
 import formatter.internal.visitor.factory.SpacingBeforeColonVisitorFactory
-import formatter.internal.visitor.factory.VisitorFactory
 import model.node.DivideNode
 import model.node.MinusNode
 import model.node.MultiplyNode
 import model.node.PlusNode
 
-internal object PrintScriptV10 : VisitorTableBuilder {
-    override val factories: Map<String, VisitorFactory> = mapOf(
+internal object PrintScriptV10 : ContextVisitorTableBuilder {
+    override val factories: Map<String, ContextVisitorFactory> = mapOf(
         NoSpacingAroundEqualsRule.signature to NoSpacingAroundEqualsVisitorFactory(),
         SpacingAroundEqualsRule.signature to SpacingAroundEqualsVisitorFactory(),
         SpacingBeforeColonRule.signature to SpacingBeforeColonVisitorFactory(),
@@ -37,6 +43,10 @@ internal object PrintScriptV10 : VisitorTableBuilder {
     )
 }
 
-internal object PrintScriptV11 : VisitorTableBuilder {
-    override val factories: Map<String, VisitorFactory> = PrintScriptV10.factories + mapOf()
+internal object PrintScriptV11 : ContextVisitorTableBuilder {
+    override val factories: Map<String, ContextVisitorFactory> = PrintScriptV10.factories + mapOf(
+        IndentsInsideIfBlockRule.signature to IndentsInsideIfVisitorFactory(),
+        IfBraceSameLineRule.signature to IfBraceSameLineVisitorFactory(),
+        IfBraceBelowLineRule.signature to IfBraceBelowLineVisitorFactory(),
+    )
 }

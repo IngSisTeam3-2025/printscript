@@ -3,12 +3,12 @@ package formatter.internal.table
 import formatter.internal.model.error.ConfigurationError
 import model.diagnostic.Diagnostic
 import model.rule.Rule
-import model.visitor.VisitorTable
+import model.visitor.context.ContextVisitorTable
 import type.outcome.Outcome
 
 internal object VisitorTableRegistry {
 
-    private val builders: Map<String, Lazy<VisitorTableBuilder>> = mapOf(
+    private val builders: Map<String, Lazy<ContextVisitorTableBuilder>> = mapOf(
         "1.0" to lazy { PrintScriptV10 },
         "1.1" to lazy { PrintScriptV11 },
     )
@@ -16,7 +16,7 @@ internal object VisitorTableRegistry {
     fun get(
         version: String,
         rules: Collection<Rule>,
-    ): Outcome<VisitorTable, Diagnostic> {
+    ): Outcome<ContextVisitorTable, Diagnostic> {
         val error = ConfigurationError("Unsupported language version '$version'")
         val lazyBuilder = builders[version.lowercase()] ?: return Outcome.Error(error)
 

@@ -1,22 +1,24 @@
 package formatter.internal.table
 
 import formatter.internal.model.error.ConfigurationError
-import formatter.internal.visitor.factory.VisitorFactory
+import formatter.internal.visitor.factory.ContextVisitorFactory
 import model.diagnostic.Diagnostic
 import model.rule.Rule
-import model.visitor.Visitor
-import model.visitor.VisitorTable
+import model.visitor.context.ContextVisitor
+import model.visitor.context.ContextVisitorTable
 import type.outcome.Outcome
 
-internal interface VisitorTableBuilder {
+internal interface ContextVisitorTableBuilder {
 
-    class DefaultVisitorTable(override val visitors: Collection<Visitor>) : VisitorTable
+    class DefaultVisitorTable(
+        override val visitors: Collection<ContextVisitor>,
+    ) : ContextVisitorTable
 
-    val factories: Map<String, VisitorFactory>
+    val factories: Map<String, ContextVisitorFactory>
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    fun build(rules: Collection<Rule>): Outcome<VisitorTable, Diagnostic> {
-        val visitors = mutableListOf<Visitor>()
+    fun build(rules: Collection<Rule>): Outcome<ContextVisitorTable, Diagnostic> {
+        val visitors = mutableListOf<ContextVisitor>()
 
         for (rule in rules) {
             val factory = factories[rule.signature] ?: continue
