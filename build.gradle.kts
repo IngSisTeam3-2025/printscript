@@ -10,7 +10,12 @@ repositories {
 koverMerged {
     enable()
     htmlReport { onCheck = true }
-    verify { rule { bound { minValue = 0 } } }
+    verify { rule { bound { minValue = 80 } } }
+    filters {
+        projects {
+            excludes += listOf(":printscript-api", ":printscript-core", ":printscript-cli")
+        }
+    }
 }
 
 tasks.named("check") { dependsOn("koverMergedVerify") }

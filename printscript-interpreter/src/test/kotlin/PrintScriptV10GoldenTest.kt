@@ -49,57 +49,57 @@ class PrintScriptV10GoldenTest {
     }
 
     @Test
-    fun `basic-assignment`() {
+    fun `test case 1`() {
         run("basic-assignment")
     }
 
     @Test
-    fun `basic-binary-operation`() {
+    fun `test case 2`() {
         run("basic-binary-operation")
     }
 
     @Test
-    fun `basic-unary-operation`() {
+    fun `test case 3`() {
         run("basic-unary-operation")
     }
 
     @Test
-    fun `test case 1`() {
+    fun `test case 4`() {
         run("empty-println")
     }
 
     @Test
-    fun `test case 2`() {
+    fun `test case 5`() {
         run("invalid-binary-operation")
     }
 
     @Test
-    fun `test case 3`() {
+    fun `test case 6`() {
         run("invalid-unary-operation")
     }
 
     @Test
-    fun `test case 4`() {
+    fun `test case 7`() {
         run("let-invalid-assignment")
     }
 
     @Test
-    fun `test case 5`() {
+    fun `test case 8`() {
         run("none-value")
     }
 
     @Test
-    fun `test case 6`() {
+    fun `test case 9`() {
         run("println-statement")
     }
 
     @Test
-    fun `test case 7`() {
+    fun `test case 10`() {
         run("string-coercion")
     }
 
     @Test
-    fun `test case 8`() {
+    fun `test case 11`() {
         run("undefined-identifier")
     }
 }
