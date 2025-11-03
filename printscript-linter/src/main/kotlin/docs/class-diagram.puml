@@ -1,0 +1,131 @@
+@startuml
+class linter.internal.visitor.factory.MandatoryIdentifierOrLiteralInReadInputVisitorFactory {
++ RuleType ruleType
++ Visitor create(Rule)
+}
+
+
+class linter.internal.model.origin.Lint {
++ String name
+}
+
+interface linter.internal.table.VisitorFactory {
++ RuleType ruleType
++ Visitor create(Rule)
+}
+
+
+class linter.internal.table.PrintScriptV10 {
++ Map<String, VisitorFactory> factories
+}
+
+class linter.internal.table.PrintScriptV11 {
++ Map<String, VisitorFactory> factories
+}
+
+class linter.internal.visitor.MandatoryVariableOrLiteralInReadInputVisitor {
++ <<Create>> MandatoryVariableOrLiteralInReadInputVisitor(,Boolean,)
++ Outcome<Value, Diagnostic> visit(void,Node.Leaf,void,VisitorTable,void)
++ Outcome<Value, Diagnostic> visit(void,Node.Composite,void,VisitorTable,void)
+}
+
+class linter.internal.visitor.factory.MandatoryIdentifierOrLiteralInPrintlnRuleFactory {
++ RuleType ruleType
++ Visitor create(Rule)
+}
+
+
+class linter.internal.visitor.IdentifierFormatVisitor {
++ <<Create>> IdentifierFormatVisitor(,String,,Regex,)
++ Outcome<Value, Diagnostic> visit(void,Node.Leaf,void,VisitorTable,void)
++ Outcome<Value, Diagnostic> visit(void,Node.Composite,void,VisitorTable,void)
+}
+
+class linter.PrintScriptLinter {
++ Sequence<Diagnostic> lint(void,String,void,Sequence<Node>,void,Collection<Rule>,void)
+- Outcome<VisitorTable, Diagnostic> getVisitorTable(void,String,void,Collection<Rule>,void)
+- Diagnostic buildConfigurationError(String)
+- Sequence<Diagnostic> lintNodes(void,Sequence<Node>,void,VisitorTable,void)
+- Sequence<Diagnostic> collectErrorsRecursive(void,Node,void,VisitorTable,void)
+}
+
+class linter.internal.visitor.MandatoryVariableOrLiteralInPrintlnVisitor {
++ <<Create>> MandatoryVariableOrLiteralInPrintlnVisitor(,Boolean,)
++ Outcome<Value, Diagnostic> visit(void,Node.Leaf,void,VisitorTable,void)
++ Outcome<Value, Diagnostic> visit(void,Node.Composite,void,VisitorTable,void)
+}
+
+class linter.internal.table.VisitorTableBuilder$DefaultVisitorTable {
++ <<Create>> DefaultVisitorTable(Collection<Visitor>)
+}
+
+interface linter.internal.table.VisitorTableBuilder {
++ Map<String, VisitorFactory> factories
++ Outcome<VisitorTable, Diagnostic> build(Collection<Rule>)
+}
+
+
+class linter.internal.model.lint.Lint {
++ <<Create>> Lint(,String,,Span,,RuleType,,Severity,,Category,)
++ String format()
+}
+
+class linter.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category,)
+}
+
+class linter.internal.visitor.factory.IdentifierFormatVisitorFactory {
++ RuleType ruleType
+-  formatPatterns
++ Visitor create(Rule)
+}
+
+
+class linter.LinterRunner {
++ <<Create>> LinterRunner(,Lexer,,Parser,,Validator,,Linter,)
++ void run(void,String,void,InputReader,void,ConfigReader,void,DiagnosticReporter,void)
+}
+
+class linter.internal.table.VisitorTableRegistry {
+- Map<String, Lazy<VisitorTableBuilder>> builders
++ void null()
++ void null()
++ Outcome<VisitorTable, Diagnostic> get(void,String,void,Collection<Rule>,void)
+}
+
+
+class linter.internal.model.rule.IdentifierFormatRule {
++  signature
++  name
+}
+
+class linter.internal.model.rule.MandatoryIdentifierOrLiteralInPrintlnRule {
++  signature
++  name
+}
+
+class linter.internal.model.rule.MandatoryIdentifierOrLiteralInReadInputRule {
++  signature
++  name
+}
+
+
+
+linter.internal.table.VisitorFactory <|.. linter.internal.visitor.factory.MandatoryIdentifierOrLiteralInReadInputVisitorFactory
+model.diagnostic.category.Category <|.. linter.internal.model.origin.Lint
+linter.internal.table.VisitorTableBuilder <|.. linter.internal.table.PrintScriptV10
+linter.internal.table.VisitorTableBuilder <|.. linter.internal.table.PrintScriptV11
+model.visitor.Visitor <|.. linter.internal.visitor.MandatoryVariableOrLiteralInReadInputVisitor
+linter.internal.table.VisitorFactory <|.. linter.internal.visitor.factory.MandatoryIdentifierOrLiteralInPrintlnRuleFactory
+model.visitor.Visitor <|.. linter.internal.visitor.IdentifierFormatVisitor
+Linter <|.. linter.PrintScriptLinter
+model.visitor.Visitor <|.. linter.internal.visitor.MandatoryVariableOrLiteralInPrintlnVisitor
+linter.internal.table.VisitorTableBuilder +.. linter.internal.table.VisitorTableBuilder$DefaultVisitorTable
+linter.internal.table.VisitorTable <|.. linter.internal.table.VisitorTableBuilder$DefaultVisitorTable
+model.diagnostic.Diagnostic <|.. linter.internal.model.lint.Lint
+model.diagnostic.Diagnostic <|.. linter.internal.model.error.ConfigurationError
+linter.internal.table.VisitorFactory <|.. linter.internal.visitor.factory.IdentifierFormatVisitorFactory
+model.rule.RuleType <|.. linter.internal.model.rule.IdentifierFormatRule
+model.rule.RuleType <|.. linter.internal.model.rule.MandatoryIdentifierOrLiteralInPrintlnRule
+model.rule.RuleType <|.. linter.internal.model.rule.MandatoryIdentifierOrLiteralInReadInputRule
+@enduml

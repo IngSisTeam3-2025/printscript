@@ -1,0 +1,204 @@
+@startuml
+class interpreter.internal.util.DefaultSymbolTable {
+- <<Create>> DefaultSymbolTable(,Map<String, Value>)
+}
+
+class interpreter.internal.model.category.IncorrectMethodCall {
++ String name
+}
+
+class interpreter.internal.model.category.InvalidReassignment {
++ String name
+}
+
+class interpreter.internal.model.category.MissingAssignment {
++ String name
+}
+
+class interpreter.internal.model.category.InvalidValue {
++ String name
+}
+
+class interpreter.internal.model.category.System {
++ String name
+}
+
+class interpreter.internal.model.category.TypeMismatch {
++ String name
+}
+
+class interpreter.internal.model.category.UndefinedIdentifier {
++ String name
+}
+
+class interpreter.internal.model.category.UnsupportedOperator {
++ String name
+}
+
+class interpreter.internal.model.category.IO {
++ String name
+}
+
+class interpreter.internal.model.category.InvalidOperandType {
++ String name
+}
+
+class interpreter.internal.table.VisitorTableRegistry {
+- Map<String, Lazy<ContextVisitorTable>> tables
++ void null()
++ void null()
++ Option<ContextVisitorTable> get(String)
+}
+
+
+class interpreter.internal.visitor.ConstDeclarationVisitor {
++ <<Create>> ConstDeclarationVisitor(,Map<NodeType, ValueType>)
+}
+
+class interpreter.internal.visitor.AssignmentVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.PrintlnVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.StringLiteralVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class interpreter.InterpreterRunner {
++ <<Create>> InterpreterRunner(,Lexer,,Parser,,Validator,,Interpreter)
+}
+
+class interpreter.internal.visitor.BinaryOperationVisitor {
++ <<Create>> BinaryOperationVisitor(,Map<NodeType, Collection<BinaryValueOperation>>)
+}
+
+class interpreter.internal.visitor.IfStatementVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.LetDeclarationVisitor {
++ <<Create>> LetDeclarationVisitor(,Map<NodeType, ValueType>)
+}
+
+class interpreter.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category)
+}
+
+class interpreter.internal.model.error.SystemError {
++ <<Create>> SystemError(,String,,Severity,,Category)
+}
+
+class interpreter.internal.model.error.IOError {
++ <<Create>> IOError(,String,,Severity,,Category)
+}
+
+class interpreter.internal.table.PrintScriptV1_0 {
++ Collection<ContextVisitor> visitors
+}
+
+class interpreter.internal.table.PrintScriptV1_1 {
++ Collection<ContextVisitor> visitors
+}
+
+class interpreter.internal.visitor.BooleanLiteralVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class interpreter.internal.model.error.RuntimeError {
++ <<Create>> RuntimeError(,String,,Category,,Span,,Severity,)
++ String format()
+}
+
+class interpreter.internal.visitor.ReadInputVisitor {
++ <<Create>> ReadInputVisitor(,Collection<ValueTransformer>)
+}
+
+interface interpreter.internal.util.SymbolTable {
++ Boolean contains(String)
++ Option<Value> get(String)
++ SymbolTable set(String,Value)
+}
+
+class interpreter.internal.visitor.NumberLiteralVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class interpreter.PrintScriptInterpreter {
++ void interpret(String,void,Sequence<Node>,void,InputReader,void,OutputWriter,void,EnvReader)
++ void null()
+- Option<ContextVisitorTable> getVisitorTable(String)
+- Diagnostic buildConfigurationError(String)
+- void interpretNodes(void,Sequence<Node>,void,ContextVisitorTable,void,InputReader,void,OutputWriter,void,EnvReader)
++ void null()
+}
+
+class interpreter.internal.visitor.ParenthesizedExpressionVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.ReadEnvVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.IdentifierVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class interpreter.internal.visitor.BlockVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class interpreter.internal.visitor.UnaryOperationVisitor {
++ <<Create>> UnaryOperationVisitor(,Map<NodeType, Collection<UnaryValueOperation>>)
+}
+
+
+
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.IncorrectMethodCall
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.InvalidReassignment
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.MissingAssignment
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.InvalidValue
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.System
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.TypeMismatch
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.UndefinedIdentifier
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.UnsupportedOperator
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.IO
+model.diagnostic.category.Category <|.. interpreter.internal.model.category.InvalidOperandType
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.AssignmentVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.PrintlnVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.StringLiteralVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.IfStatementVisitor
+model.visitor.context.ContextVisitorTable <|.. interpreter.internal.table.PrintScriptV1_0
+model.visitor.context.ContextVisitorTable <|.. interpreter.internal.table.PrintScriptV1_1
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.BooleanLiteralVisitor
+model.diagnostic.Diagnostic <|.. interpreter.internal.model.error.RuntimeError
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.NumberLiteralVisitor
+Interpreter <|.. interpreter.PrintScriptInterpreter
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.ParenthesizedExpressionVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.ReadEnvVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.IdentifierVisitor
+model.visitor.context.ContextVisitor <|.. interpreter.internal.visitor.BlockVisitor
+@enduml

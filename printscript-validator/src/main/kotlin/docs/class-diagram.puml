@@ -1,0 +1,214 @@
+@startuml
+class validator.internal.visitor.ReadInputVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.visitor.LetDeclarationVisitor {
++ <<Create>> LetDeclarationVisitor(,Map<NodeType, ValueType>)
+}
+
+class validator.internal.visitor.IdentifierVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class validator.internal.visitor.BinaryOperationVisitor {
++ <<Create>> BinaryOperationVisitor(,Map<NodeType, Collection<BinaryValueOperation>>)
+}
+
+class validator.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category)
+}
+
+class validator.internal.model.error.ValidationError {
++ <<Create>> ValidationError(,String,,Category,,Span,,Severity)
+}
+
+class validator.PrintScriptValidator {
++ void validate(String,void,Sequence<Node>)
++ void null()
+- Option<ContextVisitorTable> getVisitorTable(String)
+- Diagnostic buildConfigurationError(String)
+- void validateNodes(void,Sequence<Node>,void,ContextVisitorTable)
++ void null()
+}
+
+class validator.internal.visitor.StringLiteralVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class validator.internal.util.DefaultStaticSymbolTable {
+- <<Create>> DefaultStaticSymbolTable(,Map<String, StaticSymbol>)
+}
+
+interface validator.internal.util.StaticSymbolTable {
++ Boolean contains(String)
++ Option<StaticSymbol> get(String)
++ StaticSymbolTable set(String,StaticSymbol)
+}
+
+class validator.internal.visitor.BlockVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.table.PrintScriptV1_0 {
++ Collection<ContextVisitor> visitors
+}
+
+class validator.internal.table.PrintScriptV1_1 {
++ Collection<ContextVisitor> visitors
+}
+
+class validator.internal.visitor.IfStatementVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.visitor.PrintlnVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.visitor.UnaryOperationVisitor {
++ <<Create>> UnaryOperationVisitor(,Map<NodeType, Collection<UnaryValueOperation>>)
+}
+
+class validator.internal.model.symbol.StaticSymbol {
++ <<Create>> StaticSymbol(,String,,Value,,ValueType,,Span,,Boolean)
+}
+
+class validator.internal.model.category.IncorrectMethodCall {
++ String name
+}
+
+class validator.internal.model.category.InvalidReassignment {
++ String name
+}
+
+class validator.internal.model.category.InvalidValue {
++ String name
+}
+
+class validator.internal.model.category.System {
++ String name
+}
+
+class validator.internal.model.category.InvalidType {
++ String name
+}
+
+class validator.internal.model.category.Redeclaration {
++ String name
+}
+
+class validator.internal.model.category.TypeMismatch {
++ String name
+}
+
+class validator.internal.model.category.UndefinedIdentifier {
++ String name
+}
+
+class validator.internal.model.category.UnsupportedOperator {
++ String name
+}
+
+class validator.internal.model.category.MissingAssignment {
++ String name
+}
+
+class validator.internal.visitor.ParenthesizedExpressionVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.visitor.BooleanLiteralVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class validator.internal.model.error.SystemError {
++ <<Create>> SystemError(,String,,Severity,,Category)
+}
+
+class validator.internal.visitor.NumberLiteralVisitor {
++ void visit(Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void null()
++ void visit(Node.Composite,void,ContextVisitorTable,void,VisitorContext)
+}
+
+class validator.internal.model.value.RuntimeValueType {
++  name
+}
+
+class validator.internal.table.VisitorTableRegistry {
+- Map<String, Lazy<ContextVisitorTable>> tables
++ void null()
++ void null()
++ Option<ContextVisitorTable> get(String)
+}
+
+
+class validator.ValidatorRunner {
++ <<Create>> ValidatorRunner(,Lexer,,Parser,,Validator)
+}
+
+class validator.internal.visitor.ConstDeclarationVisitor {
++ <<Create>> ConstDeclarationVisitor(,Map<NodeType, ValueType>)
+}
+
+class validator.internal.visitor.ReadEnvVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+class validator.internal.model.value.RuntimeValue {
++ <<Create>> RuntimeValue(,ValueType)
+}
+
+class validator.internal.visitor.AssignmentVisitor {
++ void visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext)
++ void visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext)
++ void null()
+}
+
+
+
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.ReadInputVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.IdentifierVisitor
+Validator <|.. validator.PrintScriptValidator
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.StringLiteralVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.BlockVisitor
+model.visitor.context.ContextVisitorTable <|.. validator.internal.table.PrintScriptV1_0
+model.visitor.context.ContextVisitorTable <|.. validator.internal.table.PrintScriptV1_1
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.IfStatementVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.PrintlnVisitor
+model.diagnostic.category.Category <|.. validator.internal.model.category.IncorrectMethodCall
+model.diagnostic.category.Category <|.. validator.internal.model.category.InvalidReassignment
+model.diagnostic.category.Category <|.. validator.internal.model.category.InvalidValue
+model.diagnostic.category.Category <|.. validator.internal.model.category.System
+model.diagnostic.category.Category <|.. validator.internal.model.category.InvalidType
+model.diagnostic.category.Category <|.. validator.internal.model.category.Redeclaration
+model.diagnostic.category.Category <|.. validator.internal.model.category.TypeMismatch
+model.diagnostic.category.Category <|.. validator.internal.model.category.UndefinedIdentifier
+model.diagnostic.category.Category <|.. validator.internal.model.category.UnsupportedOperator
+model.diagnostic.category.Category <|.. validator.internal.model.category.MissingAssignment
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.ParenthesizedExpressionVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.BooleanLiteralVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.NumberLiteralVisitor
+model.value.type.ValueType <|.. validator.internal.model.value.RuntimeValueType
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.ReadEnvVisitor
+model.visitor.context.ContextVisitor <|.. validator.internal.visitor.AssignmentVisitor
+@enduml

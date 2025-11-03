@@ -1,0 +1,78 @@
+package formatter.internal.visitor
+
+import formatter.internal.manipulator.TriviaManipulator
+import formatter.internal.model.value.DocValue
+import formatter.internal.type.toDoc
+import model.node.AssignNode
+import model.node.Node
+import model.trivia.SpaceTrivia
+import model.trivia.Trivia
+import model.value.NoneValue
+import model.visitor.context.ContextVisitor
+import model.visitor.context.ContextVisitorTable
+import model.visitor.context.VisitResult
+import model.visitor.context.VisitorContext
+import type.outcome.Outcome
+
+internal class SpacingAroundEqualsVisitor(
+    private val enforce: Boolean,
+) : ContextVisitor {
+
+    override fun visit(
+        node: Node.Leaf,
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        return VisitResult(Outcome.Ok(NoneValue), context)
+    }
+
+    override fun visit(
+        node: Node.Composite,
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        if (!enforce) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
+
+        val children = node.children.toList()
+        val assignIndex = children.indexOfFirst {
+            it is Node.Leaf && it.type == AssignNode
+        }
+
+        if (assignIndex == -1) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
+
+        val assignNode = children[assignIndex]
+        if (assignNode !is Node.Leaf) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
+
+        val prevNode = children.getOrNull(assignIndex - 1)
+        val nextNode = children.getOrNull(assignIndex + 1)
+
+        val assignWithoutSpaces = TriviaManipulator.removeTrailing(
+            TriviaManipulator.removeLeading(assignNode, SpaceTrivia) as Node.Leaf,
+            SpaceTrivia,
+        ) as Node.Leaf
+
+        val prevWithoutSpaces = prevNode?.let { TriviaManipulator.removeTrailing(it, SpaceTrivia) }
+        val nextWithoutSpaces = nextNode?.let { TriviaManipulator.removeLeading(it, SpaceTrivia) }
+
+        val space = listOf(Trivia(SpaceTrivia, " ", assignNode.span))
+        val updatedAssign = TriviaManipulator.addTrailing(
+            TriviaManipulator.addLeading(assignWithoutSpaces, space) as Node.Leaf,
+            space,
+        )
+
+        val updatedChildren = children.toMutableList().apply {
+            if (prevWithoutSpaces != null) set(assignIndex - 1, prevWithoutSpaces)
+            set(assignIndex, updatedAssign)
+            if (nextWithoutSpaces != null) set(assignIndex + 1, nextWithoutSpaces)
+        }
+
+        val updatedNode = node.copy(children = updatedChildren)
+        return VisitResult(Outcome.Ok(DocValue(updatedNode.toDoc())), context)
+    }
+}

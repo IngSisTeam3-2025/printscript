@@ -1,0 +1,346 @@
+@startuml
+interface lexer.internal.model.terminal.TokenTerminal {
++ TokenType type
++ Regex pattern
++ Int priority
+}
+
+interface lexer.internal.table.TerminalTable {
++ Collection<TokenTerminal> tokenTerminals
++ Collection<TriviaTerminal> triviaTerminals
+}
+
+class lexer.PrintScriptLexer {
++ void lex(String,void,Sequence<Char>)
++ void null()
+- Option<TerminalTable> getTerminalTable(String)
+- Diagnostic buildConfigurationError(String)
+- void lexCharacters(Sequence<Char>,void,TerminalTable)
++ void null()
+- void buildToken(TokenScan.Ok,void,Collection<Trivia>,void,Collection<Trivia>)
++ void null()
+- void buildLexError(LexemeBuffer,void,Spanner)
++ void null()
+}
+
+class lexer.internal.table.TerminalTableRegistry {
+- Map<String, Lazy<TerminalTable>> tables
++ void null()
++ void null()
++ Option<TerminalTable> get(String)
+}
+
+
+interface lexer.internal.model.terminal.TriviaTerminal {
++ TriviaType type
++ Regex pattern
++ Int priority
+}
+
+class lexer.internal.model.error.LexError {
++ <<Create>> LexError(,String,,Category,,Span,,Severity)
+}
+
+class lexer.internal.model.scan.TokenScan$Ok {
++ <<Create>> Ok(,TokenType,,String,,Span,)
+}
+
+class lexer.internal.model.scan.TokenScan$Error {
+}
+class lexer.internal.model.scan.TokenScan$Empty {
+}
+interface lexer.internal.model.scan.TokenScan {
+}
+class lexer.internal.spanner.Spanner {
+- Int line
+- Int column
+- Int index
++ Span span(String)
+- Position mark()
+- void advance(String)
+}
+
+
+class lexer.internal.scanner.TokenScanner$TokenMatch {
++ <<Create>> TokenMatch(String,,TokenType)
+}
+
+class lexer.internal.scanner.TokenScanner {
++ <<Create>> TokenScanner(Collection<TokenTerminal>)
++ void scan(LexemeBuffer,void,Spanner)
++ void null()
+- Option<TokenMatch> findLongestMatch(LexemeBuffer)
+- Option<TokenMatch> findBestTerminal(String)
+}
+
+class lexer.internal.model.category.Syntax {
++ String name
+}
+
+class lexer.internal.model.terminal.LetTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.IdentifierTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.NumberLiteralTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.StringLitTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.BooleanLiteralTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.StringTypeTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.NumberTypeTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.ConstTypeTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.BooleanTypeTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.AssignTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.PlusTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.MinusTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.MultiplyTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.DivideTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.ColonTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.SemicolonTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.IfTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.ElseTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.PrintlnTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.ReadEnvTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.ReadInputTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.LeftParenthesisTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.RightParenthesisTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.LeftBracketTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.RightBracketTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.table.PrintScriptV1_0 {
++  tokenTerminals
++  triviaTerminals
+}
+
+class lexer.internal.table.PrintScriptV1_1 {
++  tokenTerminals
++  triviaTerminals
+}
+
+class lexer.internal.model.terminal.CommentTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.LineCommentTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.NewlineTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.SpaceTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.model.terminal.TabTerminal {
++  type
++  pattern
++  priority
+}
+
+class lexer.internal.collector.TriviaCollector$TriviaMatch {
++ <<Create>> TriviaMatch(String,TriviaTerminal)
+}
+
+class lexer.internal.collector.TriviaCollector {
++ <<Create>> TriviaCollector(Collection<TriviaTerminal>)
++ Collection<Trivia> collect(LexemeBuffer,Spanner)
+- Option<TriviaMatch> findLongestMatch(LexemeBuffer)
+- Option<TriviaMatch> findBestTerminal(String)
+}
+
+class lexer.internal.buffer.LexemeBuffer$Companion {
+-  LOOKAHEAD
+}
+
+class lexer.internal.buffer.LexemeBuffer {
+-  iterator
+-  inner
++ <<Create>> LexemeBuffer(Sequence<Char>)
+- void fill()
++ String peek(Int)
++ Boolean hasNext()
++ Boolean isEmpty()
++ void consume(Int)
+}
+
+
+class lexer.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category)
+}
+
+
+
+Lexer <|.. lexer.PrintScriptLexer
+lexer.internal.model.scan.TokenScan +.. lexer.internal.model.scan.TokenScan$Ok
+lexer.internal.model.scan.TokenScan <|.. lexer.internal.model.scan.TokenScan$Ok
+lexer.internal.model.scan.TokenScan +.. lexer.internal.model.scan.TokenScan$Error
+lexer.internal.model.scan.TokenScan <|.. lexer.internal.model.scan.TokenScan$Error
+lexer.internal.model.scan.TokenScan +.. lexer.internal.model.scan.TokenScan$Empty
+lexer.internal.model.scan.TokenScan <|.. lexer.internal.model.scan.TokenScan$Empty
+lexer.internal.scanner.TokenScanner +.. lexer.internal.scanner.TokenScanner$TokenMatch
+model.diagnostic.category.Category <|.. lexer.internal.model.category.Syntax
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.LetTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.IdentifierTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.NumberLiteralTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.StringLitTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.BooleanLiteralTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.StringTypeTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.NumberTypeTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.ConstTypeTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.BooleanTypeTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.AssignTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.PlusTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.MinusTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.MultiplyTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.DivideTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.ColonTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.SemicolonTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.IfTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.ElseTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.PrintlnTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.ReadEnvTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.ReadInputTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.LeftParenthesisTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.RightParenthesisTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.LeftBracketTerminal
+lexer.internal.model.terminal.TokenTerminal <|.. lexer.internal.model.terminal.RightBracketTerminal
+lexer.internal.table.TerminalTable <|.. lexer.internal.table.PrintScriptV1_0
+lexer.internal.table.TerminalTable <|.. lexer.internal.table.PrintScriptV1_1
+lexer.internal.model.terminal.TriviaTerminal <|.. lexer.internal.model.terminal.CommentTerminal
+lexer.internal.model.terminal.TriviaTerminal <|.. lexer.internal.model.terminal.LineCommentTerminal
+lexer.internal.model.terminal.TriviaTerminal <|.. lexer.internal.model.terminal.NewlineTerminal
+lexer.internal.model.terminal.TriviaTerminal <|.. lexer.internal.model.terminal.SpaceTerminal
+lexer.internal.model.terminal.TriviaTerminal <|.. lexer.internal.model.terminal.TabTerminal
+lexer.internal.collector.TriviaCollector +.. lexer.internal.collector.TriviaCollector$TriviaMatch
+lexer.internal.buffer.LexemeBuffer +.. lexer.internal.buffer.LexemeBuffer$Companion
+@enduml

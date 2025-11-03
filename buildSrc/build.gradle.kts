@@ -1,8 +1,16 @@
-import org.gradle.internal.impldep.org.codehaus.plexus.util.MatchPatterns.from
-
 plugins {
     `kotlin-dsl`
     `maven-publish`
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {

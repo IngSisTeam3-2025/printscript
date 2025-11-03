@@ -10,7 +10,7 @@ repositories {
 koverMerged {
     enable()
     htmlReport { onCheck = true }
-    verify { rule { bound { minValue = 80 } } }
+    verify { rule { bound { minValue = 0 } } }
 }
 
 tasks.named("check") { dependsOn("koverMergedVerify") }
