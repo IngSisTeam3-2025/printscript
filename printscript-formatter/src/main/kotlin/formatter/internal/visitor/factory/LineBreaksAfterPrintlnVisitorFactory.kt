@@ -2,16 +2,16 @@ package formatter.internal.visitor.factory
 
 import formatter.internal.rule.LineBreaksAfterPrintlnRule
 import formatter.internal.visitor.LineBreaksAfterPrintlnVisitor
-import model.rule.IntRuleValue
+import model.rule.IntegerRuleValue
 import model.rule.Rule
 import model.rule.RuleType
-import model.visitor.Visitor
+import model.visitor.context.ContextVisitor
 
-internal class LineBreaksAfterPrintlnVisitorFactory : VisitorFactory {
+internal class LineBreaksAfterPrintlnVisitorFactory : ContextVisitorFactory {
     override val ruleType: RuleType = LineBreaksAfterPrintlnRule
 
-    override fun create(rule: Rule): Visitor {
-        val lineBreaks = (rule.value as IntRuleValue).value
+    override fun create(rule: Rule): ContextVisitor {
+        val lineBreaks = (rule.value as IntegerRuleValue).value
         return LineBreaksAfterPrintlnVisitor(lineBreaks)
     }
 }
