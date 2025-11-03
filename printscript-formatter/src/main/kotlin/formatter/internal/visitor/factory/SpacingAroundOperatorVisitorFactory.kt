@@ -6,14 +6,14 @@ import model.node.NodeType
 import model.rule.BooleanRuleValue
 import model.rule.Rule
 import model.rule.RuleType
-import model.visitor.Visitor
+import model.visitor.context.ContextVisitor
 
 internal class SpacingAroundOperatorVisitorFactory(
     private val operators: Collection<NodeType>,
-) : VisitorFactory {
+) : ContextVisitorFactory {
     override val ruleType: RuleType = SpacingAroundOperatorRule
 
-    override fun create(rule: Rule): Visitor {
+    override fun create(rule: Rule): ContextVisitor {
         val enforce = (rule.value as BooleanRuleValue).value
         return SpacingAroundOperatorVisitor(enforce, operators)
     }

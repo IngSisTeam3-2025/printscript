@@ -5,12 +5,12 @@ import formatter.internal.visitor.MandatorySingleSpaceVisitor
 import model.rule.BooleanRuleValue
 import model.rule.Rule
 import model.rule.RuleType
-import model.visitor.Visitor
+import model.visitor.context.ContextVisitor
 
-internal class MandatorySingleSpaceVisitorFactory : VisitorFactory {
+internal class MandatorySingleSpaceVisitorFactory : ContextVisitorFactory {
     override val ruleType: RuleType = MandatorySingleSpaceRule
 
-    override fun create(rule: Rule): Visitor {
+    override fun create(rule: Rule): ContextVisitor {
         val enforce = (rule.value as BooleanRuleValue).value
         return MandatorySingleSpaceVisitor(enforce)
     }

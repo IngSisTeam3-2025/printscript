@@ -1,59 +1,69 @@
 package formatter.internal.visitor
 
+import formatter.internal.manipulator.TriviaManipulator
 import formatter.internal.model.value.DocValue
-import formatter.internal.type.ensureLeadingSpace
-import formatter.internal.type.ensureTrailingSpace
-import formatter.internal.type.findChildOfType
-import formatter.internal.type.getChildAt
 import formatter.internal.type.toDoc
-import formatter.internal.type.updateChildAt
-import model.diagnostic.Diagnostic
-import model.node.AssignNode
 import model.node.Node
+import model.node.SemicolonNode
+import model.trivia.SpaceTrivia
+import model.trivia.Trivia
 import model.value.NoneValue
-import model.value.Value
-import model.visitor.Visitor
-import model.visitor.VisitorTable
+import model.visitor.context.ContextVisitor
+import model.visitor.context.ContextVisitorTable
+import model.visitor.context.VisitResult
+import model.visitor.context.VisitorContext
 import type.outcome.Outcome
 
 internal class MandatorySingleSpaceVisitor(
     private val enforce: Boolean,
-) : Visitor {
+) : ContextVisitor {
 
     override fun visit(
         node: Node.Leaf,
-        table: VisitorTable,
-    ): Outcome<Value, Diagnostic> = Outcome.Ok(NoneValue)
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        return VisitResult(Outcome.Ok(NoneValue), context)
+    }
 
     override fun visit(
         node: Node.Composite,
-        table: VisitorTable,
-    ): Outcome<Value, Diagnostic> {
-        if (!enforce) return Outcome.Ok(DocValue(node.toDoc()))
+        table: ContextVisitorTable,
+        context: VisitorContext,
+    ): VisitResult {
+        if (!enforce) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
 
-        val assignIndex = node.findChildOfType(AssignNode)
-        if (assignIndex == -1) return Outcome.Ok(DocValue(node.toDoc()))
+        val children = node.children.toList()
+        if (children.size < 2) {
+            return VisitResult(Outcome.Ok(NoneValue), context)
+        }
 
-        val before = node.getChildAt(assignIndex - 1)
-        val assign = node.getChildAt(assignIndex)
-        val after = node.getChildAt(assignIndex + 1)
+        val cleanedChildren = children.map { child ->
+            val withoutTrailing = TriviaManipulator.removeTrailing(child, SpaceTrivia)
+            TriviaManipulator.removeLeading(withoutTrailing, SpaceTrivia)
+        }
 
-        val updatedNode = node
-            .updateChildAt(assignIndex - 1) { child ->
-                if (child is Node.Leaf) child.ensureTrailingSpace(assign.span) else child
+        val finalChildren = cleanedChildren.mapIndexed { i, current ->
+            val next = cleanedChildren.getOrNull(i + 1)
+
+            if (next != null && !shouldHaveNoSpaceBefore(next)) {
+                val space = listOf(Trivia(SpaceTrivia, " ", current.span))
+                TriviaManipulator.addTrailing(current, space)
+            } else {
+                current
             }
-            .updateChildAt(assignIndex) { child ->
-                if (child is Node.Leaf) {
-                    child.ensureLeadingSpace(before.span)
-                        .ensureTrailingSpace(after.span)
-                } else {
-                    child
-                }
-            }
-            .updateChildAt(assignIndex + 1) { child ->
-                if (child is Node.Leaf) child.ensureLeadingSpace(assign.span) else child
-            }
+        }
 
-        return Outcome.Ok(DocValue(updatedNode.toDoc()))
+        val updatedNode = node.copy(children = finalChildren)
+        return VisitResult(Outcome.Ok(DocValue(updatedNode.toDoc())), context)
+    }
+
+    private fun shouldHaveNoSpaceBefore(node: Node): Boolean {
+        return when (node) {
+            is Node.Leaf -> node.type is SemicolonNode
+            is Node.Composite -> false
+        }
     }
 }
