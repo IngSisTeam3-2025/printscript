@@ -28,6 +28,7 @@ import model.trivia.Trivia
 import model.value.IntegerValue
 import model.value.StringValue
 
+@SuppressWarnings("LargeClass")
 internal object PrintScriptV10TestSnippets {
 
     init {
