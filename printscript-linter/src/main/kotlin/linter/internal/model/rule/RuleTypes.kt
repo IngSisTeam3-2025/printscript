@@ -8,7 +8,7 @@ data object IdentifierFormatRule : RuleType {
 }
 
 data object MandatoryIdentifierOrLiteralInPrintlnRule : RuleType {
-    override val signature = "mandatory-variable-or-literal-in-print"
+    override val signature = "mandatory-variable-or-literal-in-println"
     override val name = "MandatoryIdentifierOrLiteralInPrintln"
 }
 
