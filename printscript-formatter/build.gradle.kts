@@ -4,6 +4,8 @@ plugins {
 
 }
 
+version = "1.0.0"
+
 dependencies {
     implementation(project(":printscript-core"))
     implementation(project(":printscript-api"))

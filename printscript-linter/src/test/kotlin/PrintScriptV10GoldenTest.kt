@@ -46,7 +46,7 @@ class PrintScriptV10GoldenTest {
     }
 
     @Test fun `test case 1`() {
-        val rules = listOf(Rule("mandatory-variable-or-literal-in-print", BooleanRuleValue(true)))
+        val rules = listOf(Rule("mandatory-variable-or-literal-in-println", BooleanRuleValue(true)))
         run("expression-in-println", rules)
     }
 

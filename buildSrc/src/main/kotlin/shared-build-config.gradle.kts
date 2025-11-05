@@ -3,6 +3,7 @@ plugins {
     id("com.diffplug.spotless")
     id("org.jetbrains.kotlinx.kover")
     kotlin("jvm")
+    id("maven-publish")
 }
 
 repositories { mavenCentral() }
@@ -39,5 +40,38 @@ spotless {
             )
         )
         trimTrailingWhitespace()
+    }
+}
+
+apply(plugin = "maven-publish")
+
+
+val envFile = rootProject.file(".env")
+val envVars = if (envFile.exists()) {
+    envFile.readLines()
+        .filter { it.isNotBlank() && !it.startsWith("#") }
+        .associate {
+            val (key, value) = it.split("=", limit = 2)
+            key.trim() to value.trim()
+        }
+} else {
+    emptyMap()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${envVars["GITHUB_REPOSITORY"] ?: System.getenv("GITHUB_REPOSITORY")}")
+            credentials {
+                username = envVars["GITHUB_ACTOR"] ?: System.getenv("GITHUB_ACTOR")
+                password = envVars["GITHUB_TOKEN"] ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+        }
     }
 }

@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlinx.kover")
 }
 
+version = "1.0.0-SNAPSHOT"
+
 dependencies {
     implementation(project(":printscript-api"))
     implementation(project(":printscript-core"))
