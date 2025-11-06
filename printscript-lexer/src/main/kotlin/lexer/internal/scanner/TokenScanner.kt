@@ -32,19 +32,26 @@ internal class TokenScanner(private val terminals: Collection<TokenTerminal>) {
     }
 
     private fun findLongestMatch(buffer: LexemeBuffer): Option<TokenMatch> {
-        var lookahead = 1
         var best: Option<TokenMatch> = Option.None
-        var lastLength = 0
+        var bestLength = 0
+        var peekSize = 64
 
         while (buffer.hasNext()) {
-            val slice = buffer.peek(lookahead)
-            if (slice.length == lastLength) break
-            lastLength = slice.length
+            val slice = buffer.peek(peekSize)
 
             val match = findBestTerminal(slice)
-            if (match is Option.Some) best = match
-
-            lookahead++
+            if (match is Option.Some) {
+                val matchLength = match.value.lexeme.length
+                if (matchLength > bestLength) {
+                    best = match
+                    bestLength = matchLength
+                    peekSize *= 2
+                } else {
+                    break
+                }
+            } else {
+                break
+            }
         }
 
         return best

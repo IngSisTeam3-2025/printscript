@@ -6,7 +6,6 @@ import parser.internal.table.GrammarTable
 import type.option.Option
 import type.option.Option.None
 import type.option.getOrElse
-import type.option.maxBy
 import type.option.maxByOrEqual
 import type.outcome.Outcome
 
@@ -18,9 +17,10 @@ internal class NodeScanner {
     ): NodeScan {
         if (!buffer.hasNext()) return NodeScan.Empty
 
-        var sliceSize = 1
         var bestNode: Option<NodeScan.Ok> = None
         var bestError: Option<NodeScan.Error> = None
+        var bestConsumed = 0
+        var sliceSize = 1
 
         while (buffer.hasNext(sliceSize)) {
             val slice = buffer.peek(sliceSize).toList()
@@ -29,16 +29,24 @@ internal class NodeScanner {
                 is Outcome.Ok -> {
                     val match = outcome.value
                     val candidate = NodeScan.Ok(match.node, match.consumed)
-                    bestNode = bestNode.maxBy({ it.consumed }, candidate)
+
+                    if (match.consumed > bestConsumed) {
+                        bestNode = Option.Some(candidate)
+                        bestConsumed = match.consumed
+                        sliceSize++
+                    } else {
+                        break
+                    }
                 }
                 is Outcome.Error -> {
                     val fail = outcome.error
                     val candidate = NodeScan.Error(fail.message, fail.category, fail.consumed)
                     bestError = bestError.maxByOrEqual({ it.consumed }, candidate)
+                    sliceSize++
                 }
             }
-            sliceSize++
         }
+
         return when {
             bestNode is Option.Some && bestError is Option.Some -> {
                 if (bestError.value.consumed > bestNode.value.consumed) {
