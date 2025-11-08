@@ -22,23 +22,15 @@ fun <T> Sequence<Outcome<T, Diagnostic>>.onError(
     }
 }
 
-fun <T> Sequence<Outcome<T, Diagnostic>>.onErrorCollectAll(
+fun <T> Sequence<Outcome<T, Diagnostic>>.onError(
     reporter: DiagnosticReporter,
-    errorFlag: ErrorFlag,
 ): Sequence<T> = sequence {
-    var hasAnyError = false
-
-    for (outcome in this@onErrorCollectAll) {
+    for (outcome in this@onError) {
         when (outcome) {
             is Outcome.Ok -> yield(outcome.value)
             is Outcome.Error -> {
                 reporter.report(outcome.error)
-                hasAnyError = true
             }
         }
-    }
-
-    if (hasAnyError) {
-        errorFlag.hasError = true
     }
 }

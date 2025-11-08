@@ -45,23 +45,27 @@ class PrintScriptValidator : Validator {
     private fun validateNodes(
         nodes: Sequence<Node>,
         table: ContextVisitorTable,
-    ): Sequence<Outcome<Node, Diagnostic>> = sequence {
-        var context = VisitorContext()
-        context = context.register(StaticSymbolTable::class, DefaultStaticSymbolTable())
+    ): Sequence<Outcome<Node, Diagnostic>> {
+        return sequence {
+            var context = VisitorContext()
 
-        val buffer = NodeBuffer(nodes)
+            context = context.register(StaticSymbolTable::class, DefaultStaticSymbolTable())
 
-        while (buffer.hasNext()) {
-            val node = buffer.next()
-            val visit = table.dispatch(node, context)
-            context = visit.context
+            val buffer = NodeBuffer(nodes)
 
-            when (val outcome = visit.outcome) {
-                is Outcome.Ok -> {
-                    yield(Outcome.Ok(node))
-                }
-                is Outcome.Error -> {
-                    yield(outcome)
+            while (buffer.hasNext()) {
+                val node = buffer.next()
+                val visit = table.dispatch(node, context)
+
+                context = visit.context
+
+                when (val outcome = visit.outcome) {
+                    is Outcome.Ok -> {
+                        yield(Outcome.Ok(node))
+                    }
+                    is Outcome.Error -> {
+                        yield(outcome)
+                    }
                 }
             }
         }

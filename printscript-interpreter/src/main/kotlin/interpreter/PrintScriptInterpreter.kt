@@ -27,10 +27,13 @@ class PrintScriptInterpreter : Interpreter {
         return sequence {
             when (val table = getVisitorTable(version)) {
                 is Option.Some -> {
-                    yieldAll(interpretNodes(nodes, table.value, input, output, env))
+                    for (diagnostic in interpretNodes(nodes, table.value, input, output, env)) {
+                        yield(diagnostic)
+                    }
                 }
                 is Option.None -> {
                     yield(buildConfigurationError(version))
+                    return@sequence
                 }
             }
         }
