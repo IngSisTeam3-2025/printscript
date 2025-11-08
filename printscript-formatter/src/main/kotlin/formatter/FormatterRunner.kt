@@ -40,11 +40,8 @@ class FormatterRunner(
         val nodes = parser.parse(version, tokens)
             .takeWhile { !flag.hasError }
             .onError(reporter, flag)
-            .toList()
 
-        if (flag.hasError) return
-
-        val docs = formatter.format(version, nodes.asSequence(), rules)
+        val docs = formatter.format(version, nodes, rules)
 
         for (doc in docs) {
             when (doc) {
