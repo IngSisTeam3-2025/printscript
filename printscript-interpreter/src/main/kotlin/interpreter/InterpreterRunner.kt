@@ -18,6 +18,7 @@ class InterpreterRunner(
     private val validator: Validator,
     private val interpreter: Interpreter,
 ) {
+
     fun run(
         version: String,
         source: InputReader,
@@ -27,29 +28,54 @@ class InterpreterRunner(
         reporter: DiagnosticReporter,
     ) {
         val flag = ErrorFlag()
+        val hasError = validate(version, source, flag, reporter)
+        if (hasError) return
+        execute(version, source, input, output, env, flag, reporter)
+    }
 
+    private fun validate(
+        version: String,
+        source: InputReader,
+        flag: ErrorFlag,
+        reporter: DiagnosticReporter,
+    ): Boolean {
         val chars = source.read()
+
         val tokens = lexer.lex(version, chars)
             .onError(reporter, flag)
+
         val nodes = parser.parse(version, tokens)
             .takeWhile { !flag.hasError }
             .onError(reporter, flag)
-        val validations = validator.validate(version, nodes)
+
+        validator.validate(version, nodes)
             .takeWhile { !flag.hasError }
             .onErrorCollectAll(reporter, flag)
-            .toList()
+            .forEach { _ -> }
 
-        if (!flag.hasError) {
-            val interpretations = interpreter.interpret(
-                version,
-                validations.asSequence(),
-                input,
-                output,
-                env,
-            )
-            for (error in interpretations) {
-                reporter.report(error)
-            }
-        }
+        return flag.hasError
+    }
+
+    private fun execute(
+        version: String,
+        source: InputReader,
+        input: InputReader,
+        output: OutputWriter,
+        env: EnvReader,
+        flag: ErrorFlag,
+        reporter: DiagnosticReporter,
+    ) {
+        val chars = source.read()
+
+        val tokens = lexer.lex(version, chars)
+            .onError(reporter, flag)
+            .takeWhile { !flag.hasError }
+
+        val nodes = parser.parse(version, tokens)
+            .onError(reporter, flag)
+            .takeWhile { !flag.hasError }
+
+        interpreter.interpret(version, nodes, input, output, env)
+            .forEach { reporter.report(it) }
     }
 }
