@@ -3,4 +3,4 @@ plugins {
     id("org.jetbrains.kotlinx.kover")
 }
 
-version = "1.0.1"
+version = "1.0.1-SNAPSHOT"
