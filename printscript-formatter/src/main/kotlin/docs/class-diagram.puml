@@ -1,0 +1,347 @@
+@startuml
+class formatter.internal.visitor.SpacingAfterColonVisitor {
++ <<Create>> SpacingAfterColonVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Boolean isDeclarationStatement(Node.Composite)
+}
+
+class formatter.internal.table.ContextVisitorTableBuilder$DefaultVisitorTable {
++ <<Create>> DefaultVisitorTable(,Collection<ContextVisitor>,)
+}
+
+interface formatter.internal.table.ContextVisitorTableBuilder {
++ Map<String, ContextVisitorFactory> factories
++ Outcome<ContextVisitorTable, Diagnostic> build(Collection<Rule>)
+}
+
+
+class formatter.internal.visitor.factory.SpacingAroundOperatorVisitorFactory {
++ RuleType ruleType
++ <<Create>> SpacingAroundOperatorVisitorFactory(,Collection<NodeType>,)
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.LineBreaksAfterPrintlnVisitor {
++ <<Create>> LineBreaksAfterPrintlnVisitor(,Int,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- PrintlnState getOrInitializeState(VisitorContext)
+- List<Trivia> calculateNewlinesAfterPrintln(void,Node,void,List<Trivia>,void)
+}
+
+class formatter.internal.traversal.NodeTraversal {
++ Boolean endsWith(Node,NodeType)
+- Node.Leaf? findLastLeaf(Node)
+}
+
+class formatter.internal.visitor.factory.LineBreakAfterStatementVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.factory.NoSpacingAroundEqualsVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.IfBraceSameLineVisitor {
++ <<Create>> IfBraceSameLineVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Node processChild(Node)
+}
+
+class formatter.internal.visitor.IndentsInsideIfVisitor {
++ <<Create>> IndentsInsideIfVisitor(,Int,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Node.Composite processIfStatement(void,Node.Composite,void,Int,void)
+- Node.Composite processBlock(void,Node.Composite,void,Int,void)
+- Node.Composite processElseBlock(void,Node.Composite,void,Int,void)
+- Node.Composite applyIndentationAfterNewline(void,Node.Composite,void,Int,void)
+- List<Trivia> createIndentTrivia(void,Int,void,Span,void)
+- Node.Leaf applyIndentationToLeaf(void,Node.Leaf,void,Int,void)
+}
+
+class formatter.internal.visitor.NoSpacingAroundEqualsVisitor {
++ <<Create>> NoSpacingAroundEqualsVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Boolean isRelevantNode(Node.Composite)
+}
+
+class formatter.internal.visitor.factory.IndentsInsideIfVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.model.context.PrintlnState {
++ <<Create>> PrintlnState(,List<Trivia>,,Boolean,)
+}
+
+class formatter.internal.visitor.SpacingAroundEqualsVisitor {
++ <<Create>> SpacingAroundEqualsVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+}
+
+class formatter.internal.visitor.factory.IfBraceSameLineVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.transformer.NodeTransformer {
++ Node applyDispatchResult(Node,VisitResult)
++ Node transformRecursive(void,Node,void,ContextVisitorTable,void,VisitorContext,void)
+}
+
+class formatter.internal.manipulator.TriviaManipulator {
++ Pair<Node, List<Trivia>> extractTrailing(Node,TriviaType)
++ Pair<Node, List<Trivia>> extractLeading(Node,TriviaType)
++ Node addLeading(Node,List<Trivia>)
++ Node removeLeading(Node,TriviaType)
++ Node removeTrailing(Node,TriviaType)
++ Node addTrailing(Node,List<Trivia>)
+}
+
+class formatter.internal.model.context.LineBreakState {
++ <<Create>> LineBreakState(,List<Trivia>,,Boolean,)
+}
+
+class formatter.internal.visitor.IfBraceBelowLineVisitor {
++ <<Create>> IfBraceBelowLineVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Node processChild(Node)
+}
+
+class formatter.internal.visitor.LineBreakAfterStatementVisitor {
++ <<Create>> LineBreakAfterStatementVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- VisitorContext initializeStateIfNeeded(VisitorContext)
+- LineBreakState getOrInitializeState(VisitorContext)
+- List<Trivia> calculateNewlinesToTransfer(void,Node,void,List<Trivia>,void)
+}
+
+interface formatter.internal.visitor.factory.ContextVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.model.origin.FormatterCategory {
++ String name
+}
+
+class formatter.internal.visitor.factory.SpacingAfterColonVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.SpacingBeforeColonVisitor {
++ <<Create>> SpacingBeforeColonVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Boolean isDeclarationStatement(Node.Composite)
+}
+
+class formatter.FormatterRunner {
++ <<Create>> FormatterRunner(,Lexer,,Parser,,Formatter,)
++ void run(void,String,void,InputReader,void,OutputWriter,void,ConfigReader,void,DiagnosticReporter,void)
+}
+
+class formatter.internal.model.error.ConfigurationError {
++ <<Create>> ConfigurationError(,String,,Severity,,Category,)
+}
+
+class formatter.internal.table.VisitorTableRegistry {
+- Map<String, Lazy<ContextVisitorTableBuilder>> builders
++ void null()
++ void null()
++ Outcome<ContextVisitorTable, Diagnostic> get(void,String,void,Collection<Rule>,void)
+}
+
+
+class formatter.PrintScriptFormatter {
++ Sequence<Outcome<Doc, Diagnostic>> format(void,String,void,Sequence<Node>,void,Collection<Rule>,void)
+- Outcome<ContextVisitorTable, Diagnostic> getVisitorTable(void,String,void,Collection<Rule>,void)
+- Sequence<Outcome<Doc, Diagnostic>> formatNodes(void,Sequence<Node>,void,ContextVisitorTable,void)
+}
+
+class formatter.internal.model.value.DocValueType {
++ String name
+}
+
+class formatter.internal.visitor.factory.SpacingAroundEqualsVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.table.PrintScriptV10 {
++ Map<String, ContextVisitorFactory> factories
+}
+
+class formatter.internal.table.PrintScriptV11 {
++ Map<String, ContextVisitorFactory> factories
+}
+
+class formatter.internal.model.context.IndentState {
++ <<Create>> IndentState(,Int,)
+}
+
+class formatter.internal.visitor.SpacingAroundOperatorVisitor {
++ <<Create>> SpacingAroundOperatorVisitor(,Boolean,,Collection<NodeType>,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Node.Composite transformBinaryOperation(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Node.Leaf ensureSpacesAround(Node.Leaf)
+- Node.Leaf removeSpacesAround(Node.Leaf)
+}
+
+class formatter.internal.rule.SpacingAroundEqualsRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.NoSpacingAroundEqualsRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.SpacingAfterColonRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.SpacingBeforeColonRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.MandatorySingleSpaceRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.SpacingAroundOperatorRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.LineBreakAfterStatementRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.LineBreaksAfterPrintlnRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.IndentsInsideIfBlockRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.IfBraceBelowLineRule {
++  signature
++  name
+}
+
+class formatter.internal.rule.IfBraceSameLineRule {
++  signature
++  name
+}
+
+class formatter.internal.model.value.DocValue {
++  type
++ <<Create>> DocValue(Doc)
++ String format()
+}
+
+
+class formatter.internal.visitor.factory.SpacingBeforeColonVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.factory.LineBreaksAfterPrintlnVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.factory.IfBraceBelowLineVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+class formatter.internal.visitor.MandatorySingleSpaceVisitor {
++ <<Create>> MandatorySingleSpaceVisitor(,Boolean,)
++ VisitResult visit(void,Node.Leaf,void,ContextVisitorTable,void,VisitorContext,void)
++ VisitResult visit(void,Node.Composite,void,ContextVisitorTable,void,VisitorContext,void)
+- Boolean shouldHaveNoSpaceBefore(Node)
+}
+
+class formatter.internal.visitor.factory.MandatorySingleSpaceVisitorFactory {
++ RuleType ruleType
++ ContextVisitor create(Rule)
+}
+
+
+
+
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.SpacingAfterColonVisitor
+formatter.internal.table.ContextVisitorTableBuilder +.. formatter.internal.table.ContextVisitorTableBuilder$DefaultVisitorTable
+formatter.internal.table.ContextVisitorTable <|.. formatter.internal.table.ContextVisitorTableBuilder$DefaultVisitorTable
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.SpacingAroundOperatorVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.LineBreaksAfterPrintlnVisitor
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.LineBreakAfterStatementVisitorFactory
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.NoSpacingAroundEqualsVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.IfBraceSameLineVisitor
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.IndentsInsideIfVisitor
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.NoSpacingAroundEqualsVisitor
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.IndentsInsideIfVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.SpacingAroundEqualsVisitor
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.IfBraceSameLineVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.IfBraceBelowLineVisitor
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.LineBreakAfterStatementVisitor
+model.diagnostic.category.Category <|.. formatter.internal.model.origin.FormatterCategory
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.SpacingAfterColonVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.SpacingBeforeColonVisitor
+model.diagnostic.Diagnostic <|.. formatter.internal.model.error.ConfigurationError
+Formatter <|.. formatter.PrintScriptFormatter
+model.value.type.ValueType <|.. formatter.internal.model.value.DocValueType
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.SpacingAroundEqualsVisitorFactory
+formatter.internal.table.ContextVisitorTableBuilder <|.. formatter.internal.table.PrintScriptV10
+formatter.internal.table.ContextVisitorTableBuilder <|.. formatter.internal.table.PrintScriptV11
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.SpacingAroundOperatorVisitor
+model.rule.RuleType <|.. formatter.internal.rule.SpacingAroundEqualsRule
+model.rule.RuleType <|.. formatter.internal.rule.NoSpacingAroundEqualsRule
+model.rule.RuleType <|.. formatter.internal.rule.SpacingAfterColonRule
+model.rule.RuleType <|.. formatter.internal.rule.SpacingBeforeColonRule
+model.rule.RuleType <|.. formatter.internal.rule.MandatorySingleSpaceRule
+model.rule.RuleType <|.. formatter.internal.rule.SpacingAroundOperatorRule
+model.rule.RuleType <|.. formatter.internal.rule.LineBreakAfterStatementRule
+model.rule.RuleType <|.. formatter.internal.rule.LineBreaksAfterPrintlnRule
+model.rule.RuleType <|.. formatter.internal.rule.IndentsInsideIfBlockRule
+model.rule.RuleType <|.. formatter.internal.rule.IfBraceBelowLineRule
+model.rule.RuleType <|.. formatter.internal.rule.IfBraceSameLineRule
+model.value.Value <|.. formatter.internal.model.value.DocValue
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.SpacingBeforeColonVisitorFactory
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.LineBreaksAfterPrintlnVisitorFactory
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.IfBraceBelowLineVisitorFactory
+model.visitor.context.ContextVisitor <|.. formatter.internal.visitor.MandatorySingleSpaceVisitor
+formatter.internal.visitor.factory.ContextVisitorFactory <|.. formatter.internal.visitor.factory.MandatorySingleSpaceVisitorFactory
+@enduml
