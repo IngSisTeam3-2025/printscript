@@ -8,7 +8,7 @@ application {
     mainClass.set("MainKt")
 }
 
-version = "1.0.0-SNAPSHOT"
+version = "1.0.1"
 
 dependencies {
     implementation(project(":printscript-api"))

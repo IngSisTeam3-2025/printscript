@@ -27,9 +27,9 @@ class ExecuteCommand : BaseCommand(name = "execute") {
         val output = ConsoleOutputWriter()
         val env = SystemEnvReader(
             listOf(
-                StringValueTransformer,
                 BooleanValueTransformer,
                 IntegerValueTransformer,
+                StringValueTransformer,
             ),
         )
         val reporter = ConsoleDiagnosticReporter()

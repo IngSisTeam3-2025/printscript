@@ -76,7 +76,6 @@ internal object PrintScriptV10 : ContextVisitorTable {
             ),
         ),
         IdentifierVisitor(),
-        IfStatementVisitor(),
         LetDeclarationVisitor(
             mapOf(
                 BooleanTypeNode to BooleanValueType,
@@ -116,5 +115,6 @@ internal object PrintScriptV11 : ContextVisitorTable {
         ),
         ReadEnvVisitor(),
         ReadInputVisitor(),
+        IfStatementVisitor(),
     )
 }

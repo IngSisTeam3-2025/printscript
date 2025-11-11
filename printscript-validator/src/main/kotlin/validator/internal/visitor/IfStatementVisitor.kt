@@ -17,6 +17,7 @@ import type.outcome.Outcome
 import type.outcome.getOrElse
 import validator.internal.model.category.TypeMismatch
 import validator.internal.model.error.ValidationError
+import validator.internal.model.value.RuntimeValueType
 
 internal class IfStatementVisitor : ContextVisitor {
 
@@ -51,7 +52,7 @@ internal class IfStatementVisitor : ContextVisitor {
 
         val condition = conditionVisit.outcome.getOrElse { return conditionVisit }
 
-        if (condition.type !is BooleanValueType) {
+        if (condition.type !is BooleanValueType && condition.type !is RuntimeValueType) {
             val message = "If condition must be a boolean, got ${condition.type.name}"
             val error = ValidationError(message, TypeMismatch, conditionNode.span)
             return VisitResult(Outcome.Error(error), conditionVisit.context)
