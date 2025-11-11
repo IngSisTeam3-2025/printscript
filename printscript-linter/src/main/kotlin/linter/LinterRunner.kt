@@ -6,12 +6,9 @@ import Parser
 import Validator
 import error.ErrorFlag
 import error.onError
-import error.onErrorCollectAll
 import io.reader.config.ConfigReader
 import io.reader.input.InputReader
 import io.reporter.DiagnosticReporter
-import model.diagnostic.Diagnostic
-import model.rule.Rule
 import type.outcome.Outcome
 
 class LinterRunner(
@@ -27,9 +24,7 @@ class LinterRunner(
         config: ConfigReader,
         reporter: DiagnosticReporter,
     ) {
-        val flag = ErrorFlag()
-
-        val rulesOutcome: Outcome<Collection<Rule>, Diagnostic> = config.read()
+        val rulesOutcome = config.read()
         val rules = when (rulesOutcome) {
             is Outcome.Ok -> rulesOutcome.value
             is Outcome.Error -> {
@@ -37,6 +32,8 @@ class LinterRunner(
                 return
             }
         }
+
+        val flag = ErrorFlag()
 
         val chars = source.read()
         val tokens = lexer.lex(version, chars)
@@ -46,14 +43,11 @@ class LinterRunner(
             .onError(reporter, flag)
         val validations = validator.validate(version, nodes)
             .takeWhile { !flag.hasError }
-            .onErrorCollectAll(reporter, flag)
-            .toList()
+            .onError(reporter)
+        val lints = linter.lint(version, validations, rules)
 
-        if (!flag.hasError) {
-            val lints = linter.lint(version, validations.asSequence(), rules)
-            for (lint in lints) {
-                reporter.report(lint)
-            }
+        for (lint in lints) {
+            reporter.report(lint)
         }
     }
 }

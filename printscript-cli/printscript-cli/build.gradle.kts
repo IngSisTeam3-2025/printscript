@@ -1,6 +1,11 @@
 plugins {
+    application
     id("shared-build-config")
     id("org.jetbrains.kotlinx.kover")
+}
+
+application {
+    mainClass.set("MainKt")
 }
 
 version = "1.0.0-SNAPSHOT"

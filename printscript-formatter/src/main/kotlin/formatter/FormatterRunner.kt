@@ -23,8 +23,6 @@ class FormatterRunner(
         config: ConfigReader,
         reporter: DiagnosticReporter,
     ) {
-        val flag = ErrorFlag()
-
         val rulesOutcome = config.read()
         val rules = when (rulesOutcome) {
             is Outcome.Ok -> rulesOutcome.value
@@ -34,28 +32,27 @@ class FormatterRunner(
             }
         }
 
+        val flag = ErrorFlag()
+
         val chars = source.read()
         val tokens = lexer.lex(version, chars)
             .onError(reporter, flag)
         val nodes = parser.parse(version, tokens)
             .takeWhile { !flag.hasError }
             .onError(reporter, flag)
-            .toList()
 
-        if (!flag.hasError) {
-            val docs = formatter.format(version, nodes.asSequence(), rules)
+        val docs = formatter.format(version, nodes, rules)
 
-            for (doc in docs) {
-                when (doc) {
-                    is Outcome.Ok -> {
-                        val formatted = doc.value.format()
-                        target.write(sequenceOf(formatted))
-                    }
+        for (doc in docs) {
+            when (doc) {
+                is Outcome.Ok -> {
+                    val formatted = doc.value.format()
+                    target.write(sequenceOf(formatted))
+                }
 
-                    is Outcome.Error -> {
-                        reporter.report(doc.error)
-                        return
-                    }
+                is Outcome.Error -> {
+                    reporter.report(doc.error)
+                    return
                 }
             }
         }
