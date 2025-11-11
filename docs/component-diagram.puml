@@ -1,0 +1,119 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "printscript-core" {
+  abstract class Node
+  class Leaf
+  class Composite
+  class Token
+  class Doc
+  class Rule
+  class Diagnostic
+  class Outcome
+  class Option
+  interface InputReader
+  interface OutputWriter
+  interface EnvReader
+  interface ConfigReader
+  interface DiagnosticReporter
+}
+
+Node <|-- Leaf
+Node <|-- Composite
+
+package "printscript-api" {
+  interface Lexer
+  interface Parser
+  interface Validator
+  interface Interpreter
+  interface Formatter
+  interface Linter
+}
+
+package "printscript-lexer" {
+  class PrintScriptLexer
+}
+PrintScriptLexer ..|> Lexer
+PrintScriptLexer ..> Token
+PrintScriptLexer ..> Outcome
+
+package "printscript-parser" {
+  class PrintScriptParser
+}
+PrintScriptParser ..|> Parser
+PrintScriptParser ..> Node
+PrintScriptParser ..> Outcome
+
+package "printscript-validator" {
+  class PrintScriptValidator
+  class ValidatorRunner
+}
+PrintScriptValidator ..|> Validator
+ValidatorRunner ..> Lexer
+ValidatorRunner ..> Parser
+ValidatorRunner ..> Validator
+ValidatorRunner ..> DiagnosticReporter
+
+package "printscript-interpreter" {
+  class PrintScriptInterpreter
+  class InterpreterRunner
+}
+PrintScriptInterpreter ..|> Interpreter
+InterpreterRunner ..> Lexer
+InterpreterRunner ..> Parser
+InterpreterRunner ..> Validator
+InterpreterRunner ..> Interpreter
+InterpreterRunner ..> InputReader
+InterpreterRunner ..> OutputWriter
+InterpreterRunner ..> EnvReader
+InterpreterRunner ..> DiagnosticReporter
+
+package "printscript-formatter" {
+  class PrintScriptFormatter
+  class FormatterRunner
+}
+PrintScriptFormatter ..|> Formatter
+FormatterRunner ..> Lexer
+FormatterRunner ..> Parser
+FormatterRunner ..> Formatter
+FormatterRunner ..> ConfigReader
+FormatterRunner ..> DiagnosticReporter
+FormatterRunner ..> OutputWriter
+
+package "printscript-linter" {
+  class PrintScriptLinter
+  class LinterRunner
+  class LinterTableRegistry
+}
+PrintScriptLinter ..|> Linter
+LinterRunner ..> Lexer
+LinterRunner ..> Parser
+LinterRunner ..> Validator
+LinterRunner ..> Linter
+LinterRunner ..> ConfigReader
+LinterRunner ..> DiagnosticReporter
+
+package "printscript-cli" {
+  class PrintScriptCli
+  class BaseCommand
+  class ValidateCommand
+  class ExecuteCommand
+  class AnalyzeCommand
+  class FormatCommand
+  class Main
+}
+BaseCommand <|-- ValidateCommand
+BaseCommand <|-- ExecuteCommand
+BaseCommand <|-- AnalyzeCommand
+BaseCommand <|-- FormatCommand
+ValidateCommand ..> ValidatorRunner
+ExecuteCommand ..> InterpreterRunner
+AnalyzeCommand ..> LinterRunner
+FormatCommand ..> FormatterRunner
+PrintScriptCli ..> ValidateCommand
+PrintScriptCli ..> ExecuteCommand
+PrintScriptCli ..> AnalyzeCommand
+PrintScriptCli ..> FormatCommand
+Main ..> PrintScriptCli
+@enduml
