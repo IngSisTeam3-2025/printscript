@@ -1,8 +1,7 @@
 package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
-import formatter.internal.model.value.DocValue
-import formatter.internal.type.toDoc
+import formatter.internal.model.value.NodeValue
 import model.node.AssignNode
 import model.node.Node
 import model.trivia.SpaceTrivia
@@ -73,6 +72,6 @@ internal class SpacingAroundEqualsVisitor(
         }
 
         val updatedNode = node.copy(children = updatedChildren)
-        return VisitResult(Outcome.Ok(DocValue(updatedNode.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(updatedNode)), context)
     }
 }

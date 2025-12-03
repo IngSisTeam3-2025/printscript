@@ -1,9 +1,8 @@
 package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
-import formatter.internal.model.value.DocValue
+import formatter.internal.model.value.NodeValue
 import formatter.internal.transformer.NodeTransformer
-import formatter.internal.type.toDoc
 import model.node.IfStatementNode
 import model.node.LeftBraceNode
 import model.node.Node
@@ -45,7 +44,7 @@ internal class IfBraceSameLineVisitor(
         val updatedNode = node.copy(children = transformedChildren)
         val transformed = NodeTransformer.transformRecursive(updatedNode, table, context)
 
-        return VisitResult(Outcome.Ok(DocValue(transformed.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(transformed)), context)
     }
 
     private fun processChild(node: Node): Node {

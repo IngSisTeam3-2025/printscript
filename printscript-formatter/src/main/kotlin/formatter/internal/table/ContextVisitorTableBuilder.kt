@@ -5,19 +5,13 @@ import formatter.internal.visitor.factory.ContextVisitorFactory
 import model.diagnostic.Diagnostic
 import model.rule.Rule
 import model.visitor.context.ContextVisitor
-import model.visitor.context.ContextVisitorTable
 import type.outcome.Outcome
 
 internal interface ContextVisitorTableBuilder {
-
-    class DefaultVisitorTable(
-        override val visitors: Collection<ContextVisitor>,
-    ) : ContextVisitorTable
-
     val factories: Map<String, ContextVisitorFactory>
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    fun build(rules: Collection<Rule>): Outcome<ContextVisitorTable, Diagnostic> {
+    fun build(rules: Collection<Rule>): Outcome<FormatterContextVisitorTable, Diagnostic> {
         val visitors = mutableListOf<ContextVisitor>()
 
         for (rule in rules) {
@@ -31,6 +25,6 @@ internal interface ContextVisitorTableBuilder {
             }
         }
 
-        return Outcome.Ok(DefaultVisitorTable(visitors))
+        return Outcome.Ok(FormatterContextVisitorTable(visitors))
     }
 }

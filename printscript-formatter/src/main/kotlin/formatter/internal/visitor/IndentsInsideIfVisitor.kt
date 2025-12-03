@@ -2,9 +2,8 @@ package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
 import formatter.internal.model.context.IndentState
-import formatter.internal.model.value.DocValue
+import formatter.internal.model.value.NodeValue
 import formatter.internal.transformer.NodeTransformer
-import formatter.internal.type.toDoc
 import model.node.BlockNode
 import model.node.ElseBlockNode
 import model.node.IfStatementNode
@@ -48,7 +47,7 @@ internal class IndentsInsideIfVisitor(
         val updatedNode = processIfStatement(node, state.currentLevel)
         val transformed = NodeTransformer.transformRecursive(updatedNode, table, context)
 
-        return VisitResult(Outcome.Ok(DocValue(transformed.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(transformed)), context)
     }
 
     private fun processIfStatement(

@@ -2,10 +2,9 @@ package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
 import formatter.internal.model.context.LineBreakState
-import formatter.internal.model.value.DocValue
+import formatter.internal.model.value.NodeValue
 import formatter.internal.transformer.NodeTransformer
 import formatter.internal.traversal.NodeTraversal
-import formatter.internal.type.toDoc
 import model.node.Node
 import model.node.SemicolonNode
 import model.trivia.NewlineTrivia
@@ -69,7 +68,7 @@ internal class LineBreakAfterStatementVisitor(
         val newState = LineBreakState(pendingNewlines = newlinesToTransfer, isFirstNode = false)
         val newContext = context.register(LineBreakState::class, newState)
 
-        return VisitResult(Outcome.Ok(DocValue(nodeWithoutTrailing.toDoc())), newContext)
+        return VisitResult(Outcome.Ok(NodeValue(nodeWithoutTrailing)), newContext)
     }
 
     private fun initializeStateIfNeeded(context: VisitorContext): VisitorContext {

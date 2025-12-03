@@ -23,8 +23,7 @@ class FormatterRunner(
         config: ConfigReader,
         reporter: DiagnosticReporter,
     ) {
-        val rulesOutcome = config.read()
-        val rules = when (rulesOutcome) {
+        val rules = when (val rulesOutcome = config.read()) {
             is Outcome.Ok -> rulesOutcome.value
             is Outcome.Error -> {
                 reporter.report(rulesOutcome.error)
@@ -43,18 +42,20 @@ class FormatterRunner(
 
         val docs = formatter.format(version, nodes, rules)
 
-        for (doc in docs) {
-            when (doc) {
-                is Outcome.Ok -> {
-                    val formatted = doc.value.format()
-                    target.write(sequenceOf(formatted))
-                }
-
-                is Outcome.Error -> {
-                    reporter.report(doc.error)
-                    return
+        val formattedSequence = sequence {
+            for (doc in docs) {
+                when (doc) {
+                    is Outcome.Ok -> {
+                        val formatted = doc.value.format()
+                        yield(formatted)
+                    }
+                    is Outcome.Error -> {
+                        reporter.report(doc.error)
+                        return@sequence
+                    }
                 }
             }
         }
+        target.write(formattedSequence)
     }
 }

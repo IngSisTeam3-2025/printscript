@@ -14,12 +14,12 @@ data object NoSpacingAroundEqualsRule : RuleType {
 
 data object SpacingAfterColonRule : RuleType {
     override val signature = "enforce-spacing-after-colon-in-declaration"
-    override val name = "SpacingAroundEquals"
+    override val name = "SpacingAfterColon"
 }
 
 data object SpacingBeforeColonRule : RuleType {
     override val signature = "enforce-spacing-before-colon-in-declaration"
-    override val name = "SpacingAroundEquals"
+    override val name = "SpacingBeforeColon"
 }
 
 data object MandatorySingleSpaceRule : RuleType {

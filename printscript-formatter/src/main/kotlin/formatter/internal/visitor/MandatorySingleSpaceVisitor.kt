@@ -1,8 +1,7 @@
 package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
-import formatter.internal.model.value.DocValue
-import formatter.internal.type.toDoc
+import formatter.internal.model.value.NodeValue
 import model.node.Node
 import model.node.SemicolonNode
 import model.trivia.SpaceTrivia
@@ -57,7 +56,7 @@ internal class MandatorySingleSpaceVisitor(
         }
 
         val updatedNode = node.copy(children = finalChildren)
-        return VisitResult(Outcome.Ok(DocValue(updatedNode.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(updatedNode)), context)
     }
 
     private fun shouldHaveNoSpaceBefore(node: Node): Boolean {

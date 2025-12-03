@@ -2,9 +2,8 @@ package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
 import formatter.internal.model.context.PrintlnState
-import formatter.internal.model.value.DocValue
+import formatter.internal.model.value.NodeValue
 import formatter.internal.transformer.NodeTransformer
-import formatter.internal.type.toDoc
 import model.node.Node
 import model.node.PrintlnStatementNode
 import model.trivia.NewlineTrivia
@@ -64,7 +63,7 @@ internal class LineBreaksAfterPrintlnVisitor(
         )
         val newContext = context.register(PrintlnState::class, newState)
 
-        return VisitResult(Outcome.Ok(DocValue(nodeWithoutTrailing.toDoc())), newContext)
+        return VisitResult(Outcome.Ok(NodeValue(nodeWithoutTrailing)), newContext)
     }
 
     private fun getOrInitializeState(context: VisitorContext): PrintlnState {

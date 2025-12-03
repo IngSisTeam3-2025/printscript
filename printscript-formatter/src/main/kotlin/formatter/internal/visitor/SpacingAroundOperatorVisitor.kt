@@ -1,9 +1,8 @@
 package formatter.internal.visitor
 
 import formatter.internal.manipulator.TriviaManipulator
-import formatter.internal.model.value.DocValue
+import formatter.internal.model.value.NodeValue
 import formatter.internal.transformer.NodeTransformer
-import formatter.internal.type.toDoc
 import model.node.BinaryOperationExpressionNode
 import model.node.Node
 import model.node.NodeType
@@ -34,7 +33,7 @@ internal class SpacingAroundOperatorVisitor(
         } else {
             node
         }
-        return VisitResult(Outcome.Ok(DocValue(adjusted.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(adjusted)), context)
     }
 
     override fun visit(
@@ -51,7 +50,7 @@ internal class SpacingAroundOperatorVisitor(
             NodeTransformer.transformRecursive(node, table, context)
         }
 
-        return VisitResult(Outcome.Ok(DocValue(transformed.toDoc())), context)
+        return VisitResult(Outcome.Ok(NodeValue(transformed)), context)
     }
 
     private fun transformBinaryOperation(
